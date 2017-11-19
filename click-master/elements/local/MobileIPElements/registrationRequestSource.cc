@@ -44,7 +44,7 @@ Packet* RegistrationRequestSource::makePacket(){
     iph->ip_ttl = 30;
     iph->ip_src = _homeAgent;
     iph->ip_dst = _homeAddress;
-    iph->ip_sum = click_in_cksum((unsigned char *)iph, sizeof(click_ip));
+    iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
 
     packet->set_dst_ip_anno(iph->ip_dst); //not sure why it is used
 
@@ -70,6 +70,21 @@ Packet* RegistrationRequestSource::makePacket(){
     _identifications2.push_back(id2);
     udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size-sizeof(click_ip)),
     iph, packet_size - sizeof(click_ip));
+
+    unsigned len = packet->length()-sizeof(click_ip);
+
+    // -> weird ?
+    // ok here but not in replier
+    if (udph->uh_sum != 0) {
+        click_chatter("hello???");
+        unsigned csum = click_in_cksum((unsigned char *)udph, len);
+        if (click_in_cksum_pseudohdr(csum, iph, len) != 0){
+            click_chatter("RequestReply wrong checksum11");
+            //p->kill();
+            //return 999;
+        }
+
+    }
 
 
     return packet;

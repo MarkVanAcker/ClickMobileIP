@@ -31,19 +31,6 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
     click_udp *udph = (click_udp*)(iph+1);
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
 
-    // calculate checksum again -> compare result
-    // CheckUDPHeader.cc
-    unsigned len = ntohs(udph->uh_ulen);
-    if (udph->uh_sum != 0) {
-        unsigned csum = click_in_cksum((unsigned char *)udph, len);
-        if (click_in_cksum_pseudohdr(csum, iph, len) != 0){
-            click_chatter("RequestReply wrong checksum");
-            p->kill();
-            return 999;
-        }
-
-    }
-
     // 136 ???
 
     // sent as zero, ignore
@@ -99,7 +86,7 @@ void RegistrationRequestReply::push(int, Packet *p) {
         iphNew->ip_ttl = 64;
         iphNew->ip_src = iph->ip_dst;
         iphNew->ip_dst = iph->ip_src;
-        iphNew->ip_sum = click_in_cksum((unsigned char *)iph, sizeof(click_ip));
+        iphNew->ip_sum = click_in_cksum((unsigned char *)iphNew, sizeof(click_ip));
 
         packet->set_dst_ip_anno(iphNew->ip_dst); //not sure why it is used
 
@@ -118,8 +105,8 @@ void RegistrationRequestReply::push(int, Packet *p) {
         formatNew->id2 = format->id2;
 
         // Calculate the udp checksum
-udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)), iphNew, packet_size - sizeof(click_ip));
-
+        udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
+        iphNew, packet_size - sizeof(click_ip));
         // if accepted change bindings
         if (code == 0 || code == 1)
         {
