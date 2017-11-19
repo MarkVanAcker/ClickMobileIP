@@ -8,7 +8,7 @@
 CLICK_DECLS
 
 
-class RegistrationRequestSource : public Element {
+class RegistrationRequestSource: public Element {
     public:
         RegistrationRequestSource();
         ~RegistrationRequestSource();
@@ -32,6 +32,12 @@ class RegistrationRequestSource : public Element {
         IPAddress _homeAgent;
         IPAddress _CoA;
 
+        /* securing registration request-replies */
+        Vector<unsigned int> _identifications1;
+        Vector<unsigned int> _identifications2;
+
+
+
 
 };
 
@@ -40,11 +46,12 @@ struct RegistrationRequestPacketheader{
 
     uint8_t type; // Type 1 (Registration Request)
     uint8_t flags; // 8 flag bits
-    uint16_t lifetime; // Number of hops remaining before the registration is expired
+    uint16_t lifetime; // Seconds remaining before the registration is expired
     uint32_t homeAddr; // IP adress of the mobile node
-    uint32_t homeAgent; // IP adress of the mobile node's home agent
+    uint32_t homeAgent; // IP adress of the mobile node
     uint32_t coAddr; // IP adress of the end of the tunnel
-    uint64_t id; // used for matching Registration Reqsuest
+    uint32_t id1; // used for matching Registration Reqsuest
+    uint32_t id2; // used for matching Registration Reqsuest
 
     // no extensions needed
 };
