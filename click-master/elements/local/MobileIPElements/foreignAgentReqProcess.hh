@@ -1,5 +1,5 @@
-#ifndef CLICK_REGISTRATIONREQUESTREPLY_HH
-#define CLICK_REGISTRATIONREQUESTREPLY_HH
+#ifndef CLICK_FOREIGNAGENTREQPROCESS_HH
+#define CLICK_FOREIGNAGANTREQPROCESS_HH
 
 #include <click/element.hh>
 #include <click/timer.hh>
@@ -8,24 +8,28 @@
 CLICK_DECLS
 
 
-class RegistrationRequestReply: public Element {
+class ForeignAgentReqProcess: public Element {
     public:
-        RegistrationRequestReply();
-        ~RegistrationRequestReply();
+        ForeignAgentReqProcess();
+        ~ForeignAgentReqProcess();
 
-        const char *class_name() const { return "RegistrationRequestReply"; }
-        const char *port_count() const { return "1/1"; }
+        const char *class_name() const { return "ForeignAgentReqProcess"; }
+        const char *port_count() const { return "1/2"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
 
         private:
-            IPAddress _homeAgent;
+            IPAddress _foreignAgent;
+            short int _maxLifetime; // ??
+
+            unsigned short int makePacket(Packet *packet);
             unsigned short int validatePacket(Packet *packet);
+
 };
 
-struct RegistrationRequestReplyPacketheader {
+struct ForeignAgentReqProcessPacketheader {
 
     uint8_t type;           // 3 for registration reply
     uint8_t code;           // code 1 for a registration reply
