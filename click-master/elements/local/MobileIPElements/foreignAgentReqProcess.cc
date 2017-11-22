@@ -19,7 +19,7 @@ ForeignAgentReqProcess::~ForeignAgentReqProcess()
 int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) {
     if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).complete() < 0) return -1;
 
-    _maxLifetime = 1800;
+    _maxLifetime = 1800; // default value
 	return 0;
 }
 
@@ -58,6 +58,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         output(0).push(p);
         return;
     }
+
     // validate packet content, react accordingly
     unsigned short int code = validatePacket(p);
     if(code == 1){
