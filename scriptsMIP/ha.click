@@ -1,4 +1,4 @@
-// Home or Foreign Agent
+// Home Agent
 // The input/output configuration is as follows:
 //
 // Input:
