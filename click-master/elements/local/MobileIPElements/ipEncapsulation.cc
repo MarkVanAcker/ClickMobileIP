@@ -42,9 +42,9 @@ void IpEncapsulation::push(int, Packet *p) {
     IPAddress careOff = getDesitination(iph->ip_dst);
     // new packet with an extra ip header, create headroom to push upon
     // space is not the same as packetdata
-    int packet_size = p->length();
+    int packetsize = p->length();
     int headroom =  sizeof(click_ether);
-    WritablePacket *packet = Packet::make(headroom, 0, sizeof(click_ip) + packet_size, 0);
+    WritablePacket *packet = Packet::make(headroom, 0, sizeof(click_ip) + packetsize, 0);
     if (packet == 0)
     {
         click_chatter("Packet creating failed (IPENCAP)");
@@ -56,13 +56,13 @@ void IpEncapsulation::push(int, Packet *p) {
     packet->push(sizeof(click_ip));
     // add pushed header at the start of the packet
     memset(packet->data(), 0, sizeof(click_ip));
-    click_ip* Oiph = (click_ip*)packet->data();
+    click_ip* Oiph = (click_ip*)packet->data(); // outer ip
     Oiph->ip_v = 4;
     Oiph->ip_hl = sizeof(click_ip) >> 2;
     Oiph->ip_len = htons(packet->length());
     Oiph->ip_id = htons(1);
     Oiph->ip_ttl = 200;
-    Oiph->ip_p = 4;
+    Oiph->ip_p = 4; // ip in ip protocol
     Oiph->ip_src = _tunnelAddres;
     Oiph->ip_dst = getDesitination(careOff); //end of tunnel
     Oiph->ip_sum = click_in_cksum((unsigned char*)Oiph, sizeof(click_ip));
