@@ -121,9 +121,9 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         item.lifetimeReq = format->lifetime;
         item.lifetimeRem = format->lifetime;
 
-        _visitorList._registrationReq.push_back(item);
-
-
+        if(_visitorList._registrationReq.size() < _visitorList._maxRequests){
+            _visitorList._registrationReq.push_back(item);
+        }
 
         output(0).push(packet);
     }

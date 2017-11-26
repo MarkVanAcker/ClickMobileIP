@@ -86,7 +86,7 @@ bool VisitorList::inPendingNode(IPAddress node){
 void VisitorList::push(int, Packet *p){
     click_ip* Oiph = (click_ip*)p->data();
     if(Oiph->ip_p != 4 && Oiph->ip_dst != _coa){
-        click_chatter("Pack recieved in VList that is not IP IN IP protocol");
+        click_chatter("Pack recieved in VList that is not IP IN IP protocol or for this host");
         p->kill;
     }
     // packet is ip in ip for this fa
