@@ -22,6 +22,7 @@ class RegistrationRequestReply: public Element {
 
         private:
             IPAddress _homeAgent;
+            bindingsList * _bindingsList;
             unsigned short int validatePacket(Packet *packet);
 };
 

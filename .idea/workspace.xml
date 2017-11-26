@@ -11,9 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6c61fbb9-d916-481d-a415-df8ee52c95d1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,21 +24,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="48" lean-forward="false" selection-start-line="29" selection-start-column="48" selection-end-line="29" selection-end-column="48" />
+            <state relative-caret-position="187">
+              <caret line="20" column="12" lean-forward="false" selection-start-line="18" selection-start-column="65" selection-end-line="20" selection-end-column="12" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="registrationRequestReply.cc" pinned="false" current-in-tab="false">
+      <file leaf-file-name="registrationRequestReply.hh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="143">
+              <caret line="24" column="12" lean-forward="false" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="registrationRequestReply.cc" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1574">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="211">
+              <caret line="122" column="25" lean-forward="false" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -49,7 +58,7 @@
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.hh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="476">
-              <caret line="28" column="37" lean-forward="false" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
+              <caret line="28" column="16" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -60,16 +69,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="432">
               <caret line="100" column="0" lean-forward="false" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="visitorList.hh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.hh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-357">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -88,7 +87,7 @@
       <file leaf-file-name="bindingsList.hh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
+            <state relative-caret-position="34">
               <caret line="5" column="29" lean-forward="false" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
               <folding />
             </state>
@@ -130,6 +129,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>homeAgentRegProcess</find>
+      <find>v</find>
     </findStrings>
     <replaceStrings>
       <replace>bindingsList</replace>
@@ -147,6 +147,8 @@
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
+        <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh" />
+        <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc" />
       </list>
     </option>
   </component>
@@ -369,7 +371,7 @@
       <updated>1510843395996</updated>
       <workItem from="1510843398738" duration="6208000" />
       <workItem from="1511628357047" duration="1254000" />
-      <workItem from="1511712845426" duration="9566000" />
+      <workItem from="1511712845426" duration="11803000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <created>1510850945815</created>
@@ -406,11 +408,18 @@
       <option name="project" value="LOCAL" />
       <updated>1511724437733</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fixed ipEncap and fixed Bindingslist">
+      <created>1511726736117</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1511726736117</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17028000" />
+    <option name="totallyTimeSpent" value="19265000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="260" y="22" width="1922" height="1046" extended-state="6" />
@@ -445,7 +454,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="second commit" />
     <MESSAGE value="fixed ipEncap and added Bindingslist" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed ipEncap and added Bindingslist" />
+    <MESSAGE value="fixed ipEncap and fixed Bindingslist" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed ipEncap and fixed Bindingslist" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -517,14 +527,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1574">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.cc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
@@ -537,22 +539,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.hh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="37" lean-forward="false" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="29" lean-forward="false" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -581,10 +567,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="5" column="29" lean-forward="false" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.hh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="16" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="48" lean-forward="false" selection-start-line="29" selection-start-column="48" selection-end-line="29" selection-end-column="48" />
+        <state relative-caret-position="187">
+          <caret line="20" column="12" lean-forward="false" selection-start-line="18" selection-start-column="65" selection-end-line="20" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="24" column="12" lean-forward="false" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="122" column="25" lean-forward="false" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
           <folding />
         </state>
       </provider>
