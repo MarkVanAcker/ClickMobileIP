@@ -106,10 +106,10 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
 
         click_ip *iphNew = (click_ip *)packet->data();
         iphNew->ip_v = 4;
+        iphNew->ip_p = 17;
         iphNew->ip_hl = sizeof(click_ip) >> 2;
         iphNew->ip_len = htons(packet->length());
         iphNew->ip_id = htons(1);
-        iphNew->ip_p = 17;
         iphNew->ip_ttl = 64;
         iphNew->ip_src = _foreignAgent;
         iphNew->ip_dst = iph->ip_src;

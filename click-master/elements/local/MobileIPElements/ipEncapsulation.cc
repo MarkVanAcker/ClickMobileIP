@@ -58,11 +58,11 @@ void IpEncapsulation::push(int, Packet *p) {
 
     click_ip* Oiph = (click_ip*)packet->data(); // outer ip
     Oiph->ip_v = 4;
+    Oiph->ip_p = 4; // ip in ip protocol
     Oiph->ip_hl = sizeof(click_ip) >> 2;
     Oiph->ip_len = htons(packet->length());
     Oiph->ip_id = htons(1);
-    Oiph->ip_ttl = 200;
-    Oiph->ip_p = 4; // ip in ip protocol
+    Oiph->ip_ttl = 1; //yet to be set
     Oiph->ip_src = _tunnelAddres;
     Oiph->ip_dst = careOff; //end of tunnel
     Oiph->ip_sum = click_in_cksum((unsigned char*)Oiph, sizeof(click_ip));
