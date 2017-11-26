@@ -5,8 +5,7 @@
 #include <clicknet/ether.h>
 #include <clicknet/ip.h>
 #include <clicknet/udp.h>
-
-// #include "Bindingslist.hh"
+#include "ipEncapsulation.hh"
 
 CLICK_DECLS
 ForeignAgentReqProcess::IpEncapsulation()
@@ -16,9 +15,9 @@ IpEncapsulation::~IpEncapsulation()
 {}
 
 int IpEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh) {
-    //Bindingslist* templist;
+    bindingsList* templist;
     if (Args(conf, this, errh).read_mp("IPADDRES", _tunnelAddres).read("ANELEMENT",
-    ElementCastArg("Bindingslist"),
+    ElementCastArg("bindingsList"),
     templist).complete() < 0) return -1;
 
     _bindingsList = templist;
@@ -28,11 +27,7 @@ int IpEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh) {
 /* There should always be an adress found here because the packet is forwarded to the encap */
 // depends on how we want to use the bingslist.
 IPAddress IpEncapsulation::getDesitination(IPAddress MN){
-    for (int x=0; x<_bindingsList->nodes().size(); ++x)
-    {
-        if (_bindingsList->nodes()[x].source == MN )
-            return _bindingsList->nodes()[x].destination;
-    }
+    return _bindingsList->getEntry(MN)->mobile_node_coa;
 }
 
 
@@ -74,4 +69,4 @@ void IpEncapsulation::push(int, Packet *p) {
 
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(ForeignAgentReqProcess)
+EXPORT_ELEMENT(IpEncapsulation)
