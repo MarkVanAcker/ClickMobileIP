@@ -11,6 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6c61fbb9-d916-481d-a415-df8ee52c95d1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,8 +28,8 @@
       <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="29" column="56" lean-forward="false" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
+            <state relative-caret-position="544">
+              <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -45,8 +48,8 @@
       <file leaf-file-name="bindingsList.hh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="816">
-              <caret line="48" column="34" lean-forward="false" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
+            <state relative-caret-position="347">
+              <caret line="38" column="18" lean-forward="false" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -55,8 +58,8 @@
       <file leaf-file-name="bindingsList.cc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="28" column="24" lean-forward="false" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            <state relative-caret-position="391">
+              <caret line="23" column="1" lean-forward="false" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -66,10 +69,10 @@
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2091">
-              <caret line="123" column="31" lean-forward="true" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+              <caret line="125" column="31" lean-forward="true" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
               <folding>
-                <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
-                <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+                <marker date="1511722850162" expanded="true" signature="464:466" ph="{...}" />
+                <marker date="1511722850162" expanded="true" signature="4460:4502" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -205,9 +208,9 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.hh</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.cc</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.hh</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -223,7 +226,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="true" />
           <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentUtil.hh</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Restored" />
@@ -329,7 +331,7 @@
       <updated>1510843395996</updated>
       <workItem from="1510843398738" duration="6208000" />
       <workItem from="1511628357047" duration="1254000" />
-      <workItem from="1511712845426" duration="4978000" />
+      <workItem from="1511712845426" duration="6753000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <created>1510850945815</created>
@@ -345,11 +347,18 @@
       <option name="project" value="LOCAL" />
       <updated>1511719288107</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fixed ipEncap and added Bindingslist">
+      <created>1511719381286</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1511719381286</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12440000" />
+    <option name="totallyTimeSpent" value="14215000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="260" y="22" width="1922" height="1046" extended-state="6" />
@@ -428,8 +437,8 @@
         <state relative-caret-position="1921">
           <caret line="113" column="0" lean-forward="true" selection-start-line="113" selection-start-column="0" selection-end-line="115" selection-end-column="38" />
           <folding>
-            <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
-            <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+            <marker date="1511722850162" expanded="true" signature="464:466" ph="{...}" />
+            <marker date="1511722850162" expanded="true" signature="4460:4502" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -446,10 +455,10 @@
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2091">
-          <caret line="123" column="31" lean-forward="true" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+          <caret line="125" column="31" lean-forward="true" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
           <folding>
-            <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
-            <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+            <marker date="1511722850162" expanded="true" signature="464:466" ph="{...}" />
+            <marker date="1511722850162" expanded="true" signature="4460:4502" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -464,16 +473,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="28" column="24" lean-forward="false" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        <state relative-caret-position="391">
+          <caret line="23" column="1" lean-forward="false" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="48" column="34" lean-forward="false" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
+        <state relative-caret-position="347">
+          <caret line="38" column="18" lean-forward="false" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -488,8 +497,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="29" column="56" lean-forward="false" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
+        <state relative-caret-position="544">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
