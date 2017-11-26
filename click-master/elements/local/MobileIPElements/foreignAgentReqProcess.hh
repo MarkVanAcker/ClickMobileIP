@@ -4,6 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
+#include "visitorList.hh"
 
 CLICK_DECLS
 
@@ -22,7 +23,9 @@ class ForeignAgentReqProcess: public Element {
 
         private:
 
+
             IPAddress _foreignAgent;
+            VisitorList* _visitorList;
             short int _maxLifetime; // ??
 
             unsigned short int makePacket(Packet *packet);
@@ -43,17 +46,6 @@ struct ForeignAgentReqProcessPacketheader {
     // no extensions needed
 };
 
-struct listItem {
-    EtherAddress ethSrc;
-    IPAddress ipSrc;
-    IPAddress ipDst;
-    uint16_t udpSrc;
-    IPAddress homeAgent;
-    uint32_t id1;
-    uint32_t id2;
-    uint16_t lifetimeReq; // requested lifetime at the registration time
-    uint16_t lifetimeRem; // remaining lifetime
-};
 
 
 
