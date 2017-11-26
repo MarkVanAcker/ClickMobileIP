@@ -82,7 +82,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
 
     if(format->type != 1) {
-        p->kill()
+        p->kill();
         return;
     }
 
