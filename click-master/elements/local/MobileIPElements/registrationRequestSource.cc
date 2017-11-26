@@ -49,7 +49,7 @@ Packet* RegistrationRequestSource::makePacket(){
     packet->set_dst_ip_anno(iph->ip_dst); //not sure why it is used
 
     click_udp *udph = (click_udp*)(iph+1);
-    udph->uh_sport = htons(100);
+    udph->uh_sport = htons(100); // anything
     udph->uh_dport = htons(434);
     udph->uh_ulen = htons(packet->length()-sizeof(click_ip));
 
@@ -72,20 +72,6 @@ Packet* RegistrationRequestSource::makePacket(){
     iph, packet_size - sizeof(click_ip));
 
     unsigned len = packet->length()-sizeof(click_ip);
-
-    // -> weird ?
-    // ok here but not in replier
-    if (udph->uh_sum != 0) {
-        click_chatter("hello???");
-        unsigned csum = click_in_cksum((unsigned char *)udph, len);
-        if (click_in_cksum_pseudohdr(csum, iph, len) != 0){
-            click_chatter("RequestReply wrong checksum11");
-            //p->kill();
-            //return 999;
-        }
-
-    }
-
 
     return packet;
 }
