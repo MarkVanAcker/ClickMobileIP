@@ -6,6 +6,7 @@
 	->CheckIPHeader()
 	->CheckUDPHeader()
 	->RegistrationRequestReply(HAGENT 12.12.12.12, BINDING bind)
+	->ipEn
 	->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
 	->ToDump(req.dump)
 	->Discard;

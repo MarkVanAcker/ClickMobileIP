@@ -9,7 +9,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c61fbb9-d916-481d-a415-df8ee52c95d1" name="Default" comment="replaced anelement">
+    <list default="true" id="6c61fbb9-d916-481d-a415-df8ee52c95d1" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/req.dump" afterPath="$PROJECT_DIR$/click-master/req.dump" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/scripts/testencap.click" afterPath="$PROJECT_DIR$/click-master/scripts/testencap.click" />
     </list>
@@ -23,10 +24,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="306">
               <caret line="18" column="79" lean-forward="false" selection-start-line="18" selection-start-column="79" selection-end-line="18" selection-end-column="79" />
               <folding />
             </state>
@@ -73,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testencap.click" pinned="false" current-in-tab="true">
+      <file leaf-file-name="testencap.click" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/scripts/testencap.click">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="136">
+              <caret line="8" column="10" lean-forward="false" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -87,7 +88,7 @@
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReplyProcess.cc">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
-              <caret line="13" column="2" lean-forward="true" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
+              <caret line="13" column="2" lean-forward="false" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -147,10 +148,10 @@
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.hh" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/registrationRequestReply.cc" />
-        <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc" />
         <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReplyProcess.cc" />
         <option value="$PROJECT_DIR$/click-master/scripts/testencap.click" />
+        <option value="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
       </list>
     </option>
   </component>
@@ -379,7 +380,7 @@
       <updated>1510843395996</updated>
       <workItem from="1510843398738" duration="6208000" />
       <workItem from="1511628357047" duration="1254000" />
-      <workItem from="1511712845426" duration="13356000" />
+      <workItem from="1511712845426" duration="13787000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <created>1510850945815</created>
@@ -458,17 +459,23 @@
       <option name="project" value="LOCAL" />
       <updated>1511730665879</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="script added">
+      <created>1511730989847</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1511730989847</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20818000" />
+    <option name="totallyTimeSpent" value="21249000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="260" y="22" width="1922" height="1046" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -502,7 +509,8 @@
     <MESSAGE value="fixed regreply" />
     <MESSAGE value="script" />
     <MESSAGE value="replaced anelement" />
-    <option name="LAST_COMMIT_MESSAGE" value="replaced anelement" />
+    <MESSAGE value="script added" />
+    <option name="LAST_COMMIT_MESSAGE" value="script added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -630,14 +638,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="18" column="79" lean-forward="false" selection-start-line="18" selection-start-column="79" selection-end-line="18" selection-end-column="79" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -657,15 +657,23 @@
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReplyProcess.cc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
-          <caret line="13" column="2" lean-forward="true" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
+          <caret line="13" column="2" lean-forward="false" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/scripts/testencap.click">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="136">
+          <caret line="8" column="10" lean-forward="false" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="79" lean-forward="false" selection-start-line="18" selection-start-column="79" selection-end-line="18" selection-end-column="79" />
           <folding />
         </state>
       </provider>
