@@ -110,7 +110,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         iphNew->ip_hl = sizeof(click_ip) >> 2;
         iphNew->ip_len = htons(packet->length());
         iphNew->ip_id = htons(1);
-        iphNew->ip_ttl = 64;
+        iphNew->ip_ttl = 12;
         iphNew->ip_src = _foreignAgent;
         iphNew->ip_dst = iph->ip_src;
         iphNew->ip_sum = click_in_cksum((unsigned char *)iphNew, sizeof(click_ip));
