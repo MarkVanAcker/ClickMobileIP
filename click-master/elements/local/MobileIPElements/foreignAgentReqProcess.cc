@@ -17,7 +17,10 @@ ForeignAgentReqProcess::~ForeignAgentReqProcess()
 {}
 
 int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent)read("ANELEMENT",
+
+    VisitorList* templist;
+
+    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read("ANELEMENT",
     ElementCastArg("VisitorList"),
     templist).complete() < 0) return -1;
 
@@ -47,7 +50,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
         return 70;
     }
 
-    if(_visitorList._registrationReq.size() == _visitorList._maxRequests){
+    if(_visitorList->_registrationReq.size() == _visitorList->_maxRequests){
         return 66;
     }
 
@@ -60,13 +63,12 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     item.id1 = format->id1;
     item.id2 = format->id2;
     item.lifetimeReq = format->lifetime;
-    item.lifetimeRem = format->lifetime;
+    item.lifetimeRem = 7;
 
     // should be true
-    if(_visitorList._registrationReq.size() < _visitorList._maxRequests){
-        _visitorList._registrationReq.push_back(item);
+    if(_visitorList->_registrationReq.size() < _visitorList->_maxRequests){
+        _visitorList->_registrationReq.push_back(item);
     }
-
 
     return 1;
 }

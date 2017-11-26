@@ -4,9 +4,21 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/etheraddress.hh>
-#include "foreignAgentUtil.hh"
 
 CLICK_DECLS
+
+
+struct listItem {
+    EtherAddress ethSrc;
+    IPAddress ipSrc;
+    IPAddress ipDst;
+    uint16_t udpSrc;
+    IPAddress homeAgent;
+    uint32_t id1;
+    uint32_t id2;
+    uint16_t lifetimeReq; // requested lifetime at the registration time
+    uint16_t lifetimeRem; // remaining lifetime
+};
 
 
 class VisitorList: public Element {
@@ -40,17 +52,6 @@ public:
 
 };
 
-struct listItem {
-    EtherAddress ethSrc;
-    IPAddress ipSrc;
-    IPAddress ipDst;
-    uint16_t udpSrc;
-    IPAddress homeAgent;
-    uint32_t id1;
-    uint32_t id2;
-    uint16_t lifetimeReq; // requested lifetime at the registration time
-    uint16_t lifetimeRem; // remaining lifetime
-};
 
 
 

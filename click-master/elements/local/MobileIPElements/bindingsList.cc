@@ -10,22 +10,23 @@
 #include <clicknet/ether.h>
 #include <clicknet/ip.h>
 #include <clicknet/udp.h>
-
 #include "foreignAgentReqProcess.hh"
-#include "registrationRequestSource.hh"
 
 CLICK_DECLS
+bindingsList::bindingsList(){}
+
+bindingsList::~bindingsList(){}
 
 int bindingsList::configure(Vector<String>&, ErrorHandler*){
     return 0;
 }
 
-HARegistrationEntry * bindingsList::getEntry(IPadress ip) {
+HARegistrationEntry* bindingsList::getEntry(IPAddress ip) {
     return _table.find_pair(ip)->value;
     //assert(pair)??
 }
 
-void bindingsList::addEntry(IPAdress ip, HARegistrationEntry * e) {
+void bindingsList::addEntry(IPAddress ip, HARegistrationEntry* e) {
     _table.insert(ip,e);
 }
 
