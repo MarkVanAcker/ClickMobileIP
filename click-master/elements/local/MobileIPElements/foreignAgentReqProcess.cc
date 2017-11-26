@@ -51,6 +51,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     }
 
     if(_visitorList->_registrationReq.size() == _visitorList->_maxRequests){
+        click_chatter("too much");
         return 66;
     }
 

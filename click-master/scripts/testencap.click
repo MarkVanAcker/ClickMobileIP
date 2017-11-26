@@ -8,19 +8,18 @@
 	->CheckUDPHeader()
 	->RegistrationRequestReply(HAGENT 12.12.12.12, BINDING bind)
 	->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
-	->Print(ttt)
 	->Discard;
 
 
 
 
-    source
-    ->Print(beforeencp)
-    ->IpEncapsulation(IPADDRES 12.12.12.12,BINDING bind)
-    ->Print(afterencap)
-    ->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
-    ->ToDump(req.dump)
-    ->Discard;
+	source
+
+	->IpEncapsulation(IPADDRES 12.12.12.12,BINDING bind)
+	->Print(afterencap)
+	->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
+	->ToDump(req.dump)
+	->Discard;
 
 
 
