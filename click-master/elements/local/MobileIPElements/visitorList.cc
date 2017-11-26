@@ -5,6 +5,7 @@
 #include <clicknet/ether.h>
 #include <clicknet/ip.h>
 #include <clicknet/udp.h>
+#include "visitorList.hh"
 
 
 CLICK_DECLS
@@ -25,19 +26,19 @@ int VisitorList::configure(Vector<String> &conf, ErrorHandler *errh) {
 void VisitorList::run_timer(Timer *timer){
 
     for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); ++it) {
-        uint16_t val = *it.lifetimeRem -1;
+        uint16_t val = it->lifetimeRem -1;
         if(val == 0){
             _registrationReq.erase(it);
         }else{
-                *it.lifetimeRem = val;
+                it->lifetimeRem = val;
         }
     }
     for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); ++it) {
-        uint16_t val = *it.lifetimeRem -1;
+        uint16_t val = it->lifetimeRem -1;
         if(val == 0){
             _visitorMap.erase(it);
         }else{
-                *it.lifetimeRem = val;
+                it->lifetimeRem = val;
         }
     }
     timer->reschedule_after_msec(1000);
@@ -45,7 +46,7 @@ void VisitorList::run_timer(Timer *timer){
 
 bool VisitorList::inMapHome(IPAddress home){
     for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); ++it) {
-        if (*it.homeAgent == node){
+        if (it->homeAgent == home){
             return true;
         }
     }
@@ -54,7 +55,7 @@ bool VisitorList::inMapHome(IPAddress home){
 
 bool VisitorList::inPendingHome(IPAddress home){
     for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); ++it) {
-        if (*it.homeAgent == node){
+        if (it->homeAgent == home){
             return true;
         }
     }
@@ -63,7 +64,7 @@ bool VisitorList::inPendingHome(IPAddress home){
 
 bool VisitorList::inMapNode(IPAddress node){
     for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); ++it) {
-        if (*it.ipSrc == node){
+        if (it->ipSrc == node){
             return true;
         }
     }
@@ -72,7 +73,7 @@ bool VisitorList::inMapNode(IPAddress node){
 
 bool VisitorList::inPendingNode(IPAddress node){
     for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); ++it) {
-        if (*it.ipSrc == node){
+        if (it->ipSrc == node){
             return true;
         }
     }
@@ -87,11 +88,11 @@ void VisitorList::push(int, Packet *p){
     click_ip* Oiph = (click_ip*)p->data();
     if(Oiph->ip_p != 4 && Oiph->ip_dst != _coa){
         click_chatter("Pack recieved in VList that is not IP IN IP protocol or for this host");
-        p->kill;
+        p->kill();
     }
     // packet is ip in ip for this fa
     // the packet is for someone in the VisitorList
-    if (inMapHome(Oiph->ip_source)){
+    if (inMapHome(Oiph->ip_src)){
         output(0).push(p);
     }
 

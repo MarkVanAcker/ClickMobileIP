@@ -26,7 +26,7 @@ HARegistrationEntry* bindingsList::getEntry(IPAddress ip) {
     //assert(pair)??
 }
 
-void bindingsList::addEntry(IPAddress ip, HARegistrationEntry* e) {
+void bindingsList::addEntry(IPAdress ip, HARegistrationEntry* e) {
     _table.insert(ip,e);
 }
 
