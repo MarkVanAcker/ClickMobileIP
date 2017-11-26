@@ -4,6 +4,7 @@
 
 #include <click/element.hh>
 #include <click/ipaddress.hh>
+#include <click/hashmap.hh>
 
 CLICK_DECLS
 
@@ -23,6 +24,7 @@ struct HARegistrationEntry{
 
 };
 
+typedef HashMap<IPAddress, HARegistrationEntry*> RegistrationTable;
 
 class bindingsList: public Element {
 public:
@@ -34,7 +36,7 @@ public:
 
     int configure(Vector<String>&, ErrorHandler*);
 
-    HashMap<IPAddress, HARegistrationEntry*> _table;
+    RegistrationTable _table;
 
 };
 
