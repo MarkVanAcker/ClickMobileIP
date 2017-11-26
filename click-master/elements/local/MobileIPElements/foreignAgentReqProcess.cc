@@ -65,7 +65,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         output(1).push(p);
         return;
     }else{
-        click_chatter("Could not make packet");
+        click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
         int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         int headroom = sizeof(click_ether);
@@ -106,6 +106,21 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         // Calculate the udp checksum
         udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
         iphNew, packet_size - sizeof(click_ip));
+
+        // create VisitorList pending entry
+        listItem* item = new listItem;
+        item->ipSrc = iph->ip_src;
+        item->ipSrc = iph->ip_dst;
+        item->udpSrc = udph->uh_sport;
+        item->homeAgent = format->homeAddr;
+        item->id1 = format->id1;
+        item->id2 = format->id2;
+        item->lifetimeReq = format->lifetime;
+        item->lifetimeRem = format->lifetime;
+
+
+
+
         output(0).push(packet);
     }
 

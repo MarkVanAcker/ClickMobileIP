@@ -21,6 +21,7 @@ class ForeignAgentReqProcess: public Element {
         void push(int, Packet*);
 
         private:
+
             IPAddress _foreignAgent;
             short int _maxLifetime; // ??
 
@@ -40,6 +41,18 @@ struct ForeignAgentReqProcessPacketheader {
     uint32_t id2;           // used for matching Registration Reqsuest
 
     // no extensions needed
+};
+
+struct listItem {
+    EtherAddress ethSrc;
+    IPAddress ipSrc;
+    IPAddress ipDst;
+    uint16_t udpSrc;
+    IPAddress homeAgent;
+    uint32_t id1;
+    uint32_t id2;
+    uint16_t lifetimeReq; // requested lifetime at the registration time
+    uint16_t lifetimeRem; // remaining lifetime
 };
 
 

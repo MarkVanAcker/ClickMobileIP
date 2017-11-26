@@ -45,7 +45,7 @@ struct listItem {
     IPAddress ipSrc;
     IPAddress ipDst;
     uint16_t udpSrc;
-    IPAddress homeAgent; s
+    IPAddress homeAgent;
     uint32_t id1;
     uint32_t id2;
     uint16_t lifetimeReq; // requested lifetime at the registration time
