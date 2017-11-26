@@ -5,7 +5,8 @@
 	->Strip(14)
 	->CheckIPHeader()
 	->CheckUDPHeader()
-	->source;
+	->RegistrationRequestReply(HAGENT 12.12.12.12)
+
 
 
 
@@ -20,7 +21,6 @@
 	->ToDump(req.dump)
 	->Discard;
 
-	//->RegistrationRequestReply(HAGENT 12.12.12.12)
 	//->EtherEncap(0x0800, 19:a3:ad:cf:ad:cc,42:dd:23:31:ff:e1)
 	//->ToDump(req.dump)
 	//->Discard;
