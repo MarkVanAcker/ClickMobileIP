@@ -16,8 +16,8 @@ CLICK_DECLS
 
 struct HARegistrationEntry{
 
-    IPAddress mobile_node_homadress;           // 3 for registration reply
-    IPAddress mobile_node_coa;           // code 1 for a registration reply
+    IPAddress mobile_node_homadress;
+    IPAddress mobile_node_coa;
     uint16_t lifetime;      // seconds for the message to expire
     uint32_t id1;           // used for matching Registration Reqsuest
     uint32_t id2;           // used for matching Registration Reqsuest
@@ -35,12 +35,8 @@ public:
     const char *port_count() const { return "0/0"; }
 
     int configure(Vector<String>&, ErrorHandler*);
-    void addEntry(IPAddress,HARegistrationEntry*);
-    HARegistrationEntry* getEntry(IPAddress);
 
-private:
-
-    HashMap<IPAddress, HARegistrationEntry*> _table;
+    RegistryTable* _table;
 
 };
 

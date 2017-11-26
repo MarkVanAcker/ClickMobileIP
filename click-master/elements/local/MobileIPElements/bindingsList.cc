@@ -18,16 +18,9 @@ bindingsList::bindingsList(){}
 bindingsList::~bindingsList(){}
 
 int bindingsList::configure(Vector<String>&, ErrorHandler*){
+
+    _table = new RegistryTable;
     return 0;
-}
-
-HARegistrationEntry* bindingsList::getEntry(IPAddress ip) {
-    return _table.find_pair(ip)->value;
-    //assert(pair)??
-}
-
-void bindingsList::addEntry(IPAddress ip, HARegistrationEntry* e) {
-    _table.insert(ip,e);
 }
 
 CLICK_ENDDECLS

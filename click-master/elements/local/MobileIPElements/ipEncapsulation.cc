@@ -27,7 +27,7 @@ int IpEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh) {
 /* There should always be an adress found here because the packet is forwarded to the encap */
 // depends on how we want to use the bingslist.
 IPAddress IpEncapsulation::getDesitination(IPAddress MN){
-    return _bindingsList->getEntry(MN)->mobile_node_coa;
+    return _bindingsList->_table->find_pair(ip).value->mobile_node_coa;
 }
 
 
