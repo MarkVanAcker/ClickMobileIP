@@ -88,7 +88,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
     }
 
     // validate packet content, react accordingly
-    unsigned short int code = validatePacket(p);
+    int code = validatePacket(p);
     if(code == 1){
         output(1).push(p);
         return;
@@ -110,7 +110,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         iphNew->ip_len = htons(packet->length());
         iphNew->ip_id = htons(1);
         iphNew->ip_p = 17;
-        iphNew->ip_ttl = 64;
+        iphNew->ip_ttl = 12;
         iphNew->ip_src = _foreignAgent;
         iphNew->ip_dst = iph->ip_src;
         iphNew->ip_sum = click_in_cksum((unsigned char *)iphNew, sizeof(click_ip));
