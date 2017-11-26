@@ -16,12 +16,11 @@ public:
     ~VisitorList();
 
     // input packet that is encapsulated
-    // output 0 encap not for this FA
-    // output 1 encap for this agent
+    // output 0 encap for this agent
 
 
     const char *class_name() const { return "VisitorList"; }
-    const char *port_count() const { return "1/2"; }
+    const char *port_count() const { return "1/1"; }
     const char *processing() const { return PUSH; }
 
     int configure(Vector<String>&, ErrorHandler*);
@@ -34,11 +33,25 @@ public:
     bool inPendingNode(IPAddress);
 
     int _maxRequests;
+    IPAddress _coa;
     Timer _timer;
     Vector<listItem> _registrationReq;
     Vector<listItem> _visitorMap;
 
 };
+
+struct listItem {
+    EtherAddress ethSrc;
+    IPAddress ipSrc;
+    IPAddress ipDst;
+    uint16_t udpSrc;
+    IPAddress homeAgent; s
+    uint32_t id1;
+    uint32_t id2;
+    uint16_t lifetimeReq; // requested lifetime at the registration time
+    uint16_t lifetimeRem; // remaining lifetime
+};
+
 
 
 

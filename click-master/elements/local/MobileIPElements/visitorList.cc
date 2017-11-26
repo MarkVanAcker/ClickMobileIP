@@ -13,7 +13,7 @@ VisitorList::VisitorList(){}
 VisitorList::~VisitorList(){}
 
 int VisitorList::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("ADD", _homeAddress).complete() < 0) return -1;
+    if (Args(conf, this, errh).read_mp("ADD", _coa).complete() < 0) return -1;
 
     _maxRequests = 5;
 	Timer *timer = new Timer(this);
@@ -79,7 +79,21 @@ bool VisitorList::inPendingNode(IPAddress node){
     return false;
 }
 
+// packet is ip
+// output 0 encap not for this FA
+// output 1 encap for this agent
+
 void VisitorList::push(int, Packet *p){
+    click_ip* Oiph = (click_ip*)p->data();
+    if(Oiph->ip_p != 4 && Oiph->ip_dst != _coa){
+        click_chatter("Pack recieved in VList that is not IP IN IP protocol");
+        p->kill;
+    }
+    // packet is ip in ip for this fa
+    // the packet is for someone in the VisitorList
+    if (inMapHome(Oiph->ip_source)){
+        output(0).push(p);
+    }
 
 }
 
