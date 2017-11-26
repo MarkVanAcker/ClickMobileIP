@@ -17,8 +17,11 @@ ForeignAgentReqProcess::~ForeignAgentReqProcess()
 {}
 
 int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).complete() < 0) return -1;
+    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent)read("ANELEMENT",
+    ElementCastArg("VisitorList"),
+    templist).complete() < 0) return -1;
 
+    _visitorList = templist;
     _maxLifetime = 1800; // default value
 	return 0;
 }
@@ -43,6 +46,28 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
         click_chatter("sent as zero");
         return 70;
     }
+
+    if(_visitorList._registrationReq.size() == _visitorList._maxRequests){
+        return 66;
+    }
+
+    // create VisitorList pending entry
+    listItem item;
+    item.ipSrc = iph->ip_src;
+    item.ipSrc = iph->ip_dst;
+    item.udpSrc = udph->uh_sport;
+    item.homeAgent = format->homeAddr;
+    item.id1 = format->id1;
+    item.id2 = format->id2;
+    item.lifetimeReq = format->lifetime;
+    item.lifetimeRem = format->lifetime;
+
+    // should be true
+    if(_visitorList._registrationReq.size() < _visitorList._maxRequests){
+        _visitorList._registrationReq.push_back(item);
+    }
+
+
     return 1;
 }
 
@@ -65,7 +90,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         output(1).push(p);
         return;
     }else{
-        click_chatter("Could not make packet");
+        click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
         int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         int headroom = sizeof(click_ether);
@@ -106,6 +131,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         // Calculate the udp checksum
         udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
         iphNew, packet_size - sizeof(click_ip));
+
         output(0).push(packet);
     }
 
