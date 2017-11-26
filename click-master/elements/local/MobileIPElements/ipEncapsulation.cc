@@ -48,7 +48,7 @@ void IpEncapsulation::push(int, Packet *p) {
     // copy old packet in the new packet's data
     memcpy(packet->data(), p->data(), p->length());
     // create space for header
-    packet->push(sizeof(click_ip));
+    packet = packet->push(sizeof(click_ip));
     // add pushed header at the start of the packet
     memset(packet->data(), 0, sizeof(click_ip));
     click_ip* Oiph = (click_ip*)packet->data(); // outer ip
