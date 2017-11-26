@@ -4,6 +4,8 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
+#include "bindingsList.hh"
+
 
 CLICK_DECLS
 

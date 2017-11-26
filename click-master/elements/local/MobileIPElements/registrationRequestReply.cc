@@ -8,7 +8,6 @@
 
 #include "registrationRequestReply.hh"
 #include "registrationRequestSource.hh"
-#include "bindingsList.hh"
 
 CLICK_DECLS
 RegistrationRequestReply::RegistrationRequestReply()
