@@ -10,53 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c61fbb9-d916-481d-a415-df8ee52c95d1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/bufconv.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/bufconv.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/chuckcheck.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/chuckcheck.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/copyflowid.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/copyflowid.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/copytcpseq.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/copytcpseq.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/duppath.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/duppath.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceicmp.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceicmp.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceip.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceip.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forcetcp.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forcetcp.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceudp.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/forceudp.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/indextreesiplookup.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/indextreesiplookup.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/print80211.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/print80211.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/printairo.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/printairo.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/reframe.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/reframe.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/rrunqueue.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/rrunqueue.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpack.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpack.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpbuffer.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpbuffer.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpconn.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpconn.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpdemux.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpdemux.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpreflector.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/tcpreflector.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/toytcp.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/toytcp.hh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/webgen.cc" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/click-master/elements/local/webgen.hh" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/homeAgentRegProcess.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.cc" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/homeAgentRegProcess.hh" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/bindingsList.hh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.hh" afterPath="$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.hh" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -71,7 +25,7 @@
       <file leaf-file-name="ipEncapsulation.cc" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
+            <state relative-caret-position="238">
               <caret line="29" column="56" lean-forward="false" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
               <folding />
             </state>
@@ -111,9 +65,12 @@
       <file leaf-file-name="foreignAgentReqProcess.cc" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1666">
-              <caret line="98" column="31" lean-forward="true" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
-              <folding />
+            <state relative-caret-position="2091">
+              <caret line="123" column="31" lean-forward="true" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+              <folding>
+                <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
+                <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -121,8 +78,8 @@
       <file leaf-file-name="foreignAgentReqProcess.hh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.hh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+            <state relative-caret-position="612">
+              <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -234,6 +191,120 @@
       <recent name="$PROJECT_DIR$/click-master/elements/local/MobileIPElements" />
     </key>
   </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.hh</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.cc</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/visitorList.hh</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentUtil.hh</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -258,7 +329,7 @@
       <updated>1510843395996</updated>
       <workItem from="1510843398738" duration="6208000" />
       <workItem from="1511628357047" duration="1254000" />
-      <workItem from="1511712845426" duration="4871000" />
+      <workItem from="1511712845426" duration="4978000" />
     </task>
     <task id="LOCAL-00001" summary="second commit">
       <created>1510850945815</created>
@@ -267,11 +338,18 @@
       <option name="project" value="LOCAL" />
       <updated>1510850945817</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fixed ipEncap and added Bindingslist">
+      <created>1511719288106</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1511719288107</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12333000" />
+    <option name="totallyTimeSpent" value="12440000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="260" y="22" width="1922" height="1046" extended-state="6" />
@@ -305,7 +383,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="second commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
+    <MESSAGE value="fixed ipEncap and added Bindingslist" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed ipEncap and added Bindingslist" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -348,7 +427,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1921">
           <caret line="113" column="0" lean-forward="true" selection-start-line="113" selection-start-column="0" selection-end-line="115" selection-end-column="38" />
-          <folding />
+          <folding>
+            <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
+            <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -363,16 +445,19 @@
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIpElements/Encapsulator.cc" />
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1666">
-          <caret line="98" column="31" lean-forward="true" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="2091">
+          <caret line="123" column="31" lean-forward="true" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+          <folding>
+            <marker date="1511719356352" expanded="true" signature="464:529" ph="{...}" />
+            <marker date="1511719356352" expanded="true" signature="4441:4483" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/foreignAgentReqProcess.hh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="0" lean-forward="true" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+        <state relative-caret-position="612">
+          <caret line="36" column="0" lean-forward="true" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -403,7 +488,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/click-master/elements/local/MobileIPElements/ipEncapsulation.cc">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
+        <state relative-caret-position="238">
           <caret line="29" column="56" lean-forward="false" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
           <folding />
         </state>
