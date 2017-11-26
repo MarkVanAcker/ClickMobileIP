@@ -7,10 +7,6 @@
 #include <click/args.hh>
 #include <click/confparse.hh>
 #include <click/error.hh>
-#include <clicknet/ether.h>
-#include <clicknet/ip.h>
-#include <clicknet/udp.h>
-#include "foreignAgentReqProcess.hh"
 
 CLICK_DECLS
 bindingsList::bindingsList(){}
@@ -18,11 +14,9 @@ bindingsList::bindingsList(){}
 bindingsList::~bindingsList(){}
 
 int bindingsList::configure(Vector<String>&, ErrorHandler*){
-
-    _table = new RegistryTable;
+if (Args(conf, this, errh).complete() < 0) return -1;
     return 0;
 }
 
 CLICK_ENDDECLS
-
 EXPORT_ELEMENT(bindingsList)
