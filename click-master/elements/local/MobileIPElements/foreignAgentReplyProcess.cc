@@ -20,7 +20,7 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
 
     VisitorList* templist;
 
-    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read_m("ANELEMENT",
+    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read_m("VISITOR",
     ElementCastArg("VisitorList"),
     templist).complete() < 0) return -1;
 
