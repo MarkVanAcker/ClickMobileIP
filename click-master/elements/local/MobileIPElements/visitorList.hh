@@ -2,7 +2,6 @@
 #define CLICK_VISITORLIST_HH
 
 #include <click/element.hh>
-#include <click/hashtable.hh>
 #include <click/timer.hh>
 #include <click/etheraddress.hh>
 #include "foreignAgentUtil.hh"
@@ -23,22 +22,25 @@ public:
 
     const char *class_name() const { return "VisitorList"; }
     const char *port_count() const { return "1/2"; }
+    const char *processing() const { return PUSH; }
 
     int configure(Vector<String>&, ErrorHandler*);
     void push(int, Packet *p);
     void run_timer(Timer*);
 
-    bool inMap(IPAddress);
-    bool inPending(IPAddress);
+    bool inMapHome(IPAddress);
+    bool inPendingHome(IPAddress);
+    bool inMapNode(IPAddress);
+    bool inPendingNode(IPAddress);
 
+    int _maxRequests;
     Timer _timer;
     Vector<listItem> _registrationReq;
-    HashTable<IPAddress,listItem> _visitorMap;
+    Vector<listItem> _visitorMap;
 
 };
 
 
 
 CLICK_ENDDECLS
-
 #endif
