@@ -71,15 +71,12 @@ Packet* AgentAdvertiser::makePacket() {
     ah->typeEx = 16; // normal routing
     ah->length = 10; // 6 + 4 bytes
     ah->sequenceNum = htons(_sequenceNum); // next seq
-    ah->reserved = 0; // 0
     ah->lifetimeEx = htons(_lifetimeReg);
+    // we don not need to use htons() because last bits 0 anyway
+    ah->flagsReserved = (_FA << 7) + (_HA << 5) + (_FA << 4) + 0;   // force reg req if FA
     ah->addressEx = _addressCO; // normally same as _address
-    if (_HA){
-        ah->flags = 32; //00100000 (is Ha)
-    }
-    else if(_FA){
-        ah->flags = 144;  //10010000 (FA and reg req required)
-    }
+
+
 
     packet->set_dst_ip_anno(iph->ip_dst);
     ah->checksum = click_in_cksum((unsigned char *) ah, packet->length()-sizeof(click_ip));
@@ -95,7 +92,7 @@ void AgentAdvertiser::push(int, Packet *p) {
 
 // make packet and increase seq num
 void AgentAdvertiser::run_timer(Timer * timer) {
-    Packet *p = makePacket()
+    Packet *p = makePacket();
     if (p) {
         output(0).push(p);
         if (_sequenceNum == 0xffff)
