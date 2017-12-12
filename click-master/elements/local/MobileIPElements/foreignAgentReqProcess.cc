@@ -17,8 +17,14 @@ ForeignAgentReqProcess::~ForeignAgentReqProcess()
 {}
 
 int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).complete() < 0) return -1;
 
+    VisitorList* templist;
+
+    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read_m("VISITOR",
+    ElementCastArg("VisitorList"),
+    templist).complete() < 0) return -1;
+
+    _visitorList = templist;
     _maxLifetime = 1800; // default value
 	return 0;
 }
@@ -43,6 +49,28 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
         click_chatter("sent as zero");
         return 70;
     }
+
+    if(_visitorList->_registrationReq.size() == _visitorList->_maxRequests){
+        click_chatter("too much");
+        return 66;
+    }
+
+    // create VisitorList pending entry
+    listItem item;
+    item.ipSrc = iph->ip_src;
+    item.ipSrc = iph->ip_dst;
+    item.udpSrc = udph->uh_sport;
+    item.homeAgent = format->homeAddr;
+    item.id1 = format->id1;
+    item.id2 = format->id2;
+    item.lifetimeReq = format->lifetime;
+    item.lifetimeRem = 7;
+
+    // should be true
+    if(_visitorList->_registrationReq.size() < _visitorList->_maxRequests){
+        _visitorList->_registrationReq.push_back(item);
+    }
+
     return 1;
 }
 
@@ -55,7 +83,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
 
     if(format->type != 1) {
-        output(0).push(p);
+        p->kill();
         return;
     }
 
@@ -65,7 +93,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         output(1).push(p);
         return;
     }else{
-        click_chatter("Could not make packet");
+        click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
         int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         int headroom = sizeof(click_ether);
@@ -78,11 +106,11 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
 
         click_ip *iphNew = (click_ip *)packet->data();
         iphNew->ip_v = 4;
+        iphNew->ip_p = 17;
         iphNew->ip_hl = sizeof(click_ip) >> 2;
         iphNew->ip_len = htons(packet->length());
         iphNew->ip_id = htons(1);
-        iphNew->ip_p = 17;
-        iphNew->ip_ttl = 64;
+        iphNew->ip_ttl = 12;
         iphNew->ip_src = _foreignAgent;
         iphNew->ip_dst = iph->ip_src;
         iphNew->ip_sum = click_in_cksum((unsigned char *)iphNew, sizeof(click_ip));
@@ -106,6 +134,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
         // Calculate the udp checksum
         udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
         iphNew, packet_size - sizeof(click_ip));
+
         output(0).push(packet);
     }
 

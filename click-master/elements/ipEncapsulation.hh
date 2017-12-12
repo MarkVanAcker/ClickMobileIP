@@ -4,8 +4,6 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
-#include "bindingsList.hh"
-
 
 CLICK_DECLS
 
@@ -14,7 +12,6 @@ class IpEncapsulation: public Element {
     public:
         IpEncapsulation();
         ~IpEncapsulation();
-
 
         const char *class_name() const { return "IpEncapsulation"; }
         const char *port_count() const { return "1/1"; }
@@ -26,7 +23,9 @@ class IpEncapsulation: public Element {
 
     private:
         IPAddress _tunnelAddres;
-        bindingsList * _bindingsList;
+        //Bindings* _bindingsList;
+
+
 
 
 };
