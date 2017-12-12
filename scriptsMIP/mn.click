@@ -41,7 +41,8 @@ elementclass MobileNode {
 		-> output;
 
 	// incoming packets
-	input	-> HostEtherFilter($address)
+	input	-> ToDump(dump.req)
+		-> HostEtherFilter($address)
 		-> in_cl :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800)
 		-> arp_res :: ARPResponder($address)
 		-> output;
@@ -51,4 +52,9 @@ elementclass MobileNode {
 
 	in_cl[2]
 		-> ip;
+
+	RegistrationRequestSource(HADDR $address, HAGENT $home_agent, COA $address)
+		-> EtherEncap(0x0800, $address:eth, $address:eth)
+		-> ToDump(req.dump)
+		-> output
 }
