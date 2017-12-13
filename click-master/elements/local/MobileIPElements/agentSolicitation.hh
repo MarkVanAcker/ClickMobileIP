@@ -1,5 +1,5 @@
-#ifndef CLICK_AGENTSOLLICITATION_HH
-#define CLICK_AGENTSOLLICITATION_HH
+#ifndef CLICK_AGENTSOLICITATION_HH
+#define CLICK_AGENTSOLICITATION_HH
 
 #include <click/element.hh>
 #include <click/timer.hh>
@@ -7,12 +7,12 @@
 
 CLICK_DECLS
 
-class AgentSollicitation: public Element {
+class AgentSolicitation: public Element {
     public:
-        AgentSollicitation();
-        ~AgentSollicitation();
+        AgentSolicitation();
+        ~AgentSolicitation();
 
-        const char *class_name() const { return "AgentSollicitation"; }
+        const char *class_name() const { return "AgentSolicitation"; }
         const char *port_count() const { return "0-1/1"; }
         const char *processing() const { return PUSH; }
 
@@ -24,8 +24,6 @@ class AgentSollicitation: public Element {
     private:
         Timer _timer;
 
-        bool _HA;
-        bool _FA;
         int _lifetimeReg;
         int _lifetimeAdv;
         int _interval;
