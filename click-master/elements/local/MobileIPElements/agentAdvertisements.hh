@@ -23,9 +23,15 @@ class AgentAdvertiser: public Element {
 
     private:
         Timer _timer;
-        int _retransmissions; // max 0xffff
-        int _maxRetransmissions;
+
+        bool _HA;
+        bool _FA;
+        int _lifetimeReg;
+        int _lifetimeAdv;
+        int _interval;
+        uint16_t _sequenceNum; // max 0xffff
         IPAddress _address;
+        IPAddress _addressCO;
 
 
 };

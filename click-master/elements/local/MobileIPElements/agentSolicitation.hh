@@ -24,12 +24,9 @@ class AgentSolicitation: public Element {
     private:
         Timer _timer;
 
-        int _lifetimeReg;
-        int _lifetimeAdv;
         int _interval;
-        uint16_t _sequenceNum; // max 0xffff
+        int _maxRetransmissions;
         IPAddress _address;
-        IPAddress _addressCO;
 
 
 };
