@@ -76,17 +76,21 @@ Packet* AgentAdvertiser::makePacket() {
     ah->flagsReserved = (_FA << 7) + (_HA << 5) + (_FA << 4) + 0;   // force reg req if FA
     ah->addressEx = _addressCO; // normally same as _address
 
-
-
     packet->set_dst_ip_anno(iph->ip_dst);
     ah->checksum = click_in_cksum((unsigned char *) ah, packet->length()-sizeof(click_ip));
 
     return packet;
 }
 
-
+// expects node Sollicitation packet
+// sends an extra packet, we do not reset the timer
 void AgentAdvertiser::push(int, Packet *p) {
-    output(0).push(p);
+    Packet *newP = makePacket();
+    if(newP)
+    {
+        output(0).push(newP);
+    }
+    p->kill()
 }
 
 

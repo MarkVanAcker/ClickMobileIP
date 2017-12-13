@@ -1,5 +1,5 @@
-#ifndef CLICK_AGENTADVERTISEMENTS_HH
-#define CLICK_AGENTADVERTISEMENTS_HH
+#ifndef CLICK_AGENTSOLLICITATION_HH
+#define CLICK_AGENTSOLLICITATION_HH
 
 #include <click/element.hh>
 #include <click/timer.hh>
@@ -7,12 +7,12 @@
 
 CLICK_DECLS
 
-class AgentAdvertiser: public Element {
+class AgentSollicitation: public Element {
     public:
-        AgentAdvertiser();
-        ~AgentAdvertiser();
+        AgentSollicitation();
+        ~AgentSollicitation();
 
-        const char *class_name() const { return "AgentAdvertiser"; }
+        const char *class_name() const { return "AgentSollicitation"; }
         const char *port_count() const { return "0-1/1"; }
         const char *processing() const { return PUSH; }
 
