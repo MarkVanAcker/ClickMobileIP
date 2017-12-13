@@ -90,7 +90,7 @@ void AgentAdvertiser::push(int, Packet *p) {
     {
         output(0).push(newP);
     }
-    p->kill()
+    p->kill();
 }
 
 
