@@ -53,8 +53,7 @@ struct AdvertisementPacketheader{
     uint8_t     length;         // length is 10 because only 1 address
     uint16_t    sequenceNum;    // in 0 -> 0xffff
     uint16_t    lifetimeEx;     // reg lifetime (longest agent is willing to accept in a request)
-    uint8_t     flags;          // 8 flags
-    uint8_t     reserved;       // 0
+    uint16_t    flagsReserved;  // 11 bit flags 5 res (res = 0)
     IPAddress   addressEx;      // care off
 
 };
