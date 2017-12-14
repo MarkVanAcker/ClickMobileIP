@@ -1,5 +1,5 @@
-#ifndef CLICK_VISITORLIST_HH
-#define CLICK_VISITORLIST_HH
+#ifndef CLICK_MOBILEINFOLIST_HH
+#define CLICK_MOBILEINFOLIST_HH
 
 #include <click/element.hh>
 #include <click/timer.hh>
@@ -8,47 +8,40 @@
 CLICK_DECLS
 
 
-struct listItem {
-    EtherAddress ethSrc;
-    IPAddress ipSrc;
-    IPAddress ipDst;
-    uint16_t udpSrc;
-    IPAddress homeAgent;
-    uint32_t id1;
-    uint32_t id2;
-    uint16_t lifetimeReq; // requested lifetime at the registration time
-    uint16_t lifetimeRem; // remaining lifetime
+struct Advertisements {
+		int lifetime;
+		int reg_lifetime;
+		IPAddress _coa;
+		IPAddress _private_addr;
+		bool dectimer();
+
 };
 
 
-class VisitorList: public Element {
+class MobileInfoList: public Element {
+
+
 public:
 
-    VisitorList();
-    ~VisitorList();
+    MobileInfoList();
+    ~MobileInfoList();
 
     // input packet that is encapsulated
     // output 0 encap for this agent
     // 0-0 for testing 
 
-    const char *class_name() const { return "VisitorList"; }
-    const char *port_count() const { return "0-1/0-1"; }
-    const char *processing() const { return PUSH; }
+    const char *class_name() const { return "MobileInfoList"; }
+    const char *port_count() const { return "0/0"; }
 
     int configure(Vector<String>&, ErrorHandler*);
-    void push(int, Packet *p);
-    void run_timer(Timer*);
 
-    bool inMapHome(IPAddress);
-    bool inPendingHome(IPAddress);
-    bool inMapNode(IPAddress);
-    bool inPendingNode(IPAddress);
-
-    int _maxRequests;
-    IPAddress _coa;
-    Timer _timer;
-    Vector<listItem> _registrationReq;
-    Vector<listItem> _visitorMap;
+		bool home;
+		bool connected;
+		IPAddress curr_coa;
+		IPAddress curr_private_addr;
+		IPAddress home_public_addr;
+		IPAddress home_private_addr;	
+		Vector<Advertisement*> current advertisements;
 
 };
 
