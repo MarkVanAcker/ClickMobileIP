@@ -4,8 +4,18 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
+#include "mobileinfolist.hh"
 
 CLICK_DECLS
+
+struct Request{
+    IPAddress ipDst;
+    IPAddress COA;
+    uint32_t id1;
+    uint32_t id2;
+    uint16_t requestedLifetime;
+    uint16_t remainingLifetime;
+};
 
 
 class RegistrationRequestSource: public Element {
@@ -22,22 +32,11 @@ class RegistrationRequestSource: public Element {
         void run_timer(Timer*);
         Packet* makePacket();
 
+        Vector<Request> currentRequests;
+
     private:
         Timer _timer;
-        bool _registrated;
-        bool _remainingBidingLifetime;
-        // default foreign agent time ? 1800
-
-        IPAddress _homeAddress;
-        IPAddress _homeAgent;
-        IPAddress _CoA;
-
-        /* securing registration request-replies */
-        Vector<unsigned int> _identifications1;
-        Vector<unsigned int> _identifications2;
-
-
-
+        MobileInfoList* _mobileNode;
 
 };
 
