@@ -8,12 +8,7 @@
 CLICK_DECLS
 
 
-struct Advertisement {
-		int lifetime;
-		int reg_lifetime;
-		IPAddress _coa;
-		IPAddress _private_addr;
-};
+
 
 
 class MobileInfoList: public Element {
@@ -41,7 +36,7 @@ public:
 	IPAddress curr_private_addr;
 	IPAddress home_public_addr;
 	IPAddress home_private_addr;
-	Vector<Advertisement*> current_advertisements;
+	//Vector<Advertisement*> current_advertisements;
 
 };
 

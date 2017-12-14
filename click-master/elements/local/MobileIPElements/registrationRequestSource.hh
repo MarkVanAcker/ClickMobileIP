@@ -4,6 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
+#include "mobileinfolist.hh"
 
 CLICK_DECLS
 

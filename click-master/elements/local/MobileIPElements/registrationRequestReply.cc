@@ -7,6 +7,7 @@
 #include <clicknet/udp.h>
 
 #include "registrationRequestReply.hh"
+#include "registrationRequestSource.hh"
 
 CLICK_DECLS
 RegistrationRequestReply::RegistrationRequestReply()
