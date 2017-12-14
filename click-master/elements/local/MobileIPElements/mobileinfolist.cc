@@ -19,8 +19,9 @@ int MobileInfoList::configure(Vector<String> &conf, ErrorHandler *errh) {
 		curr_coa = home_public_addr;
 		curr_private_addr = home_private_addr;
 		home = true;
-		
-}
+        return 0;
+
+    }
 
 
 

@@ -8,7 +8,7 @@
 CLICK_DECLS
 
 
-struct Advertisements {
+struct Advertisement {
 		int lifetime;
 		int reg_lifetime;
 		IPAddress _coa;
@@ -28,7 +28,7 @@ public:
 
     // input packet that is encapsulated
     // output 0 encap for this agent
-    // 0-0 for testing 
+    // 0-0 for testing
 
     const char *class_name() const { return "MobileInfoList"; }
     const char *port_count() const { return "0/0"; }
@@ -40,8 +40,8 @@ public:
 		IPAddress curr_coa;
 		IPAddress curr_private_addr;
 		IPAddress home_public_addr;
-		IPAddress home_private_addr;	
-		Vector<Advertisement*> current advertisements;
+		IPAddress home_private_addr;
+		Vector<Advertisement*> current_advertisements;
 
 };
 
