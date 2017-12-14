@@ -7,17 +7,21 @@
 #include <clicknet/udp.h>
 
 #include "registrationRequestSource.hh"
+#include "registrationRequestReply.hh"
 
 CLICK_DECLS
-RegistrationRequestSource::RegistrationRequestSource(): _registrated(false),_remainingBidingLifetime(0)
-{}
+RegistrationRequestSource::RegistrationRequestSource(){
+    srand(time(NULL));
+}
 
 RegistrationRequestSource::~RegistrationRequestSource()
 {}
 
 int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("HADDR", _homeAddress).read_mp("HAGENT", _homeAgent).read_mp("COA", _CoA).complete() < 0) return -1;
+    MobileInfoList* tempList;
+    if (Args(conf, this, errh).read("MNLIST",ElementCastArg("MobileInfoList"),tempList).complete() < 0) return -1;
 
+    _mobileNode = tempList;
 	Timer *timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1000);
@@ -35,6 +39,7 @@ Packet* RegistrationRequestSource::makePacket(){
     }
     memset(packet->data(), 0, packet->length());
 
+
 	click_ip *iph = (click_ip *)packet->data();
     iph->ip_v = 4;
     iph->ip_hl = sizeof(click_ip) >> 2;
@@ -49,7 +54,7 @@ Packet* RegistrationRequestSource::makePacket(){
     packet->set_dst_ip_anno(iph->ip_dst); //not sure why it is used
 
     click_udp *udph = (click_udp*)(iph+1);
-    udph->uh_sport = htons(100); // anything
+    udph->uh_sport = htons(1000 + (rand()%2000+) ); // anything
     udph->uh_dport = htons(434);
     udph->uh_ulen = htons(packet->length()-sizeof(click_ip));
 
@@ -77,9 +82,21 @@ Packet* RegistrationRequestSource::makePacket(){
 }
 
 void RegistrationRequestSource::push(int, Packet *p) {
-    click_chatter("Could not make packet");
-    Packet* requestSource = makePacket();
-    output(0).push(requestSource);
+    click_ip *iph = (click_ip *)p->data();
+    click_udp *udph= (click_udp*)(iph+1);
+    RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPacketheader*)(udph+1);
+    if(format->type == 3){
+        if(format->code == 0 || format->code == 1){ // code 1 should not be used
+            _mobileNode->connected = true;
+            if(format->lifetime == 0){
+                _mobileNode->home = true;
+                _mobileNode->remainingConnectionTime = -1; // if at home infinite time
+            }else{
+                _mobileNode->home = false;
+                _mobileNode->remainingConnectionTime = format->lifetime; // if at home infinite time
+            }
+        }
+    }
     return;
 }
 

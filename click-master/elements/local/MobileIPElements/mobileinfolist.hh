@@ -13,8 +13,6 @@ struct Advertisement {
 		int reg_lifetime;
 		IPAddress _coa;
 		IPAddress _private_addr;
-		bool dectimer();
-
 };
 
 
@@ -35,13 +33,15 @@ public:
 
     int configure(Vector<String>&, ErrorHandler*);
 
-		bool home;
-		bool connected;
-		IPAddress curr_coa;
-		IPAddress curr_private_addr;
-		IPAddress home_public_addr;
-		IPAddress home_private_addr;
-		Vector<Advertisement*> current_advertisements;
+
+	bool home;
+	bool connected;
+	int remainingConnectionTime;
+	IPAddress curr_coa;
+	IPAddress curr_private_addr;
+	IPAddress home_public_addr;
+	IPAddress home_private_addr;
+	Vector<Advertisement*> current_advertisements;
 
 };
 
