@@ -12,10 +12,14 @@
 
 elementclass Agent {
 	$private_address, $public_address, $gateway |
+	
+	bind::bindingsList();
+
 
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
+		-> ipc :: IPClassifier(dst udp port 434 or src udp port 434, -)[1]
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -23,6 +27,8 @@ elementclass Agent {
 					$public_address:ipnet 2,
 					0.0.0.0/0 $gateway 2);
 	
+
+
 	// ARP responses are copied to each ARPQuerier and the host.
 	arpt :: Tee (2);
 	
@@ -117,4 +123,14 @@ elementclass Agent {
 	public_frag[1]
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
+
+
+	
+	ipc
+		-> RegistrationRequestReply(HAGENT public_address, BINDING bind)
+		-> public_arpq;
+	
+	adv::AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 1000)
+		-> private_arpq
+
 }
