@@ -12,6 +12,7 @@ CLICK_DECLS
 struct Advertisement{
 		uint16_t lifetime;
 		uint16_t reg_lifetime;
+		uint16_t sequenceNum;
 		IPAddress COA;
 		IPAddress private_addr;
 };
@@ -30,9 +31,10 @@ class AdvertisementsHandler: public Element {
         void run_timer(Timer*);
 
     private:
-        Timer _timer;
         MobileInfoList* _mobileNode;
-        Vector<Advertisement*> current_advertisements;
+		RegistrationRequestSource* _source;
+        Vector<Advertisement> current_advertisements;
+		Vector<Timer> current_timers;
 
 
 };

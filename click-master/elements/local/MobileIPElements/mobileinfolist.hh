@@ -31,7 +31,7 @@ public:
 
 	bool home;
 	bool connected;
-	int remainingConnectionTime;
+	uint16_t remainingConnectionTime;
 	IPAddress curr_coa;
 	IPAddress curr_private_addr;
 	IPAddress home_public_addr;
