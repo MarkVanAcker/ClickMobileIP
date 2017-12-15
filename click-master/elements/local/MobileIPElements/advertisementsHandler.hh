@@ -10,10 +10,10 @@
 CLICK_DECLS
 
 struct Advertisement{
-		int lifetime;
-		int reg_lifetime;
-		IPAddress _coa;
-		IPAddress _private_addr;
+		uint16_t lifetime;
+		uint16_t reg_lifetime;
+		IPAddress COA;
+		IPAddress private_addr;
 };
 
 class AdvertisementsHandler: public Element {
