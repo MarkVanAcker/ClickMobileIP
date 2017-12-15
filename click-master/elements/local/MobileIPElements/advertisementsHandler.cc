@@ -53,19 +53,28 @@ void AdvertisementsHandler::push(int, Packet *p) {
             found = true;
             // if the router is reset and i am connected to that one, re reg with new values
             if(advh.sequenceNum < 256 && advh.sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
-                // make packet (req) for this advert _source
-                // stuff
-            }else{
+                if(_mobileNode->curr_private_addr == it->private_addr){
+                    // make packet (req) for this advert _source
+                    // stuff
+                }
                 // update fields recording to the curr adv message,
-
+                it->lifetime = advh.lifetime;
+                it->reg_lifetime = advh.lifetimeEx;
+                it->sequenceNum = advh.sequenceNum;
             }
-
-
-
         }
-     }
-
-
+    }
+    if(found == false){
+        current_advertisements.push_back(advStruct);
+    }
+    if(_mobileNode->connected == false){
+        // make packet (req) for this advert _source
+    }
+    // is there is a change FA to HA
+    if(_mobileNode->connected == true && advh->adress == _mobileNode->home_private_addr
+        && _mobileNode->curr_coa!= _mobileNode->home_public_addr){
+            // make packet (req) for this advert _source DEREG
+        }
 }
 
 
@@ -73,7 +82,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
 void AdvertisementsHandler::run_timer(Timer * timer) {
 
     // random term to make sure 2 hosts messages will not interfere
-    timer->reschedule_after_msec(1000+((rand()%70)-35));
+    timer->reschedule_after_msec(1000);
 }
 
 CLICK_ENDDECLS
