@@ -117,4 +117,8 @@ elementclass Agent {
 	public_frag[1]
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
+
+	AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 1000)
+		-> private_arpq
+
 }
