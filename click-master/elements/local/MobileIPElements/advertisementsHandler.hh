@@ -15,6 +15,8 @@ struct Advertisement{
 		uint16_t sequenceNum;
 		IPAddress COA;
 		IPAddress private_addr;
+		bool ha;
+		bool fa;
 };
 
 class AdvertisementsHandler: public Element {

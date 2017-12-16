@@ -31,11 +31,13 @@ public:
 
 	bool home;
 	bool connected;
+    bool advertisementReady;
 	uint16_t remainingConnectionTime;
 	IPAddress curr_coa;
 	IPAddress curr_private_addr;
 	IPAddress home_public_addr;
 	IPAddress home_private_addr;
+    IPAddress myAddress;
 	//Vector<Advertisement*> current_advertisements;
 
 };

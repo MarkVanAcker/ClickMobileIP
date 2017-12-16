@@ -5,6 +5,7 @@
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
 #include "mobileinfolist.hh"
+#include "advertisementsHandler.hh"
 
 CLICK_DECLS
 
@@ -15,6 +16,7 @@ struct Request{
     uint32_t id2;
     uint16_t requestedLifetime;
     uint16_t remainingLifetime;
+    uint16_t port;
 };
 
 
