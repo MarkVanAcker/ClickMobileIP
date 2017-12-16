@@ -66,8 +66,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
             // if the router is reset and i am connected to that one, re reg with new values
             if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
                 if(_mobileNode->curr_private_addr == it->private_addr){
-                    // make packet (req) for this advert _source
-                    // stuff
+                    _source->makePacket(advStruct);
                 }
                 // update fields recording to the curr adv message,
                 it->lifetime = advh->lifetime;
@@ -80,17 +79,18 @@ void AdvertisementsHandler::push(int, Packet *p) {
         current_advertisements.push_back(advStruct);
     }
     if(_mobileNode->connected == false){
-        // make packet (req) for this advert _source
+        _source->makePacket(advStruct);
+        return;
     }
     // is there is a change FA to HA
     else if(_mobileNode->connected == true && advh->address == _mobileNode->home_private_addr
         && _mobileNode->curr_coa!= _mobileNode->home_public_addr){
-            // make packet (req) for this advert _source DEREG
+            _source->makePacket(advStruct);
         }
 }
 
 
-// make packet and increase seq num
+// decrease lifetimes and act if needed
 void AdvertisementsHandler::run_timer(Timer * timer) {
     bool wasConnected = _mobileNode->connected;
     bool hostConnectionLost = false;
@@ -111,7 +111,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
         _mobileNode->advertisementReady = false;
     }
     if((!wasConnected || hostConnectionLost) && !current_advertisements.empty()){
-        // make packet req with any item in list
+        _source->makePacket(*current_advertisements.begin());
     }
 
     timer->reschedule_after_msec(1000);
