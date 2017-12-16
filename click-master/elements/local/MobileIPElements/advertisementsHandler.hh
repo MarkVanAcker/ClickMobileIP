@@ -5,17 +5,13 @@
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
 #include "mobileinfolist.hh"
-#include "advertisementsHandler.hh"
+#include "registrationRequestSource.hh"
+#include "agentAdvertisements.hh"
+
 
 CLICK_DECLS
 
-struct Advertisement{
-		uint16_t lifetime;
-		uint16_t reg_lifetime;
-		uint16_t sequenceNum;
-		IPAddress COA;
-		IPAddress private_addr;
-};
+
 
 class AdvertisementsHandler: public Element {
     public:

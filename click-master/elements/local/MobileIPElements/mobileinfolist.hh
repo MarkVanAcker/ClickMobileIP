@@ -8,7 +8,15 @@
 CLICK_DECLS
 
 
-
+struct Advertisement{
+		uint16_t lifetime;
+		uint16_t reg_lifetime;
+		uint16_t sequenceNum;
+		IPAddress COA;
+		IPAddress private_addr;
+		bool ha;
+		bool fa;
+};
 
 
 class MobileInfoList: public Element {
@@ -31,11 +39,13 @@ public:
 
 	bool home;
 	bool connected;
+    bool advertisementReady;
 	uint16_t remainingConnectionTime;
 	IPAddress curr_coa;
 	IPAddress curr_private_addr;
 	IPAddress home_public_addr;
 	IPAddress home_private_addr;
+    IPAddress myAddress;
 	//Vector<Advertisement*> current_advertisements;
 
 };

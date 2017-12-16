@@ -15,6 +15,7 @@ struct Request{
     uint32_t id2;
     uint16_t requestedLifetime;
     uint16_t remainingLifetime;
+    uint16_t port;
 };
 
 
@@ -30,7 +31,7 @@ class RegistrationRequestSource: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
         void run_timer(Timer*);
-        Packet* makePacket();
+        void makePacket(Advertisement a);
 
         Vector<Request> currentRequests;
 

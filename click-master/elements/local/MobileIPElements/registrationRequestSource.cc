@@ -28,18 +28,22 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
 	return 0;
 }
 
-Packet* RegistrationRequestSource::makePacket(){
+void RegistrationRequestSource::makePacket(Advertisement a){
     // make the packet
     int packet_size = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
     int headroom = sizeof(click_ether);
     WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");
-        return 0;
+        return;
     }
     memset(packet->data(), 0, packet->length());
 
     Request newReq;
+    newReq.ipDst = a.private_addr;
+    newReq.COA = a.COA;
+    newReq.remainingLifetime = a.reg_lifetime;
+    newReq.requestedLifetime = a.reg_lifetime;
     newReq.ipDst = 0;// adv as argument !!!!!!!!!!!!!!!!!!!!!!!!!
 	click_ip *iph = (click_ip *)packet->data();
     iph->ip_v = 4;
@@ -47,15 +51,17 @@ Packet* RegistrationRequestSource::makePacket(){
     iph->ip_len = htons(packet->length());
     iph->ip_id = htons(1);
     iph->ip_p = 17;
-    iph->ip_ttl = 30;
-    //iph->ip_src = _homeAgent;
-    //iph->ip_dst = _homeAddress;
+    iph->ip_ttl = 20;
+    iph->ip_src = _mobileNode->myAddress;
+    iph->ip_dst = a.private_addr;
     iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
 
     packet->set_dst_ip_anno(iph->ip_dst); //not sure why it is used
 
     click_udp *udph = (click_udp*)(iph+1);
-    udph->uh_sport = htons(1000 + (rand()%2000+1) ); // anything
+    uint16_t p = htons(1000 + (rand()%2000+1));
+    newReq.port = p;
+    udph->uh_sport = p; // anything
     udph->uh_dport = htons(434);
     udph->uh_ulen = htons(packet->length()-sizeof(click_ip));
 
@@ -63,38 +69,65 @@ Packet* RegistrationRequestSource::makePacket(){
     RegistrationRequestPacketheader* format = (RegistrationRequestPacketheader*)(udph+1);
     format->type = 1; //fixed
     format->flags = 0; //all flags 0   ||  4, 8, 16, 32 ?
-    format->lifetime = htons(10);
-    //format->homeAddr = _homeAddress;
-    //format->homeAgent = _homeAgent;
-    //format->coAddr = _CoA;
+    if(a.private_addr == _mobileNode->home_private_addr){
+        if(a.ha && _mobileNode->curr_private_addr != _mobileNode->home_private_addr){
+            // update routing table
+            _mobileNode->home = true;
+            _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
+            _mobileNode->remainingConnectionTime = 0; // should not matter
+        }
+    }else if(a.fa){
+        format->lifetime = a.reg_lifetime;
+    }else{
+        return;
+    }
+    // lifetime for HA = 0 which is set at default.
+    format->homeAddr = _mobileNode->home_private_addr;
+    format->homeAgent = _mobileNode->home_public_addr;
+    format->coAddr = a.COA;
     unsigned int id1  = rand() % (2147483647);
     unsigned int id2  = rand() % (2147483647);
     format->id1 = htonl(id1); // max 32 bit number (unsigned) if we want to secure the messages
     format->id2 = htonl(id2);
+    newReq.id1 = id1;
+    newReq.id2 = id2;
 
-    //_identifications1.push_back(id1); // indexwise connection
-    //_identifications2.push_back(id2);
+
     udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size-sizeof(click_ip)),
     iph, packet_size - sizeof(click_ip));
 
-    unsigned len = packet->length()-sizeof(click_ip);
+    currentRequests.push_back(newReq);
 
-    return packet;
+    output(0).push(packet);
 }
 
 void RegistrationRequestSource::push(int, Packet *p) {
     click_ip *iph = (click_ip *)p->data();
     click_udp *udph= (click_udp*)(iph+1);
     RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPacketheader*)(udph+1);
+    //
+    // check pendings and accept occerdingly
+    //
     if(format->type == 3){
         if(format->code == 0 || format->code == 1){ // code 1 should not be used
-            _mobileNode->connected = true;
-            if(format->lifetime == 0){
-                _mobileNode->home = true;
-                _mobileNode->remainingConnectionTime = -1; // if at home infinite time
-            }else{
-                _mobileNode->home = false;
-                _mobileNode->remainingConnectionTime = format->lifetime; // if at home infinite time
+            for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); ++it){
+                if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
+                    // found corresponding request
+                    _mobileNode->connected = true;
+                    if(format->lifetime == 0){
+                        _mobileNode->home = true;
+                        _mobileNode->remainingConnectionTime = 0; // doenst really matter
+                    }else{
+                        _mobileNode->home = false;
+                        _mobileNode->curr_private_addr = it->ipDst;
+                        _mobileNode->curr_coa = it->COA;
+                        uint16_t lifetimeReq = it->requestedLifetime;
+                        uint16_t lifetimeResponse = format->lifetime;
+                        uint16_t diff = lifetimeReq - lifetimeResponse;
+                        uint16_t lifetime = it->remainingLifetime - diff;
+                        _mobileNode->remainingConnectionTime = lifetime;
+                    }
+                }
             }
         }
     }
@@ -102,10 +135,14 @@ void RegistrationRequestSource::push(int, Packet *p) {
 }
 
 void RegistrationRequestSource::run_timer(Timer *timer){
+    for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
+        if(it->remainingLifetime == 0){
+            currentRequests.erase(it);
+        }else{
+            it->remainingLifetime--;
+        }
+    }
 
-    click_chatter("timer goes off");
-    Packet* requestSource = makePacket();
-    output(0).push(requestSource);
     timer->reschedule_after_msec(1000);
 }
 

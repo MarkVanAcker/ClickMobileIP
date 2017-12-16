@@ -4,6 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
+#include "mobileinfolist.hh"
 
 CLICK_DECLS
 
@@ -13,7 +14,7 @@ class AgentSolicitation: public Element {
         ~AgentSolicitation();
 
         const char *class_name() const { return "AgentSolicitation"; }
-        const char *port_count() const { return "0-1/1"; }
+        const char *port_count() const { return "0-1/0-1"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);
@@ -24,14 +25,16 @@ class AgentSolicitation: public Element {
     private:
         Timer _timer;
 
+        MobileInfoList* _mobileNode;
         int _interval;
+        int transmissions;
         int _maxRetransmissions;
         IPAddress _address;
 
 
 };
 
-struct SollicitationPacketheader{
+struct SolicitationPacketheader{
 
     /* part 1 icmp adv */
     uint8_t     type;      // 10 for Sollicitation
