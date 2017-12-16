@@ -8,7 +8,15 @@
 CLICK_DECLS
 
 
-
+struct Advertisement{
+		uint16_t lifetime;
+		uint16_t reg_lifetime;
+		uint16_t sequenceNum;
+		IPAddress COA;
+		IPAddress private_addr;
+		bool ha;
+		bool fa;
+};
 
 
 class MobileInfoList: public Element {

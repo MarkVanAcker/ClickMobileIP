@@ -28,14 +28,14 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
 	return 0;
 }
 
-Packet* RegistrationRequestSource::makePacket(Advertisement a){
+void RegistrationRequestSource::makePacket(Advertisement a){
     // make the packet
     int packet_size = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
     int headroom = sizeof(click_ether);
     WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");
-        return 0;
+        return;
     }
     memset(packet->data(), 0, packet->length());
 
@@ -69,11 +69,22 @@ Packet* RegistrationRequestSource::makePacket(Advertisement a){
     RegistrationRequestPacketheader* format = (RegistrationRequestPacketheader*)(udph+1);
     format->type = 1; //fixed
     format->flags = 0; //all flags 0   ||  4, 8, 16, 32 ?
-    if(_mobileNode->curr_private_addr != _mobileNode->home_private_addr && a.private_addr == )
-    format->lifetime = a.reg_lifetime;
+    if(a.private_addr == _mobileNode->home_private_addr){
+        if(a.ha && _mobileNode->curr_private_addr != _mobileNode->home_private_addr){
+            // update routing table
+            _mobileNode->home = true;
+            _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
+            _mobileNode->remainingConnectionTime = 0; // should not matter
+        }
+    }else if(a.fa){
+        format->lifetime = a.reg_lifetime;
+    }else{
+        return;
+    }
+    // lifetime for HA = 0 which is set at default.
     format->homeAddr = _mobileNode->home_private_addr;
     format->homeAgent = _mobileNode->home_public_addr;
-    format->coAddr = _CoA;
+    format->coAddr = a.COA;
     unsigned int id1  = rand() % (2147483647);
     unsigned int id2  = rand() % (2147483647);
     format->id1 = htonl(id1); // max 32 bit number (unsigned) if we want to secure the messages
@@ -87,7 +98,7 @@ Packet* RegistrationRequestSource::makePacket(Advertisement a){
 
     currentRequests.push_back(newReq);
 
-    return packet;
+    output(0).push(packet);
 }
 
 void RegistrationRequestSource::push(int, Packet *p) {
@@ -99,13 +110,24 @@ void RegistrationRequestSource::push(int, Packet *p) {
     //
     if(format->type == 3){
         if(format->code == 0 || format->code == 1){ // code 1 should not be used
-            _mobileNode->connected = true;
-            if(format->lifetime == 0){
-                _mobileNode->home = true;
-                _mobileNode->remainingConnectionTime = -1; // if at home infinite time
-            }else{
-                _mobileNode->home = false;
-                _mobileNode->remainingConnectionTime = format->lifetime; // if at home infinite time
+            for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); ++it){
+                if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
+                    // found corresponding request
+                    _mobileNode->connected = true;
+                    if(format->lifetime == 0){
+                        _mobileNode->home = true;
+                        _mobileNode->remainingConnectionTime = 0; // doenst really matter
+                    }else{
+                        _mobileNode->home = false;
+                        _mobileNode->curr_private_addr = it->ipDst;
+                        _mobileNode->curr_coa = it->COA;
+                        uint16_t lifetimeReq = it->requestedLifetime;
+                        uint16_t lifetimeResponse = format->lifetime;
+                        uint16_t diff = lifetimeReq - lifetimeResponse;
+                        uint16_t lifetime = it->remainingLifetime - diff;
+                        _mobileNode->remainingConnectionTime = lifetime;
+                    }
+                }
             }
         }
     }
@@ -113,7 +135,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
 }
 
 void RegistrationRequestSource::run_timer(Timer *timer){
-    for(Vector<currentRequests>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
+    for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
         if(it->remainingLifetime == 0){
             currentRequests.erase(it);
         }else{

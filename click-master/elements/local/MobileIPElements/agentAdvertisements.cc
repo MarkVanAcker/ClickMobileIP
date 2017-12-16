@@ -78,6 +78,11 @@ Packet* AgentAdvertiser::makePacket() {
 
     packet->set_dst_ip_anno(iph->ip_dst);
     ah->checksum = click_in_cksum((unsigned char *) ah, packet->length()-sizeof(click_ip));
+    if (_sequenceNum == 0xffff){
+        _sequenceNum = 256;
+    }else{
+        _sequenceNum++;
+    }
 
     return packet;
 }
@@ -91,6 +96,7 @@ void AgentAdvertiser::push(int, Packet *p) {
         output(0).push(newP);
     }
     p->kill();
+    _timer.reschedule_after_msec(_interval+((rand()%70)-35));
 }
 
 
@@ -99,11 +105,6 @@ void AgentAdvertiser::run_timer(Timer * timer) {
     Packet *p = makePacket();
     if (p) {
         output(0).push(p);
-        if (_sequenceNum == 0xffff)
-            _sequenceNum = 256;
-        else
-            _sequenceNum++;
-
         click_chatter("Advertisement sent");
     }
 

@@ -5,7 +5,6 @@
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
 #include "mobileinfolist.hh"
-#include "advertisementsHandler.hh"
 
 CLICK_DECLS
 
@@ -32,7 +31,7 @@ class RegistrationRequestSource: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
         void run_timer(Timer*);
-        Packet* makePacket();
+        void makePacket(Advertisement a);
 
         Vector<Request> currentRequests;
 

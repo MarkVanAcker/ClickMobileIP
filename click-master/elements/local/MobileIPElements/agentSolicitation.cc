@@ -15,8 +15,9 @@ AgentSolicitation::AgentSolicitation(){
 AgentSolicitation::~AgentSolicitation() {}
 
 int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
+    MobileInfoList* tempList;
     if (Args(conf, this, errh)
-        .read_m("ADDRNODE", _address)
+        .read_m("MNLIST",ElementCastArg("MobileInfoList"),tempList)
         .read_m("MAX", _maxRetransmissions)
         .complete() < 0) return -1;
 
@@ -25,7 +26,8 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
         return -1;
     }
 
-
+    _mobileNode = tempList;
+    _address = _mobileNode->myAddress;
     Timer *timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(500);
@@ -35,7 +37,7 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
 
 // create adveritesements
 Packet* AgentSolicitation::makePacket() {
-    int packetsize = sizeof(click_ip) + sizeof(SollicitationPacketheader);
+    int packetsize = sizeof(click_ip) + sizeof(SolicitationPacketheader);
     int headroom = sizeof(click_ether);
     WritablePacket* packet = Packet::make(headroom, 0, packetsize, 0);
     if (packet == 0){
@@ -53,7 +55,7 @@ Packet* AgentSolicitation::makePacket() {
     iph->ip_dst = IPAddress("255.255.255.255");
     iph->ip_sum = click_in_cksum((unsigned char*)packet->data(), packet->length());
 
-    SollicitationPacketheader* sh = (SollicitationPacketheader*) (iph+1);
+    SolicitationPacketheader* sh = (SolicitationPacketheader*) (iph+1);
     sh->type = 10; // Sollicitations
     sh->code = 0; // 0
 
@@ -63,28 +65,36 @@ Packet* AgentSolicitation::makePacket() {
     return packet;
 }
 
-// expects node Sollicitation packet
-// sends an extra packet, we do not reset the timer
-void AgentSolicitation::push(int, Packet *p) {
-    Packet *newP = makePacket();
-    if(newP)
-    {
-        output(0).push(newP);
-    }
-    p->kill();
-}
 
 
 // make packet and increase seq num
 void AgentSolicitation::run_timer(Timer * timer) {
-    Packet *p = makePacket();
-    if (p) {
-        output(0).push(p);
-        click_chatter("Sollicitation sent");
+    if(!_mobileNode->connected && !_mobileNode->advertisementReady){
+        // we could send an adv
+        if( transmissions == _maxRetransmissions){
+            // dont send if we are at max
+            timer->schedule_after_msec(1000);
+            return;
+        }
+        transmissions++;
+        Packet *p = makePacket();
+        if (p) {
+            output(0).push(p);
+            click_chatter("Sollicitation sent");
+        }
+        // random term to make sure 2 hosts messages will not interfere
+        timer->reschedule_after_msec(1000+((rand()%20)-10));
+        return;
+    }else{
+        transmissions = 0;
+        timer->reschedule_after_msec(1000+((rand()%20)-10));
+        return;
     }
+}
 
-    // random term to make sure 2 hosts messages will not interfere
-    timer->reschedule_after_msec(1000+((rand()%20)-10));
+// no functionality so far
+void AgentSolicitation::push(int, Packet *p) {
+        output(0).push(p);
 }
 
 CLICK_ENDDECLS

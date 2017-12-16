@@ -34,23 +34,21 @@ int AdvertisementsHandler::configure(Vector<String> &conf,ErrorHandler *errh) {
 // recieves Advertisements yet to be handled
 void AdvertisementsHandler::push(int, Packet *p) {
     click_ip* ip = (click_ip*)p->data();
-    AdvertisementPacketheader* advh = (advertisement_header*)(ip + 1);
-    //ah->flagsReserved = (_FA << 7) + (_HA << 5) + (_FA << 4) + 0;
+    AdvertisementPacketheader* advh = (AdvertisementPacketheader*)(ip + 1);
     uint16_t flags = advh->flagsReserved;
-
     // create struct if we need to add
     Advertisement advStruct;
     advStruct.lifetime = advh->lifetime;
     advStruct.reg_lifetime = advh->lifetimeEx;
     advStruct.sequenceNum = advh->sequenceNum;
     advStruct.COA = advh->addressEx;
-    advStruct.private_addr = advh->adress;
+    advStruct.private_addr = advh->address;
     advStruct.ha = false;
     advStruct.fa = false;
     if((flags >> 5) & 1){
         advStruct.ha = true;
     }
-    if(((flags >> 7) & 1) && ((_FA << 4) & 1)){
+    if(((flags >> 7) & 1) && ((flags << 4) & 1)){
         advStruct.fa = true;
     }
     if(advStruct.ha == false && advStruct.fa == false){
@@ -60,22 +58,21 @@ void AdvertisementsHandler::push(int, Packet *p) {
     // modify current adv if needed. also extract the seq num
     // check if the adv is from the curr one if connected
     bool found = false;
-    int LastSeq = -1;
-    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != currentRequests.end(); ++it){
+    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != current_advertisements.end(); ++it){
         // if we have an entry in the list. We can update it
         // this happens when we are connected but not necessairly with this agent
         if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
             found = true;
             // if the router is reset and i am connected to that one, re reg with new values
-            if(advh.sequenceNum < 256 && advh.sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
+            if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
                 if(_mobileNode->curr_private_addr == it->private_addr){
                     // make packet (req) for this advert _source
                     // stuff
                 }
                 // update fields recording to the curr adv message,
-                it->lifetime = advh.lifetime;
-                it->reg_lifetime = advh.lifetimeEx;
-                it->sequenceNum = advh.sequenceNum;
+                it->lifetime = advh->lifetime;
+                it->reg_lifetime = advh->lifetimeEx;
+                it->sequenceNum = advh->sequenceNum;
             }
         }
     }
@@ -86,7 +83,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
         // make packet (req) for this advert _source
     }
     // is there is a change FA to HA
-    else if(_mobileNode->connected == true && advh->adress == _mobileNode->home_private_addr
+    else if(_mobileNode->connected == true && advh->address == _mobileNode->home_private_addr
         && _mobileNode->curr_coa!= _mobileNode->home_public_addr){
             // make packet (req) for this advert _source DEREG
         }
@@ -97,7 +94,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
 void AdvertisementsHandler::run_timer(Timer * timer) {
     bool wasConnected = _mobileNode->connected;
     bool hostConnectionLost = false;
-    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != currentRequests.end();){
+    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != current_advertisements.end();){
         if(it->lifetime == 0){
             // if my host is not active anymore
             if(wasConnected && it->private_addr == _mobileNode->curr_private_addr){
@@ -111,7 +108,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
         }
     }
     if(current_advertisements.empty()){
-        _mobileNode->advertisementReady = false
+        _mobileNode->advertisementReady = false;
     }
     if((!wasConnected || hostConnectionLost) && !current_advertisements.empty()){
         // make packet req with any item in list
