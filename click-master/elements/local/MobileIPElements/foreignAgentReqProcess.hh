@@ -15,15 +15,18 @@ class ForeignAgentReqProcess: public Element {
         ~ForeignAgentReqProcess();
 
         const char *class_name() const { return "ForeignAgentReqProcess"; }
-        const char *port_count() const { return "1/2"; }
+        const char *port_count() const { return "1/1-2"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
+        void run_timer(Timer*);
+
 
         private:
 
 
+            Timer _timer;
             IPAddress _foreignAgent;
             VisitorList* _visitorList;
             short int _maxLifetime; // ??

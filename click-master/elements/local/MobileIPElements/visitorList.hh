@@ -13,7 +13,9 @@ struct listItem {
     IPAddress ipSrc;
     IPAddress ipDst;
     uint16_t udpSrc;
+    uint16_t udpDst;
     IPAddress homeAgent;
+    IPAddress homeAddress;
     uint32_t id1;
     uint32_t id2;
     uint16_t lifetimeReq; // requested lifetime at the registration time
@@ -29,7 +31,7 @@ public:
 
     // input packet that is encapsulated
     // output 0 encap for this agent
-    // 0-0 for testing 
+    // 0-0 for testing
 
     const char *class_name() const { return "VisitorList"; }
     const char *port_count() const { return "0-1/0-1"; }
