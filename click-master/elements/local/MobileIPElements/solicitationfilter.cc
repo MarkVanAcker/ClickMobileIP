@@ -26,9 +26,9 @@ int SolicitationFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
 void SolicitationFilter::push(int, Packet *p) {
 
     int packetsize = p->length();
-		if(packetsize == sizeof(click_ip) + sizeof(SollicitationPacketheader)){
+		if(packetsize == sizeof(click_ip) + sizeof(SolicitationPacketheader)){
 			    click_ip* iph = (click_ip*)p->data();
-					SollicitationPacketheader* sh = (SollicitationPacketheader*) (iph+1);
+					SolicitationPacketheader* sh = (SolicitationPacketheader*) (iph+1);
 
 					if(sh->type == 10 && sh->code == 0 && iph->ip_dst == IPAddress("255.255.255.255")){
 						output(1).push(p);
