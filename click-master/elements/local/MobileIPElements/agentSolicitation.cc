@@ -47,7 +47,7 @@ Packet* AgentSolicitation::makePacket() {
     memset(packet->data(), 0, packet->length());
     click_ip* iph = (click_ip*) packet->data();
     iph->ip_v = 4;
-    iph->ip_hl = sizeof(click_ip) >> 2;
+    iph->ip_hl = 5;
     iph->ip_len = htons(packet->length());
     iph->ip_ttl = 1; // TTL must be 1 in Sollicitation
     iph->ip_p = 1; //  IP-protocolnummer 1 voor IPv4 en 58 voor IPv6 icmp. (wikipedia)

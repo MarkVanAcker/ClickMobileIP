@@ -46,7 +46,7 @@ public:
 	IPAddress home_public_addr;
 	IPAddress home_private_addr;
     IPAddress myAddress;
-	//Vector<Advertisement*> current_advertisements;
+	Vector<Advertisement> current_advertisements;
 
 };
 

@@ -29,9 +29,6 @@ class AdvertisementsHandler: public Element {
     private:
         MobileInfoList* _mobileNode;
 		RegistrationRequestSource* _source;
-        Vector<Advertisement> current_advertisements;
-		Vector<Timer> current_timers;
-
 
 };
 
