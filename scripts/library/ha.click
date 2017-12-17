@@ -120,7 +120,7 @@ elementclass Agent {
 		-> rt;
 
 	soli[1]
-		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 1000)
+		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 20000)
 		-> private_arpq;
 
 

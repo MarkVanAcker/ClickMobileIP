@@ -28,13 +28,10 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
     if(_HA == _FA){
         return -1;
     }
-    if(_interval*3 > _lifetimeAdv*1000){
-        return -1;
-    }
 
-    Timer *timer = new Timer(this);
-	timer->initialize(this);
-	timer->schedule_after_msec(001);
+	_timer = new Timer(this);
+	_timer->initialize(this);
+	_timer->schedule_after_msec(1);	
 	return 0;
 }
 
@@ -96,7 +93,7 @@ void AgentAdvertiser::push(int, Packet *p) {
         output(0).push(newP);
     }
     p->kill();
-    _timer.reschedule_after_msec(_interval+((rand()%70)-35));
+    _timer->reschedule_after_msec(_interval+((rand()%70)-35));
 }
 
 

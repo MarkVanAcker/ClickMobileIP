@@ -22,7 +22,7 @@ class AgentAdvertiser: public Element {
         Packet* makePacket();
 
     private:
-        Timer _timer;
+        Timer * _timer;
 
         bool _HA;
         bool _FA;
