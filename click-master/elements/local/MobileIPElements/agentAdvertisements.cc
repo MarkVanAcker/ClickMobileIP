@@ -34,7 +34,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 
     Timer *timer = new Timer(this);
 	timer->initialize(this);
-	timer->schedule_after_msec(500);
+	timer->schedule_after_msec(001);
 	return 0;
 }
 
