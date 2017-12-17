@@ -12,7 +12,7 @@ AgentSolicitation::AgentSolicitation(){
     srand(time(NULL));
 }
 
-AgentSolicitation::~AgentSolicitation() {}
+AgentSolicitation::~AgentSolicitation(){}
 
 int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
     MobileInfoList* tempList;
@@ -30,7 +30,7 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
     _address = _mobileNode->myAddress;
     Timer *timer = new Timer(this);
 	timer->initialize(this);
-	timer->schedule_after_msec(500);
+	timer->schedule_after_msec(1);
 	return 0;
 }
 
@@ -78,7 +78,7 @@ void AgentSolicitation::run_timer(Timer * timer) {
         }
         transmissions++;
         Packet *p = makePacket();
-        if (p) {
+        if (p){
             output(0).push(p);
             click_chatter("Sollicitation sent");
         }
