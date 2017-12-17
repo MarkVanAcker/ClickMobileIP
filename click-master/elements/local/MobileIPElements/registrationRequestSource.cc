@@ -130,6 +130,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
                         uint16_t diff = lifetimeReq - lifetimeResponse;
                         uint16_t lifetime = it->remainingLifetime - diff;
                         _mobileNode->remainingConnectionTime = lifetime;
+                        timers.back()->reschedule_after_msec(1000);
                     }
                 }
             }
@@ -149,9 +150,16 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         }
         timer->reschedule_after_msec(1000);
     }else{
-        if(_mobileNode->remainingConnectionTime == 3 && _mobileNode->connected && !_mobileNode->home){
-
+        if(_mobileNode->remainingConnectionTime == 2 && _mobileNode->connected && !_mobileNode->home){
+            // we want to re register if the host is still active (find adv)
+            for(Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); it++) {
+                if(it->private_addr  == _mobileNode->curr_private_addr && it->COA == _mobileNode->curr_coa){
+                    makePacket(*it);
+                    break;
+                }
+            }
         }
+        timer->reschedule_after_msec(1000);
     }
 
 }
