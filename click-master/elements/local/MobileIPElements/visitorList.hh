@@ -15,7 +15,6 @@ struct listItem {
     uint16_t udpSrc;
     uint16_t udpDst;
     IPAddress homeAgent;
-    IPAddress homeAddress;
     uint32_t id1;
     uint32_t id2;
     uint16_t lifetimeReq; // requested lifetime at the registration time

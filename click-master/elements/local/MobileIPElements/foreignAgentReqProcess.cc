@@ -60,12 +60,11 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
 
     // create VisitorList pending entry
     listItem item;
-    item.ipSrc = iph->ip_src;
+    item.ipSrc = format->homeAddr;
     item.ipDst = iph->ip_dst;
     item.udpSrc = udph->uh_sport;
     item.udpDst = udph->uh_dport;
     item.homeAgent = format->homeAgent;
-    item.homeAddress = format->homeAddr;
     item.id1 = format->id1;
     item.id2 = format->id2;
     item.lifetimeReq = ntohs(format->lifetime);
@@ -185,7 +184,7 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
                 formatNew->type = 3; // Registration Reply
                 formatNew->code = 78;
                 formatNew->lifetime = htons(it->lifetimeReq);
-                formatNew->homeAddr = it->homeAddress;
+                formatNew->homeAddr = it->ipSrc;
                 formatNew->homeAgent = it->homeAgent;
                 formatNew->id1 = it->id1;
                 formatNew->id2 = it->id2;
@@ -196,6 +195,7 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
 
                 output(0).push(packet);
             }else{
+                it->lifetimeRem--;
                 it++;
             }
         }

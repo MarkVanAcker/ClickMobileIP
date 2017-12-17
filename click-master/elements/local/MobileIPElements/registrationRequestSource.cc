@@ -44,7 +44,6 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     newReq.COA = a.COA;
     newReq.remainingLifetime = a.reg_lifetime;
     newReq.requestedLifetime = a.reg_lifetime;
-    newReq.ipDst = 0;// adv as argument !!!!!!!!!!!!!!!!!!!!!!!!!
 	click_ip *iph = (click_ip *)packet->data();
     iph->ip_v = 4;
     iph->ip_hl = sizeof(click_ip) >> 2;
@@ -82,7 +81,7 @@ void RegistrationRequestSource::makePacket(Advertisement a){
         return;
     }
     // lifetime for HA = 0 which is set at default.
-    format->homeAddr = _mobileNode->home_private_addr;
+    format->homeAddr = _mobileNode->myAddress;
     format->homeAgent = _mobileNode->home_public_addr;
     format->coAddr = a.COA;
     unsigned int id1  = rand() % (2147483647);

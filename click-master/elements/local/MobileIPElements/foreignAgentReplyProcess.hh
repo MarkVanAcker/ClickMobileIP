@@ -18,9 +18,11 @@ class ForeignAgentReplyProcess: public Element {
 
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
+        void run_timer(Timer*);
 
         private:
 
+            Timer _timer;
             IPAddress _foreignAgent;
             VisitorList* _visitorList;
             short int _maxLifetime; // ??
