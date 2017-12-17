@@ -25,6 +25,7 @@ struct HARegistrationEntry{
 };
 
 typedef HashMap<IPAddress, HARegistrationEntry*> RegistrationTable;
+typedef Vector<IPAddress> RegistrationIPList;
 
 class bindingsList: public Element {
 public:
@@ -35,8 +36,10 @@ public:
     const char *port_count() const { return "0/0"; }
 
     int configure(Vector<String>&, ErrorHandler*);
+    bool isHome(IPAddress);
 
     RegistrationTable _table;
+	RegistrationIPList _list;
 
 };
 

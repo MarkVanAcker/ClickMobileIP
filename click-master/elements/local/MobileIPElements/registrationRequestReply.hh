@@ -16,16 +16,18 @@ class RegistrationRequestReply: public Element {
         ~RegistrationRequestReply();
 
         const char *class_name() const { return "RegistrationRequestReply"; }
-        const char *port_count() const { return "1/1"; }
+        const char *port_count() const { return "1/2"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);
+		void run_timer(Timer *);
         void push(int, Packet*);
 
-        private:
-            IPAddress _homeAgent;
-            bindingsList * _bindingsList;
-            unsigned short int validatePacket(Packet *packet);
+	private:
+		Timer * _timer;
+		IPAddress _homeAgent;
+		bindingsList * _bindingsList;
+		unsigned short int validatePacket(Packet *packet);
 };
 
 struct RegistrationRequestReplyPacketheader {

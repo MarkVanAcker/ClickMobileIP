@@ -23,5 +23,12 @@ if (Args(conf, this, errh).complete() < 0) return -1;
     return 0;
 }
 
+bool bindingsList::isHome(IPAddress addr){
+	if(!_table.find_pair(addr)){
+		return true;
+	}
+	return false;
+}
+
 CLICK_ENDDECLS
 EXPORT_ELEMENT(bindingsList)

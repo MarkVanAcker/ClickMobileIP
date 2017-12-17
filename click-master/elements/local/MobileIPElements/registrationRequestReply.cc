@@ -21,6 +21,9 @@ int RegistrationRequestReply::configure(Vector<String> &conf, ErrorHandler *errh
     if (Args(conf, this, errh).read_mp("HAGENT", _homeAgent).read("BINDING", ElementCastArg("bindingsList"), templist).complete() < 0) return -1;
 
     _bindingsList = templist;
+	_timer = new Timer(this);
+	_timer->initialize(this);
+	_timer->reschedule_after_msec(1000);
 	return 0;
 }
 
@@ -116,22 +119,62 @@ void RegistrationRequestReply::push(int, Packet *p) {
     // if accepted change bindings
     if (code == 0 || code == 1)
     {
-        // remove node from a previous foreign binding in a list/map!
-        // if home netwerk is the same as CoA remove binding!
+		if(format->lifetime > 0){
+		    // remove node from a previous foreign binding in a list/map!
+		    // if home netwerk is the same as CoA remove binding!
 
-        //update bindlist
-        HARegistrationEntry * tempentry = new HARegistrationEntry;
-        tempentry->mobile_node_coa = format->coAddr;
-        tempentry->lifetime = format->lifetime;
-        tempentry->id1 = format->id1;
-        tempentry->id2 = format->id2;
-        tempentry->mobile_node_homadress = format->homeAddr;
+		    //update bindlist
+		    HARegistrationEntry * tempentry = new HARegistrationEntry;
+		    tempentry->mobile_node_coa = format->coAddr;
+		    tempentry->lifetime = format->lifetime;
+		    tempentry->id1 = format->id1;
+		    tempentry->id2 = format->id2;
+		    tempentry->mobile_node_homadress = format->homeAddr;
 
-        _bindingsList->_table.insert(format->homeAddr,tempentry);
+		    _bindingsList->_table.insert(format->homeAddr,tempentry);
+			_bindingsList->_list.push_back(format->homeAddr);
+		}else{
+			if(!_bindingsList->isHome(format->homeAddr)){
+				_bindingsList->_table.erase(format->homeAddr);
+				for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
+					if((*it) == format->homeAddr){
+						_bindingsList->_list.erase(it);							
+						break;
+					}else{
+						it++;					
+					}
+				}
+
+			}
+
+		}
 
         // keep info is the current situation (new bind) in a list or map!
+		if(format->lifetime > 0){
+		output(0).push(packet);
+		}else{
+		output(1).push(packet);
+		}
     }
-    output(0).push(packet);
+
+	
+  
+}
+
+void RegistrationRequestReply::run_timer(Timer * timer) {
+
+	for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
+		RegistrationTable::Pair * pair = _bindingsList->_table.find_pair((*it));
+		pair->value->lifetime--;
+		if(pair->value->lifetime == 0){
+			_bindingsList->_table.erase((*it));
+			_bindingsList->_list.erase(it);
+		}else{
+			it++;		
+		}
+	}
+    
+    timer->reschedule_after_msec(1000);
 }
 
 CLICK_ENDDECLS
