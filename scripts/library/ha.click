@@ -13,10 +13,13 @@
 elementclass Agent {
 	$private_address, $public_address, $gateway |
 
+	bind::bindingsList();
+
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
 		-> soli :: SolicitationFilter
+		-> ipc :: IPClassifier(src udp port 434 or dst udp port 434,-)[1]
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -119,6 +122,10 @@ elementclass Agent {
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
 
+	ipc
+		->RegistrationRequestReply(HAGENT $public_address, BINDING bind)
+		-> public_arpq;
+	
 	soli[1]
 		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 20000)
 		-> private_arpq;

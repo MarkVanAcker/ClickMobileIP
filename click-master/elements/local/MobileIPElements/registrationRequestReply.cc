@@ -49,7 +49,7 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
 
 
     //accepted but simultanious bindings unsupported
-    return 1;
+    return 0;
 
 }
 
