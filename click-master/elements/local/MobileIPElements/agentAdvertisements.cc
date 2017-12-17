@@ -66,7 +66,7 @@ Packet* AgentAdvertiser::makePacket() {
     ah->lifetime = htons(_lifetimeAdv);
     ah->addressNumbers = 1; // 1 adress
     ah->addrEntrySize = 2; // 2 entries for 1 address
-    ah->address = _address; // agent adress
+    ah->address = _addressCO; // agent adress
     ah->pref = 0;    // 0
     ah->typeEx = 16; // normal routing
     ah->length = 10; // 6 + 4 bytes
