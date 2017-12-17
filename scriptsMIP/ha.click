@@ -16,6 +16,7 @@ elementclass Agent {
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
+		-> soli :: SolicitationFilter
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -118,7 +119,8 @@ elementclass Agent {
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
 
-	AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 1000)
-		-> private_arpq
+	soli[1]
+		-> ToDump(soli.dump);
+
 
 }
