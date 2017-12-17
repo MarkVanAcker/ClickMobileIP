@@ -36,8 +36,8 @@ class RegistrationRequestSource: public Element {
         Vector<Request> currentRequests;
 
     private:
-        Timer _timer;
         MobileInfoList* _mobileNode;
+        Vector<Timer*> timers;
 
 };
 

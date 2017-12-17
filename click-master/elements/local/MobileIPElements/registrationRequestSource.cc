@@ -22,9 +22,14 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
     if (Args(conf, this, errh).read("MNLIST",ElementCastArg("MobileInfoList"),tempList).complete() < 0) return -1;
 
     _mobileNode = tempList;
-	Timer *timer = new Timer(this);
+	Timer* timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1000);
+    Timer* timer2 = new Timer(this);
+	timer2->initialize(this);
+    timers.push_back(timer);
+    timers.push_back(timer2);
+
 	return 0;
 }
 
@@ -134,15 +139,21 @@ void RegistrationRequestSource::push(int, Packet *p) {
 }
 
 void RegistrationRequestSource::run_timer(Timer *timer){
-    for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
-        if(it->remainingLifetime == 0){
-            currentRequests.erase(it);
-        }else{
-            it->remainingLifetime--;
+    if(timer == (*timers.begin())){
+        for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
+            if(it->remainingLifetime == 0){
+                currentRequests.erase(it);
+            }else{
+                it->remainingLifetime--;
+            }
+        }
+        timer->reschedule_after_msec(1000);
+    }else{
+        if(_mobileNode->remainingConnectionTime == 3 && _mobileNode->connected && !_mobileNode->home){
+
         }
     }
 
-    timer->reschedule_after_msec(1000);
 }
 
 CLICK_ENDDECLS

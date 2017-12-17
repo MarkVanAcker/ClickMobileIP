@@ -58,7 +58,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
     // modify current adv if needed. also extract the seq num
     // check if the adv is from the curr one if connected
     bool found = false;
-    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != current_advertisements.end(); ++it){
+    for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
         // if we have an entry in the list. We can update it
         // this happens when we are connected but not necessairly with this agent
         if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
@@ -76,7 +76,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
         }
     }
     if(found == false){
-        current_advertisements.push_back(advStruct);
+        _mobileNode->current_advertisements.push_back(advStruct);
     }
     if(_mobileNode->connected == false){
         _source->makePacket(advStruct);
@@ -94,24 +94,24 @@ void AdvertisementsHandler::push(int, Packet *p) {
 void AdvertisementsHandler::run_timer(Timer * timer) {
     bool wasConnected = _mobileNode->connected;
     bool hostConnectionLost = false;
-    for (Vector<Advertisement>::iterator it = current_advertisements.begin(); it != current_advertisements.end();){
+    for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end();){
         if(it->lifetime == 0){
             // if my host is not active anymore
             if(wasConnected && it->private_addr == _mobileNode->curr_private_addr){
                 hostConnectionLost = true;
                 _mobileNode->connected = false;
-                current_advertisements.erase(it);
+                _mobileNode->current_advertisements.erase(it);
             }
         }else{
             it->lifetime--;
             it++;
         }
     }
-    if(current_advertisements.empty()){
+    if(_mobileNode->current_advertisements.empty()){
         _mobileNode->advertisementReady = false;
     }
-    if((!wasConnected || hostConnectionLost) && !current_advertisements.empty()){
-        _source->makePacket(*current_advertisements.begin());
+    if((!wasConnected || hostConnectionLost) && !_mobileNode->current_advertisements.empty()){
+        _source->makePacket(*_mobileNode->current_advertisements.begin());
     }
 
     timer->reschedule_after_msec(1000);
