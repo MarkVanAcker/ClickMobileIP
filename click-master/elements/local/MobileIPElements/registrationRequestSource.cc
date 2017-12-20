@@ -114,7 +114,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
     //
     if(format->type == 3){
         if(format->code == 0 || format->code == 1){ // code 1 should not be used
-            for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); ++it){
+            for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); it++){
                 if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
                     // found corresponding request
                     _mobileNode->connected = true;

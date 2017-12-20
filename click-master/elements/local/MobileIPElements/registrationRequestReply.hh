@@ -4,7 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
-#include "bindingsList.hh"
+#include "agentBase.hh"
 
 
 CLICK_DECLS
@@ -23,11 +23,13 @@ class RegistrationRequestReply: public Element {
 		void run_timer(Timer *);
         void push(int, Packet*);
 
+
 	private:
 		Timer * _timer;
 		IPAddress _homeAgent;
-		bindingsList * _bindingsList;
+	    AgentBase* _bindingsList;
 		unsigned short int validatePacket(Packet *packet);
+
 };
 
 struct RegistrationRequestReplyPacketheader {

@@ -4,7 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
-#include "bindingsList.hh"
+#include "agentBase.hh"
 
 
 CLICK_DECLS
@@ -26,7 +26,7 @@ class IpEncapsulation: public Element {
 
     private:
         IPAddress _tunnelAddres;
-        bindingsList * _bindingsList;
+        AgentBase * _bindingsList;
 
 
 };
