@@ -28,11 +28,21 @@ int MobileIPFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
 void MobileIPFilter::push(int, Packet *p) {
 
 
-		click_ip* iph = (click_ip)q->data();
-    click_udp* udph = (click_udp)(iph+1);
-		mypacket* m = (mypacket*)(udph+1)
+		click_ip *iph = (click_ip*)p->data();
+    click_udp *udph = (click_udp*)(iph+1);
+		typepacket* m = (typepacket*)(udph+1);
 
-    output(0).push(p);
+		if ( m->type == 3){
+			output(1).push(p);
+			return;
+		}else if (m->type == 1){
+			output(2).push(p);
+			return;
+		}else{
+    	output(0).push(p);
+			return;
+		}
+
 }
 
 

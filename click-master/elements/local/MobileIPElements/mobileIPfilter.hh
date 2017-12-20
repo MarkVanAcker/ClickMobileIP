@@ -17,7 +17,7 @@ class MobileIPFilter: public Element {
 
 
         const char *class_name() const { return "MobileIPFilter"; }
-        const char *port_count() const { return "1/4"; }
+        const char *port_count() const { return "1/3"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);
@@ -29,9 +29,9 @@ class MobileIPFilter: public Element {
 
 };
 
-struct mypacket{
-	uint_8 type;
-}
+struct typepacket{
+	uint8_t type;
+};
 
 CLICK_ENDDECLS
 #endif
