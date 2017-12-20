@@ -58,7 +58,17 @@ void AdvertisementsHandler::push(int, Packet *p) {
         _mobileNode->home = true;
     }else{
         _mobileNode->home = false;
-        _mobileNode->advertisementReady = true;
+        if (((flags >> 6) & 1) == 1){
+            // busy bit set so it has no point in registrating at this agent
+            for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
+                // remove an entry from this host because we know he is busy
+                if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
+                    _mobileNode->current_advertisements.erase(it);
+                    break;
+                }
+            }
+            return;
+        }
         // modify current adv if needed. also extract the seq num
         // check if the adv is from the curr one if connected
         bool found = false;
