@@ -18,7 +18,7 @@ ForeignAgentReplyProcess::~ForeignAgentReplyProcess()
 
 int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh) {
 
-    VisitorList* templist;
+    AgentBase* templist;
 
     if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read_m("VISITOR",
     ElementCastArg("VisitorList"),

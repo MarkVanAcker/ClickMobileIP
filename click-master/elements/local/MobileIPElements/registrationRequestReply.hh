@@ -4,7 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/ipaddress.hh>
-#include "bindingsList.hh"
+#include "agentBase.hh"
 
 
 CLICK_DECLS
@@ -24,7 +24,7 @@ class RegistrationRequestReply: public Element {
 
         private:
             IPAddress _homeAgent;
-            bindingsList * _bindingsList;
+            AgentBase* _bindingsList;
             unsigned short int validatePacket(Packet *packet);
 };
 

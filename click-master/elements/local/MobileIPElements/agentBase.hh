@@ -1,12 +1,14 @@
-#ifndef CLICK_VISITORLIST_HH
-#define CLICK_VISITORLIST_HH
+#ifndef CLICK_AGENTBASE_HH
+#define CLICK_AGENTBASE_HH
+
 
 #include <click/element.hh>
+#include <click/ipaddress.hh>
+#include <click/hashmap.hh>
 #include <click/timer.hh>
 #include <click/etheraddress.hh>
 
 CLICK_DECLS
-
 
 struct listItem {
     EtherAddress ethSrc;
@@ -22,22 +24,27 @@ struct listItem {
 };
 
 
-class VisitorList: public Element {
+
+struct HARegistrationEntry{
+
+    IPAddress mobile_node_homadress;
+    IPAddress mobile_node_coa;
+    uint16_t lifetime;      // seconds for the message to expire
+    uint32_t id1;           // used for matching Registration Reqsuest
+    uint32_t id2;           // used for matching Registration Reqsuest
+
+};
+
+typedef HashMap<IPAddress, HARegistrationEntry*> RegistrationTable;
+
+class AgentBase: public Element {
 public:
+    AgentBase();
+    ~AgentBase();
 
-    VisitorList();
-    ~VisitorList();
-
-    // input packet that is encapsulated
-    // output 0 encap for this agent
-    // 0-0 for testing
-
-    const char *class_name() const { return "VisitorList"; }
-    const char *port_count() const { return "0-1/0-1"; }
-    const char *processing() const { return PUSH; }
-
+    const char *class_name() const { return "AgentBase"; }
+    const char *port_count() const { return "0/0"; }
     int configure(Vector<String>&, ErrorHandler*);
-    void push(int, Packet *p);
     void run_timer(Timer*);
 
     bool inMapHome(IPAddress);
@@ -51,11 +58,12 @@ public:
     Vector<listItem> _registrationReq;
     Vector<listItem> _visitorMap;
 
+    RegistrationTable _table;
+
 };
 
 
 
 
-
 CLICK_ENDDECLS
-#endif
+#endif //CLICKMOBILEIP_bindingsLis_HH

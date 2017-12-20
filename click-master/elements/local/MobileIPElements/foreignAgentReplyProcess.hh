@@ -3,7 +3,7 @@
 
 #include <click/element.hh>
 #include <click/ipaddress.hh>
-#include "visitorList.hh"
+#include "agentBase.hh"
 CLICK_DECLS
 
 
@@ -24,7 +24,7 @@ class ForeignAgentReplyProcess: public Element {
 
             Timer _timer;
             IPAddress _foreignAgent;
-            VisitorList* _visitorList;
+            AgentBase* _visitorList;
             short int _maxLifetime; // ??
 
 

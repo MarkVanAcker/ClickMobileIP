@@ -48,7 +48,7 @@ struct RegistrationRequestPacketheader{
     uint8_t flags; // 8 flag bits
     uint16_t lifetime; // Seconds remaining before the registration is expired
     uint32_t homeAddr; // IP adress of the mobile node
-    uint32_t homeAgent; // IP adress of the mobile node
+    uint32_t homeAgent; // IP adress of HA
     uint32_t coAddr; // IP adress of the end of the tunnel
     uint32_t id1; // used for matching Registration Reqsuest
     uint32_t id2; // used for matching Registration Reqsuest

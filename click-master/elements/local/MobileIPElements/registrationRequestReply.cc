@@ -17,7 +17,7 @@ RegistrationRequestReply::~RegistrationRequestReply()
 {}
 
 int RegistrationRequestReply::configure(Vector<String> &conf, ErrorHandler *errh) {
-    bindingsList * templist;
+    AgentBase* templist;
     if (Args(conf, this, errh).read_mp("HAGENT", _homeAgent).read("BINDING", ElementCastArg("bindingsList"), templist).complete() < 0) return -1;
 
     _bindingsList = templist;
