@@ -20,7 +20,7 @@ int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) 
 
     AgentBase* templist;
 
-    if (Args(conf, this, errh).read_mp("FAGENT", _foreignAgent).read_m("VISITOR",
+    if (Args(conf, this, errh).read_m("VISITOR",
     ElementCastArg("VisitorList"),
     templist).complete() < 0) return -1;
 
@@ -128,7 +128,7 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
 
         ForeignAgentReqProcessPacketheader *formatNew = (ForeignAgentReqProcessPacketheader*)(udphNew+1);
         formatNew->type = 3; // Registration Reply
-        formatNew->code = 78;
+        formatNew->code = code;
         formatNew->lifetime = format->lifetime;
         formatNew->homeAddr = format->homeAddr;
         formatNew->homeAgent = format->homeAgent;
@@ -146,13 +146,13 @@ void ForeignAgentReqProcess::push(int, Packet *p) {
 
 void ForeignAgentReqProcess::run_timer(Timer* timer){
     // edit pending registration
-    for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin(); it != _visitorList->_registrationReq.end();){
+    for(Vector<listItem>::iterator it = _visitorList->_registrationReq.end()-1; it != _visitorList->_registrationReq.begin()-1;it--){
+        it->lifetimeRem--;
         if(it->lifetimeRem == 0){
             // expired
             _visitorList->_registrationReq.erase(it);
         }else{
             if(it->lifetimeReq - it->lifetimeRem == 7){
-                _visitorList->_registrationReq.erase(it);
                 int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
                 int headroom = sizeof(click_ether);
                 WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
@@ -192,11 +192,8 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
                 // Calculate the udp checksum
                 udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
                 iphNew, packet_size - sizeof(click_ip));
-
+                _visitorList->_registrationReq.erase(it);
                 output(0).push(packet);
-            }else{
-                it->lifetimeRem--;
-                it++;
             }
         }
     }
