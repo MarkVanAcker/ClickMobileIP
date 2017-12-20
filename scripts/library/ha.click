@@ -19,7 +19,6 @@ elementclass Agent {
 	ip :: Strip(14)
 		-> CheckIPHeader
 		-> soli :: SolicitationFilter
-		-> ipc :: IPClassifier(src udp port 434 or dst udp port 434,-)[1]
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -68,11 +67,13 @@ elementclass Agent {
 
 	// Local delivery
 	rt[0]
+		-> ipc :: IPClassifier(src udp port 434 or dst udp port 434,-)[1]
 		-> [2]output
 	
 	// Forwarding paths per interface
 	rt[1]
 		-> DropBroadcasts
+		-> ipenc :: IpEncapsulation(IPADDRES $public_address, BINDING bind)
 		-> private_paint :: PaintTee(1)
 		-> private_ipgw :: IPGWOptions($private_address)
 		-> FixIPSrc($private_address)
@@ -95,6 +96,7 @@ elementclass Agent {
 	private_frag[1]
 		-> ICMPError($private_address, unreachable, needfrag)
 		-> rt;
+	
 	
 
 	rt[2]
@@ -122,10 +124,16 @@ elementclass Agent {
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
 
+	ipenc [1]
+		-> public_arpq;
+
 	ipc
-		->RegistrationRequestReply(HAGENT $public_address, BINDING bind)
+		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind)
 		-> public_arpq;
 	
+	regrep[1]
+		-> private_arpq;
+
 	soli[1]
 		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 20000)
 		-> private_arpq;
