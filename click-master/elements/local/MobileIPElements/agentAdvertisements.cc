@@ -24,10 +24,6 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
         .read_m("ADDAGENT", _address)
         .read_m("COA", _addressCO).complete() < 0) return -1;
 
-    // either home or foreign agent
-    if(_HA == _FA){
-        return -1;
-    }
 
 	_timer = new Timer(this);
 	_timer->initialize(this);

@@ -18,7 +18,7 @@ elementclass Agent {
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
-		-> soli :: SolicitationFilter
+		-> soli :: SolicitationFilter // we moeten nog checken of ze van een publiek of prive netwerk komen (Paint?)
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -124,18 +124,32 @@ elementclass Agent {
 		-> ICMPError($public_address, unreachable, needfrag)
 		-> rt;
 
+
+//IP in IP berichten worden direct op het publieke netwerk geduwd na aanmaak.
 	ipenc [1]
 		-> public_arpq;
 
+//soorten Requests die hier binnenkomen:
+//1. Registration requests van privé netwerk bestemd voor agent zelf.
+//1.1 Ze zijn van een thuisnode en hiervoor genereer je direct een reply terug.
+//1.2 Ze zijn van een visitornode en deze stuur je door naar zijn HA.
+//2. Registration requests van public netwerk voor jezelf. Deze moeten altijd beantwoord en teruggestuurd worden.
+//3. Registration reply van een public netwerk voor jezelf. Deze worden doorverwezen naar de visitor node.
+
 	ipc
-		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind)
+		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
+
+//infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
 	
 	regrep[1]
 		-> private_arpq;
 
+
+//Solicitation requests komen hier binnen en zijn 100% geldig. Er wordt een Advertisement gemaakt en doorgestuurd op het prive netwerk.
+
 	soli[1]
-		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA false, LTREG 3, LTADV 5, INTERVAL 20000)
+		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA true, LTREG 3, LTADV 5, INTERVAL 20000)
 		-> private_arpq;
 
 
