@@ -74,18 +74,18 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     format->type = 1; //fixed
     format->flags = 0; //all flags 0   ||  4, 8, 16, 32 ?
     if(a.private_addr == _mobileNode->home_private_addr){
-        if(a.ha && _mobileNode->curr_private_addr != _mobileNode->home_private_addr){
+        if(a.ha && _mobileNode->curr_private_addr != _mobileNode->home_private_addr && _mobileNode->home){
             // update routing table
-            _mobileNode->home = true;
             _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
+            _mobileNode->curr_coa = a.COA;
             _mobileNode->remainingConnectionTime = 0; // should not matter
+            format->lifetime = 0;
         }
-    }else if(a.fa){
+    }else if(a.fa && !_mobileNode->home){
         format->lifetime = a.reg_lifetime;
     }else{
         return;
     }
-    // lifetime for HA = 0 which is set at default.
     format->homeAddr = _mobileNode->myAddress;
     format->homeAgent = _mobileNode->home_public_addr;
     format->coAddr = a.COA;
@@ -145,7 +145,9 @@ void RegistrationRequestSource::run_timer(Timer *timer){
             if(it->remainingLifetime == 0){
                 currentRequests.erase(it);
             }else{
-                it->remainingLifetime--;
+                if(it->remainingLifetime >0){
+                    it->remainingLifetime--;
+                }
             }
         }
         timer->reschedule_after_msec(1000);

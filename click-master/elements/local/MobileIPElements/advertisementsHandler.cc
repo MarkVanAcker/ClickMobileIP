@@ -54,31 +54,38 @@ void AdvertisementsHandler::push(int, Packet *p) {
     if(advStruct.ha == false && advStruct.fa == false){
         return;
     }
-    _mobileNode->advertisementReady = true;
-    // modify current adv if needed. also extract the seq num
-    // check if the adv is from the curr one if connected
-    bool found = false;
-    for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
-        // if we have an entry in the list. We can update it
-        // this happens when we are connected but not necessairly with this agent
-        if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
-            found = true;
-            // if the router is reset and i am connected to that one, re reg with new values
-            if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
-                if(_mobileNode->curr_private_addr == it->private_addr){
-                    _source->makePacket(advStruct);
+    if(advh->address == _mobileNode->home_private_addr){
+        _mobileNode->home = true;
+    }else{
+        _mobileNode->home = false;
+        _mobileNode->advertisementReady = true;
+        // modify current adv if needed. also extract the seq num
+        // check if the adv is from the curr one if connected
+        bool found = false;
+        for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
+            // if we have an entry in the list. We can update it
+            // this happens when we are connected but not necessairly with this agent
+            if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
+                found = true;
+                // if the router is reset and i am connected to that one, re reg with new values
+                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
+                    if(_mobileNode->curr_private_addr == it->private_addr){
+                        _source->makePacket(advStruct);
+                    }
+                    // update fields recording to the curr adv message,
+                    it->lifetime = advh->lifetime;
+                    it->reg_lifetime = advh->lifetimeEx;
+                    it->sequenceNum = advh->sequenceNum;
                 }
-                // update fields recording to the curr adv message,
-                it->lifetime = advh->lifetime;
-                it->reg_lifetime = advh->lifetimeEx;
-                it->sequenceNum = advh->sequenceNum;
             }
         }
+        if(found == false){
+            _mobileNode->current_advertisements.push_back(advStruct);
+        }
     }
-    if(found == false){
-        _mobileNode->current_advertisements.push_back(advStruct);
-    }
-    if(_mobileNode->connected == false){
+
+
+    if(_mobileNode->connected == false && !_mobileNode->home ){
         _source->makePacket(advStruct);
         return;
     }
