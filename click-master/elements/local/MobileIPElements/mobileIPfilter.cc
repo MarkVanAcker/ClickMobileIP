@@ -16,7 +16,9 @@ MobileIPFilter::~MobileIPFilter()
 {}
 
 int MobileIPFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).complete() < 0) return -1;
+		AgentBase* templist;
+    if (Args(conf, this, errh).read("BINDING", ElementCastArg("bindingsList"), templist).complete() < 0) return -1;
+    _agentbase = templist;
 
 	return 0;
 }

@@ -23,6 +23,8 @@ class MobileIPFilter: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
 
+				AgentBase * _agentbase;
+
 
 
 };
