@@ -40,8 +40,8 @@ struct ForeignAgentReqProcessPacketheader {
     uint8_t type;           // 3 for registration reply
     uint8_t code;           // code 1 for a registration reply
     uint16_t lifetime;      // seconds for the message to expire
-    uint32_t homeAddr;      // IP adress of the mobile node
-    uint32_t homeAgent;     // IP adress of the mobile node
+    IPAddress homeAddr;      // IP adress of the mobile node
+    IPAddress homeAgent;     // IP adress of the mobile node
     uint32_t id1;           // used for matching Registration Reqsuest
     uint32_t id2;           // used for matching Registration Reqsuest
 

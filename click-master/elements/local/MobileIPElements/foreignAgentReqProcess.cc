@@ -79,21 +79,26 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
 }
 
 
-void ForeignAgentReqProcess::push(int, Packet *p) {
+void ForeignAgentReqProcess::push(int, Packet *pt) {
     // it is assumed that all incoming packets are registration requests
     // get relevant headers
+    WritablePacket* p = pt->uniqueify();
     click_ip *iph = (click_ip*)p->data();
     click_udp *udph = (click_udp*)(iph+1);
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
 
     if(format->type != 1) {
-        p->kill();
+        pt->kill();
         return;
     }
 
     // validate packet content, react accordingly
     unsigned short int code = validatePacket(p);
     if(code == 1){
+        iph->ip_sum = htons(0);
+        iph->ip_src = _visitorList->_private_addr;
+        iph->ip_dst = format->homeAgent;
+        iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
         output(1).push(p);
         return;
     }else{

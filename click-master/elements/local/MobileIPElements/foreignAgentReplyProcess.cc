@@ -36,11 +36,12 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
 void ForeignAgentReplyProcess::push(int, Packet *p) {
     //  assume that all incoming packets are registration requests
     // get access packet
-    click_ip *iph = (click_ip*)p->data();
+    WritablePacket* q = p->uniqueify();
+    click_ip *iph = (click_ip*)q->data();
     click_udp *udph = (click_udp*)(iph+1);
-RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPacketheader*)(udph+1);
+    RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPacketheader*)(udph+1);
     if(format->type != 3) {
-        p->kill();
+        q->kill();
         return;
     }
 
@@ -83,8 +84,12 @@ RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPackethe
             }
         }
     }
+    iph->ip_sum = htons(0);
+    iph->ip_src = _visitorList->_private_addr;
+    iph->ip_dst = format->homeAddr;
+    iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
      // respond to node
-    output(0).push(p);
+    output(0).push(q);
 }
 
 void ForeignAgentReplyProcess::run_timer(Timer* timer){
