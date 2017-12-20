@@ -32,9 +32,18 @@ IPAddress IpEncapsulation::getDesitination(IPAddress MN){
 
 
 void IpEncapsulation::push(int, Packet *p) {
+
+
     // get the careoff adress of the bindingslist
     click_ip* iph = (click_ip*)p->data();
+	if(_bindingsList->isHome(iph->ip_dst)){
+		output(0).push(p);
+		return;
+	}
     IPAddress careOff = getDesitination(iph->ip_dst);
+
+
+    
     // new packet with an extra ip header, create headroom to push upon
     // space is not the same as packetdata
 
@@ -62,14 +71,14 @@ void IpEncapsulation::push(int, Packet *p) {
     Oiph->ip_hl = sizeof(click_ip) >> 2;
     Oiph->ip_len = htons(packet->length());
     Oiph->ip_id = htons(1);
-    Oiph->ip_ttl = 1; //yet to be set
+    Oiph->ip_ttl = 200; //yet to be set
     Oiph->ip_src = _tunnelAddres;
     Oiph->ip_dst = careOff; //end of tunnel
     Oiph->ip_sum = click_in_cksum((unsigned char*)Oiph, sizeof(click_ip));
     p->kill(); // free memory
-    packet->set_dst_ip_anno(iph->ip_dst);
+    packet->set_dst_ip_anno(Oiph->ip_dst);
 
-    output(0).push(packet);
+    output(1).push(packet);
 }
 
 
