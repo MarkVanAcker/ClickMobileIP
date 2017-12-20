@@ -27,7 +27,6 @@ class ForeignAgentReqProcess: public Element {
 
 
             Timer _timer;
-            IPAddress _foreignAgent;
             AgentBase* _visitorList;
             short int _maxLifetime; // ??
 

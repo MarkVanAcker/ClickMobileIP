@@ -142,16 +142,17 @@ void RegistrationRequestSource::push(int, Packet *p) {
 void RegistrationRequestSource::run_timer(Timer *timer){
     if(timer == (*timers.begin())){
         for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
+            it->remainingLifetime--;
             if(it->remainingLifetime == 0){
                 currentRequests.erase(it);
-            }else{
-                if(it->remainingLifetime >0){
-                    it->remainingLifetime--;
-                }
             }
         }
         timer->reschedule_after_msec(1000);
     }else{
+        _mobileNode->remainingConnectionTime--;
+        if(_mobileNode->remainingConnectionTime == 0 && !_mobileNode->home){
+            _mobileNode->connected = false;
+        }
         if(_mobileNode->remainingConnectionTime == 2 && _mobileNode->connected && !_mobileNode->home){
             // we want to re register if the host is still active (find adv)
             for(Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); it++) {
@@ -161,6 +162,7 @@ void RegistrationRequestSource::run_timer(Timer *timer){
                 }
             }
         }
+
         timer->reschedule_after_msec(1000);
     }
 
