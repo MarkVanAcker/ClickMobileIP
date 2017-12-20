@@ -36,6 +36,8 @@ struct HARegistrationEntry{
 };
 
 typedef HashMap<IPAddress, HARegistrationEntry*> RegistrationTable;
+typedef Vector<IPAddress> RegistrationIPList;
+
 
 class AgentBase: public Element {
 public:
@@ -51,6 +53,7 @@ public:
     bool inPendingHome(IPAddress);
     bool inMapNode(IPAddress);
     bool inPendingNode(IPAddress);
+    bool isHome(IPAddress);
 
     int _maxRequests;
     IPAddress _coa;
@@ -59,6 +62,7 @@ public:
     Vector<listItem> _visitorMap;
 
     RegistrationTable _table;
+    RegistrationIPList _list;
 
 };
 

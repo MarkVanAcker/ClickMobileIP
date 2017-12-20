@@ -80,6 +80,13 @@ bool AgentBase::inPendingNode(IPAddress node){
     return false;
 }
 
+bool AgentBase::isHome(IPAddress addr){
+	if(!_table.find_pair(addr)){
+		return true;
+	}
+	return false;
+}
+
 /**
 // packet is ip
 // output 0 encap not for this FA

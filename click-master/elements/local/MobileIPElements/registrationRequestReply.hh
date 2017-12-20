@@ -23,24 +23,13 @@ class RegistrationRequestReply: public Element {
 		void run_timer(Timer *);
         void push(int, Packet*);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        private:
-            IPAddress _homeAgent;
-            AgentBase* _bindingsList;
-            unsigned short int validatePacket(Packet *packet);
-=======
-=======
->>>>>>> 1558a44cfc054b002f05f92645453adca509818e
+
 	private:
 		Timer * _timer;
 		IPAddress _homeAgent;
-		bindingsList * _bindingsList;
+	    AgentBase* _bindingsList;
 		unsigned short int validatePacket(Packet *packet);
-<<<<<<< HEAD
->>>>>>> 1558a44cfc054b002f05f92645453adca509818e
-=======
->>>>>>> 1558a44cfc054b002f05f92645453adca509818e
+
 };
 
 struct RegistrationRequestReplyPacketheader {
