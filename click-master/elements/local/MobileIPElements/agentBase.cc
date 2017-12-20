@@ -14,7 +14,7 @@ AgentBase::AgentBase(){}
 AgentBase::~AgentBase(){}
 
 int AgentBase::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("ADD", _coa).complete() < 0) return -1;
+    if (Args(conf, this, errh).read_mp("PUBADDR", _public_addr).read_mp("PRIVADDR", _private_addr).complete() < 0) return -1;
 
     _maxRequests = 5;
 	Timer *timer = new Timer(this);
