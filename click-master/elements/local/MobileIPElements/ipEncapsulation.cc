@@ -43,13 +43,13 @@ void IpEncapsulation::push(int, Packet *p) {
     IPAddress careOff = getDesitination(iph->ip_dst);
 
 
-    
+
     // new packet with an extra ip header, create headroom to push upon
     // space is not the same as packetdata
 
-    int packetsize = p->length();
+    int packetSize = p->length();
     int headroom =  sizeof(click_ether) + sizeof(click_ip);
-    WritablePacket *packet = Packet::make(headroom, 0, packetsize, 0);
+    WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if (packet == 0)
     {
         click_chatter("Packet creating failed (IPENCAP)");
