@@ -29,6 +29,9 @@ class MobileIPFilter: public Element {
 
 };
 
+struct mypacket{
+	uint_8 type;
+}
 
 CLICK_ENDDECLS
 #endif

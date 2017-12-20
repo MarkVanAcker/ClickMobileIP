@@ -28,6 +28,10 @@ int MobileIPFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
 void MobileIPFilter::push(int, Packet *p) {
 
 
+		click_ip* iph = (click_ip)q->data();
+    click_udp* udph = (click_udp)(iph+1);
+		mypacket* m = (mypacket*)(udph+1)
+
     output(0).push(p);
 }
 
