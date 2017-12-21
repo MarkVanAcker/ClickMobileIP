@@ -144,7 +144,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
 void RegistrationRequestSource::run_timer(Timer *timer){
     if(timer == (*timers.begin())){
         for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
-            it->remainingLifetime--;
+            it->remainingLifetime = it->remainingLifetime-htons(1);
             if(it->remainingLifetime == 0){
                 currentRequests.erase(it);
             }
@@ -155,7 +155,7 @@ void RegistrationRequestSource::run_timer(Timer *timer){
             timer->reschedule_after_msec(1000);
             return;
         }
-        _mobileNode->remainingConnectionTime--;
+        _mobileNode->remainingConnectionTime = _mobileNode->remainingConnectionTime-htons(1);
         if(_mobileNode->remainingConnectionTime == 0 && !_mobileNode->home){
             _mobileNode->connected = false;
         }

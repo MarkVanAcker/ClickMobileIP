@@ -67,8 +67,8 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     item.homeAgent = format->homeAgent;
     item.id1 = format->id1;
     item.id2 = format->id2;
-    item.lifetimeReq = ntohs(format->lifetime);
-    item.lifetimeRem = ntohs(format->lifetime);
+    item.lifetimeReq = format->lifetime;
+    item.lifetimeRem = format->lifetime;
 
     // should be true
     if(_visitorList->_registrationReq.size() < _visitorList->_maxRequests){
@@ -152,12 +152,12 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
 void ForeignAgentReqProcess::run_timer(Timer* timer){
     // edit pending registration
     for(Vector<listItem>::iterator it = _visitorList->_registrationReq.end()-1; it != _visitorList->_registrationReq.begin()-1;it--){
-        it->lifetimeRem--;
+        it->lifetimeRem = it->lifetimeRem-htons(1);
         if(it->lifetimeRem == 0){
             // expired
             _visitorList->_registrationReq.erase(it);
         }else{
-            if(it->lifetimeReq - it->lifetimeRem == 7){
+            if(it->lifetimeReq - it->lifetimeRem == htons(7)){
                 int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
                 int headroom = sizeof(click_ether);
                 WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
@@ -188,7 +188,7 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
                 ForeignAgentReqProcessPacketheader *formatNew = (ForeignAgentReqProcessPacketheader*)(udphNew+1);
                 formatNew->type = 3; // Registration Reply
                 formatNew->code = 78;
-                formatNew->lifetime = htons(it->lifetimeReq);
+                formatNew->lifetime = it->lifetimeReq;
                 formatNew->homeAddr = it->ipSrc;
                 formatNew->homeAgent = it->homeAgent;
                 formatNew->id1 = it->id1;

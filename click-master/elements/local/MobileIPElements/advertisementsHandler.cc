@@ -43,7 +43,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
     advStruct.reg_lifetime = advh->lifetimeEx;
     advStruct.sequenceNum = advh->sequenceNum;
     advStruct.COA = advh->addressEx;
-    advStruct.private_addr = advh->address;
+    advStruct.private_addr = ip->ip_src;
     advStruct.ha = false;
     advStruct.fa = false;
     if((flags >> 5) & 1){
@@ -125,7 +125,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
                 _mobileNode->current_advertisements.erase(it);
             }
         }else{
-            it->lifetime--;
+            it->lifetime = it->lifetime-htons(1);
             it++;
         }
     }

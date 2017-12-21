@@ -47,7 +47,6 @@ public:
     const char *class_name() const { return "AgentBase"; }
     const char *port_count() const { return "0/0"; }
     int configure(Vector<String>&, ErrorHandler*);
-    void run_timer(Timer*);
 
     bool inMapHome(IPAddress);
     bool inPendingHome(IPAddress);
@@ -58,7 +57,6 @@ public:
     int _maxRequests;
     IPAddress _public_addr;
 	IPAddress _private_addr;
-    Timer _timer;
     Vector<listItem> _registrationReq;
     Vector<listItem> _visitorMap;
 

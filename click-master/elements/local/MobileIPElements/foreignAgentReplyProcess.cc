@@ -77,7 +77,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
         }
     }else{
         click_chatter("deny from homeAgent at processReply");
-        for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin();it != _visitorList->_registrationReq.end(); ++it) {
+        for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin();it != _visitorList->_registrationReq.end(); it++) {
             if(it->id1 == format->id1 && it->id2 == format->id2){
                 _visitorList->_registrationReq.erase(it);
                 break;
@@ -97,7 +97,7 @@ void ForeignAgentReplyProcess::run_timer(Timer* timer){
         if(it->lifetimeRem == 0){
             _visitorList->_visitorMap.erase(it);
         }else{
-            it->lifetimeRem--;
+            it->lifetimeRem = it->lifetimeRem-htons(1);
             it++;
         }
     }
