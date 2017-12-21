@@ -19,6 +19,7 @@ int MobileInfoList::configure(Vector<String> &conf, ErrorHandler *errh) {
         remainingConnectionTime = 0;
         advertisementReady = false;
 		curr_private_addr = home_private_addr;
+        curr_coa = home_public_addr;
 		home = true;
         return 0;
 
