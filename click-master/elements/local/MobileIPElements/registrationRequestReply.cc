@@ -138,10 +138,10 @@ void RegistrationRequestReply::push(int, Packet *p) {
 				_bindingsList->_table.erase(format->homeAddr);
 				for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
 					if((*it) == format->homeAddr){
-						_bindingsList->_list.erase(it);							
+						_bindingsList->_list.erase(it);
 						break;
 					}else{
-						it++;					
+						it++;
 					}
 				}
 
@@ -157,23 +157,23 @@ void RegistrationRequestReply::push(int, Packet *p) {
 		}
     }
 
-	
-  
+
+
 }
 
 void RegistrationRequestReply::run_timer(Timer * timer) {
 
 	for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
 		RegistrationTable::Pair * pair = _bindingsList->_table.find_pair((*it));
-		pair->value->lifetime--;
+		pair->value->lifetime = pair->value->lifetime-htons(1);
 		if(pair->value->lifetime == 0){
 			_bindingsList->_table.erase((*it));
 			_bindingsList->_list.erase(it);
 		}else{
-			it++;		
+			it++;
 		}
 	}
-    
+
     timer->reschedule_after_msec(1000);
 }
 

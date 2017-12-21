@@ -58,7 +58,6 @@ public:
     int _maxRequests;
     IPAddress _public_addr;
 	IPAddress _private_addr;
-    Timer _timer;
     Vector<listItem> _registrationReq;
     Vector<listItem> _visitorMap;
 
