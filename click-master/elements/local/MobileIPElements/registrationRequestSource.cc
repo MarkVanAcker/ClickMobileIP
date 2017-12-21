@@ -121,6 +121,8 @@ void RegistrationRequestSource::push(int, Packet *p) {
                     if(format->lifetime == 0){
                         _mobileNode->home = true;
                         _mobileNode->remainingConnectionTime = 0; // doenst really matter
+                        _mobileNode->curr_private_addr = it->ipDst;
+                        _mobileNode->curr_coa = it->COA; 
                     }else{
                         _mobileNode->home = false;
                         _mobileNode->curr_private_addr = it->ipDst;
