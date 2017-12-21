@@ -44,7 +44,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
 
     // positive respond from home agent
     // update list
-    if(format->code == 1){
+    if(format->code == 0 || format->code == 1){
         click_chatter("accept from homeAgent at processReply");
         for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin();it != _visitorList->_registrationReq.end(); ++it) {
             // we found a corresponding home agent -> check id's
@@ -89,6 +89,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
     udph->uh_sum = htons(0);
     udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
     iph, packet_size - sizeof(click_ip));
+		q->set_dst_ip_anno(format->homeAddr);
      // respond to node
     output(0).push(q);
 }
