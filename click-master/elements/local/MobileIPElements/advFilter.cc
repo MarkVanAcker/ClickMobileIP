@@ -23,13 +23,13 @@ int AdvFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
 
 
 void AdvFilter::push(int, Packet *p) {
-
     int packetsize = p->length();
 		if(packetsize == sizeof(click_ip) + sizeof(AdvertisementPacketheader)){
 			    click_ip* iph = (click_ip*)p->data();
                     if(iph->ip_p == 1 && iph->ip_dst == IPAddress("255.255.255.255")){
                         AdvertisementPacketheader* ah = (AdvertisementPacketheader*) (iph+1);
     					if(ah->typeEx == 16 && ah->type == 9 && ah->code == 0 ){
+                            click_chatter("is mobile ip adv");
     						output(1).push(p);
     						return;
     					}

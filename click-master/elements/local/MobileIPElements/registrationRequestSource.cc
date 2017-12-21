@@ -34,6 +34,7 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
 }
 
 void RegistrationRequestSource::makePacket(Advertisement a){
+    click_chatter("source make packet");
     // make the packet
     int packet_size = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
     int headroom = sizeof(click_ether);
@@ -74,17 +75,15 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     format->type = 1; //fixed
     format->flags = 0; //all flags 0   ||  4, 8, 16, 32 ?
     if(a.private_addr == _mobileNode->home_private_addr){
-        if(a.ha && _mobileNode->curr_private_addr != _mobileNode->home_private_addr && _mobileNode->home){
-            // update routing table
-            _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
-            _mobileNode->curr_coa = a.COA;
-            _mobileNode->remainingConnectionTime = 0; // should not matter
-            format->lifetime = 0;
-        }
-    }else if(a.fa && !_mobileNode->home){
-        format->lifetime = a.reg_lifetime;
+        click_chatter("source making a DEreg request");
+        // update routing table
+        _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
+        _mobileNode->curr_coa = a.COA;
+        _mobileNode->remainingConnectionTime = 0; // should not matter
+        format->lifetime = 0;
     }else{
-        return;
+        click_chatter("source making a reg request");
+        format->lifetime = a.reg_lifetime;
     }
     format->homeAddr = _mobileNode->myAddress;
     format->homeAgent = _mobileNode->home_public_addr;
@@ -117,14 +116,14 @@ void RegistrationRequestSource::push(int, Packet *p) {
             for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); it++){
                 if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
                     // found corresponding request
-                    _mobileNode->connected = true;
                     if(format->lifetime == 0){
                         _mobileNode->home = true;
                         _mobileNode->remainingConnectionTime = 0; // doenst really matter
                         _mobileNode->curr_private_addr = it->ipDst;
-                        _mobileNode->curr_coa = it->COA; 
+                        _mobileNode->curr_coa = it->COA;
                     }else{
                         _mobileNode->home = false;
+                        _mobileNode->connected = true;
                         _mobileNode->curr_private_addr = it->ipDst;
                         _mobileNode->curr_coa = it->COA;
                         uint16_t lifetimeReq = it->requestedLifetime;

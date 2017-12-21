@@ -27,7 +27,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 
 	_timer = new Timer(this);
 	_timer->initialize(this);
-	_timer->schedule_after_msec(1);	
+	_timer->schedule_after_msec(1);
 	return 0;
 }
 
@@ -98,7 +98,6 @@ void AgentAdvertiser::run_timer(Timer * timer) {
     Packet *p = makePacket();
     if (p) {
         output(0).push(p);
-        click_chatter("Advertisement sent");
     }
 
     // random term to make sure 2 hosts messages will not interfere

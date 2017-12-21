@@ -94,22 +94,18 @@ void AdvertisementsHandler::push(int, Packet *p) {
             _mobileNode->current_advertisements.push_back(advStruct);
         }
     }
-    bool wasHome = _mobileNode->home;
+    bool advFromHome = false;
     if(advh->address == _mobileNode->home_private_addr){
-        click_chatter("Ik bben thuis");
-        _mobileNode->home = true;
-    }else{
-        click_chatter("ben niet thuis");
-        _mobileNode->home = false;
+        advFromHome = true;
     }
 
-    if(_mobileNode->connected == false && !_mobileNode->home && wasHome ){
+    if(_mobileNode->connected == false && _mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
         _source->makePacket(advStruct);
         return;
     }
     // is there is a change FA to HA
-    else if(_mobileNode->connected == true && _mobileNode->home && !wasHome){
+    else if(_mobileNode->connected == true && !_mobileNode->home && advFromHome){
             click_chatter("reg source swtich FA to HA");
             _source->makePacket(advStruct);
         }
@@ -136,7 +132,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
     if(_mobileNode->current_advertisements.empty()){
         _mobileNode->advertisementReady = false;
     }
-    if((!wasConnected || hostConnectionLost) && !_mobileNode->current_advertisements.empty()){
+    if((!wasConnected || hostConnectionLost) && !_mobileNode->current_advertisements.empty() && !_mobileNode->home){
         click_chatter("Conection lost remake Request");
         _source->makePacket(*_mobileNode->current_advertisements.begin());
     }
