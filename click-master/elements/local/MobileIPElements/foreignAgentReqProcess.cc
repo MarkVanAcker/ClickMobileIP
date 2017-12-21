@@ -20,7 +20,7 @@ int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) 
 
     AgentBase* templist;
 
-    if (Args(conf, this, errh).read_m("AGBASE",
+    if (Args(conf, this, errh).read_m("BASE",
     ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
@@ -94,17 +94,24 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
 
     // validate packet content, react accordingly
     unsigned short int code = validatePacket(p);
+    click_chatter("after val");
     if(code == 1){
+        int packet_size = sizeof(RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         iph->ip_sum = htons(0);
         iph->ip_src = _visitorList->_private_addr;
         iph->ip_dst = format->homeAgent;
         iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
+        udph->uh_sum = htons(0);
+        udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
+        iph, packet_size - sizeof(click_ip));
+        click_chatter("checksum");
         output(1).push(p);
+        click_chatter("afterpush");
         return;
     }else{
         click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
-        int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+        int packet_size = sizeof(struct RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         int headroom = sizeof(click_ether);
         WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
         if(packet == 0) {

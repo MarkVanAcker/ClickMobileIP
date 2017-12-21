@@ -81,10 +81,14 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
             }
         }
     }
+    int packet_size = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
     iph->ip_sum = htons(0);
     iph->ip_src = _visitorList->_private_addr;
     iph->ip_dst = format->homeAddr;
     iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
+    udph->uh_sum = htons(0);
+    udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
+    iph, packet_size - sizeof(click_ip));
      // respond to node
     output(0).push(q);
 }
