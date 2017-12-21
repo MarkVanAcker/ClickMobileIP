@@ -140,20 +140,28 @@ elementclass Agent {
 
 	ipc
 		-> mipfilter :: MobileIPFilter(AGBASE bind)
+		-> Print("Test5")
 		-> Discard
 
 	mipfilter[1]
+		-> Print("Test4")
 		-> ForeignAgentReplyProcess(AGBASE bind)
 		-> private_arpq;
 
 	mipfilter[2]
+		-> Print("Test2")
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
 
 	mipfilter[3]
-		-> ForeignAgentReqProcess(AGBASE bind)
+		-> farp :: ForeignAgentReqProcess(BASE bind)
 		-> private_arpq;
+
+
+		farp[1]
+			->public_arpq;
+
 
 //infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
 	

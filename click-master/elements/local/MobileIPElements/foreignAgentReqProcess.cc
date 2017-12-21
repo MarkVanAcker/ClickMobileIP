@@ -98,15 +98,14 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
     if(code == 1){
         int packet_size = sizeof(RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         iph->ip_sum = htons(0);
-        iph->ip_src = _visitorList->_private_addr;
+        iph->ip_src = _visitorList->_public_addr;
         iph->ip_dst = format->homeAgent;
         iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
         udph->uh_sum = htons(0);
         udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
         iph, packet_size - sizeof(click_ip));
-        click_chatter("checksum");
+				p->set_dst_ip_anno(format->homeAgent);
         output(1).push(p);
-        click_chatter("afterpush");
         return;
     }else{
         click_chatter("fault in packet recieved (PROCESS REQUEST)");
