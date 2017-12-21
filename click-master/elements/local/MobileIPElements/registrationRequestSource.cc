@@ -84,7 +84,6 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     }else{
         click_chatter("source making a reg request");
         format->lifetime = a.reg_lifetime;
-        format->lifetime = format->lifetime-htons(1);
     }
     format->homeAddr = _mobileNode->myAddress;
     format->homeAgent = _mobileNode->home_public_addr;

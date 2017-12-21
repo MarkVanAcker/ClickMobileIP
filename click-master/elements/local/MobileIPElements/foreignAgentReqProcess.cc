@@ -202,6 +202,14 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
             }
         }
     }
+    for(Vector<listItem>::iterator it = _visitorList->_visitorMap.begin();it != _visitorList->_visitorMap.end();) {
+        if(it->lifetimeRem == 0){
+            _visitorList->_visitorMap.erase(it);
+        }else{
+            it->lifetimeRem = it->lifetimeRem-htons(1);
+            it++;
+        }
+    }
     timer->schedule_after_msec(1000);
 }
 

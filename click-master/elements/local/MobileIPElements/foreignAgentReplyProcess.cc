@@ -24,9 +24,6 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
     ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
-    Timer *timer = new Timer(this);
-    timer->initialize(this);
-    timer->schedule_after_msec(1000);
     _visitorList = templist;
     _maxLifetime = 1800; // default value
 	return 0;
@@ -90,18 +87,6 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
     iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
      // respond to node
     output(0).push(q);
-}
-
-void ForeignAgentReplyProcess::run_timer(Timer* timer){
-    for(Vector<listItem>::iterator it = _visitorList->_visitorMap.begin();it != _visitorList->_visitorMap.end();) {
-        if(it->lifetimeRem == 0){
-            _visitorList->_visitorMap.erase(it);
-        }else{
-            it->lifetimeRem = it->lifetimeRem-htons(1);
-            it++;
-        }
-    }
-    timer->schedule_after_msec(1000);
 }
 
 CLICK_ENDDECLS
