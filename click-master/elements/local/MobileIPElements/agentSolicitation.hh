@@ -29,8 +29,6 @@ class AgentSolicitation: public Element {
         int _interval;
         int transmissions;
         int _maxRetransmissions;
-        IPAddress _address;
-
 
 };
 

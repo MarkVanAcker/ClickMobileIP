@@ -27,7 +27,6 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
     }
 
     _mobileNode = tempList;
-    _address = _mobileNode->myAddress;
     Timer *timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1);
@@ -51,7 +50,7 @@ Packet* AgentSolicitation::makePacket() {
     iph->ip_len = htons(packet->length());
     iph->ip_ttl = 1; // TTL must be 1 in Sollicitation
     iph->ip_p = 1; //  IP-protocolnummer 1 voor IPv4 en 58 voor IPv6 icmp. (wikipedia)
-    iph->ip_src = _address;
+    iph->ip_src = _mobileNode->myAddress;
     iph->ip_dst = IPAddress("255.255.255.255");
     iph->ip_sum = click_in_cksum((unsigned char*)packet->data(), packet->length());
 
