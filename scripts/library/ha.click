@@ -18,7 +18,7 @@ elementclass Agent {
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
-		-> solipt :: PaintTee(1)
+		-> soli :: SolicitationFilter
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -27,9 +27,6 @@ elementclass Agent {
 					0.0.0.0/0 $gateway 2);
 	
 
-	solipt[1] 		
-		-> soli :: SolicitationFilter
-		-> Discard
 
 	// ARP responses are copied to each ARPQuerier and the host.
 	arpt :: Tee (2);
@@ -142,22 +139,18 @@ elementclass Agent {
 //3. Registration reply van een public netwerk voor jezelf. Deze worden doorverwezen naar de visitor node.
 
 	ipc
-		-> mipfilter :: MobileIPFilter
+		-> mipfilter :: MobileIPFilter(AGBASE bind)
 		-> Discard
 
 	mipfilter[1]
 		-> Discard //Replies
 
 	mipfilter[2]
-		-> cp :: CheckPaint(1)
-		-> ipc2 :: IPClassifier(src net $private_address:ipnet ,-)
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
-	cp[1]
-		->regrep
 
-	ipc2[1]
+	mipfilter[3]
 		-> Discard
 
 //infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
@@ -167,8 +160,10 @@ elementclass Agent {
 
 
 //Solicitation requests komen hier binnen en zijn 100% geldig. Er wordt een Advertisement gemaakt en doorgestuurd op het prive netwerk.
+//publieke packages worden gedropt
 
 	soli[1]
+		-> CheckPaint(1)
 		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA true, LTREG 3, LTADV 5, INTERVAL 20000)
 		-> private_arpq;
 
