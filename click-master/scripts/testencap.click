@@ -1,4 +1,4 @@
-	bind::bindingsList();
+	basee :: AgentBase( PUBADDR 20.20.20.201, PRIVADDR 20.20.20.20);
    	source::ICMPPingSource(10.10.10.11, 10.10.10.10, DATA "test");
 
 	RegistrationRequestSource(HADDR 10.10.10.10 , HAGENT 12.12.12.12, COA 15.15.15.15)
