@@ -18,8 +18,6 @@ elementclass MobileNode {
 	base :: MobileInfoList(MYADDR $address, PRADDR $gateway, PADDR $home_agent);
 	regreq :: RegistrationRequestSource(MNBASE base);
 
-	sol :: AgentSolicitation(MNBASE base, MAXR 5)
-		->output;
 	
 
 	// Shared IP input path
@@ -63,10 +61,14 @@ elementclass MobileNode {
 		-> ip;
 
 
+	AgentSolicitation(MNBASE base, MAXR 5)
+		-> arpq;
+
 	adv[1]
 		-> AdvertisementsHandler(MNBASE base, SOURCE regreq);
+
 	ipc
 		->regreq
-		->output;
+		->arpq;
 
 }
