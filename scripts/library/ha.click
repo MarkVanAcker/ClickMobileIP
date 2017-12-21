@@ -143,7 +143,8 @@ elementclass Agent {
 		-> Discard
 
 	mipfilter[1]
-		-> Discard //Replies
+		-> ForeignAgentReplyProcess(AGBASE bind)
+		-> private_arpq;
 
 	mipfilter[2]
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
