@@ -27,7 +27,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 
 	_timer = new Timer(this);
 	_timer->initialize(this);
-	_timer->schedule_after_msec(1);	
+	_timer->schedule_after_msec(1);
 	return 0;
 }
 
@@ -59,7 +59,7 @@ Packet* AgentAdvertiser::makePacket() {
     ah->lifetime = htons(_lifetimeAdv);
     ah->addressNumbers = 1; // 1 adress
     ah->addrEntrySize = 2; // 2 entries for 1 address
-    ah->address = _addressCO; // agent adress
+    ah->address = _address; // agent adress
     ah->pref = 0;    // 0
     ah->typeEx = 16; // normal routing
     ah->length = 10; // 6 + 4 bytes
@@ -67,7 +67,7 @@ Packet* AgentAdvertiser::makePacket() {
     ah->lifetimeEx = htons(_lifetimeReg);
     // we don not need to use htons() because last bits 0 anyway
     ah->flagsReserved = (_FA << 7) + (_HA << 5) + (_FA << 4) + 0;   // force reg req if FA
-    ah->addressEx = _addressCO; // normally same as _address
+    ah->addressEx = _addressCO; // coa
 
     packet->set_dst_ip_anno(iph->ip_dst);
     ah->checksum = click_in_cksum((unsigned char *) ah, packet->length()-sizeof(click_ip));
@@ -98,7 +98,6 @@ void AgentAdvertiser::run_timer(Timer * timer) {
     Packet *p = makePacket();
     if (p) {
         output(0).push(p);
-        click_chatter("Advertisement sent");
     }
 
     // random term to make sure 2 hosts messages will not interfere
