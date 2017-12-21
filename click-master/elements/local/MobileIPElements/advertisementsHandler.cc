@@ -54,23 +54,21 @@ void AdvertisementsHandler::push(int, Packet *p) {
     if(advStruct.ha == false && advStruct.fa == false){
         return;
     }
-    if(advh->address == _mobileNode->home_private_addr){
-        _mobileNode->home = true;
-    }else{
-        _mobileNode->home = false;
-        if (((flags >> 6) & 1) == 1){
-            // busy bit set so it has no point in registrating at this agent
-            for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
-                // remove an entry from this host because we know he is busy
-                if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
-                    _mobileNode->current_advertisements.erase(it);
-                    break;
-                }
+
+    if (((flags >> 6) & 1) == 1){
+        // busy bit set so it has no point in registrating at this agent
+        for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
+            // remove an entry from this host because we know he is busy
+            if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
+                _mobileNode->current_advertisements.erase(it);
+                break;
             }
-            return;
         }
-        // modify current adv if needed. also extract the seq num
-        // check if the adv is from the curr one if connected
+        return;
+    }
+    // modify current adv if needed. also extract the seq num
+    // check if the adv is from the curr one if connected
+    if(advh->address != _mobileNode->home_private_addr){
         bool found = false;
         for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
             // if we have an entry in the list. We can update it
@@ -80,6 +78,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
                 // if the router is reset and i am connected to that one, re reg with new values
                 if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
                     if(_mobileNode->curr_private_addr == it->private_addr){
+                        click_chatter("reg source router reset");
                         _source->makePacket(advStruct);
                     }
                     // update fields recording to the curr adv message,
@@ -93,15 +92,21 @@ void AdvertisementsHandler::push(int, Packet *p) {
             _mobileNode->current_advertisements.push_back(advStruct);
         }
     }
+    bool wasHome = _mobileNode->home;
+    if(advh->address == _mobileNode->home_private_addr){
+        _mobileNode->home = true;
+    }else{
+        _mobileNode->home = false;
+    }
 
-
-    if(_mobileNode->connected == false && !_mobileNode->home ){
+    if(_mobileNode->connected == false && !_mobileNode->home && wasHome ){
+        click_chatter("reg source swtich HA to FA");
         _source->makePacket(advStruct);
         return;
     }
     // is there is a change FA to HA
-    else if(_mobileNode->connected == true && advh->address == _mobileNode->home_private_addr
-        && _mobileNode->curr_coa!= _mobileNode->home_public_addr){
+    else if(_mobileNode->connected == true && _mobileNode->home && !wasHome){
+            click_chatter("reg source swtich FA to HA");
             _source->makePacket(advStruct);
         }
 }
@@ -128,6 +133,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
         _mobileNode->advertisementReady = false;
     }
     if((!wasConnected || hostConnectionLost) && !_mobileNode->current_advertisements.empty()){
+        click_chatter("Conection lost remake Request");
         _source->makePacket(*_mobileNode->current_advertisements.begin());
     }
 
