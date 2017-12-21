@@ -15,14 +15,25 @@
 elementclass MobileNode {
 	$address, $gateway, $home_agent |
 
+	base :: MobileInfoList(MYADDR $address, PRADDR $gateway, PADDR $home_agent);
+	regreq :: RegistrationRequestSource(MNBASE base);
+
+	sol :: AgentSolicitation(MNBASE base, MAXR 5)
+		->output;
+	
+
 	// Shared IP input path
 	ip :: Strip(14)
 		-> CheckIPHeader
+		-> adv :: AdvFilter()
 		-> rt :: LinearIPLookup(
 			$address:ip/32 0,
 			$address:ipnet 1,
 			0.0.0.0/0 $gateway 1)
 		-> [1]output;
+	rt[0]
+		-> ipc :: IPClassifier(src udp port 434,-)[1]
+		-> [1]output
 
 	rt[1]	-> ipgw :: IPGWOptions($address)
 		-> FixIPSrc($address)
@@ -53,8 +64,11 @@ elementclass MobileNode {
 	in_cl[2]
 		-> ip;
 
-	RegistrationRequestSource(HADDR $address, HAGENT $home_agent, COA $address)
-		-> EtherEncap(0x0800, $address:eth, $address:eth)
-		-> ToDump(req.dump)
-		-> output
+
+	adv[1]
+		-> AdvertisementsHandler(MNBASE base, SOURCE regreq);
+	ipc
+		->regreq
+		->output;
+
 }
