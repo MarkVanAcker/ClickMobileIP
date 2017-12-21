@@ -33,6 +33,7 @@ int AdvertisementsHandler::configure(Vector<String> &conf,ErrorHandler *errh) {
 
 // recieves Advertisements yet to be handled
 void AdvertisementsHandler::push(int, Packet *p) {
+    click_chatter("RECIEVED ADV");
     click_ip* ip = (click_ip*)p->data();
     AdvertisementPacketheader* advh = (AdvertisementPacketheader*)(ip + 1);
     uint16_t flags = advh->flagsReserved;
@@ -56,6 +57,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
     }
 
     if (((flags >> 6) & 1) == 1){
+        click_chatter("busy bit set");
         // busy bit set so it has no point in registrating at this agent
         for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
             // remove an entry from this host because we know he is busy
@@ -94,8 +96,10 @@ void AdvertisementsHandler::push(int, Packet *p) {
     }
     bool wasHome = _mobileNode->home;
     if(advh->address == _mobileNode->home_private_addr){
+        click_chatter("Ik bben thuis");
         _mobileNode->home = true;
     }else{
+        click_chatter("ben niet thuis");
         _mobileNode->home = false;
     }
 
