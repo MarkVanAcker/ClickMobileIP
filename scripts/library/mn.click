@@ -26,14 +26,12 @@ elementclass MobileNode {
 	ip :: Strip(14)
 		-> CheckIPHeader
 		-> adv :: AdvFilter()
-		-> rt :: LinearIPLookup(
+		-> rt :: LinearIPLookup( 
 			$address:ip/32 0,
 			$address:ipnet 1,
 			0.0.0.0/0 $gateway 1)
-		-> [1]output;
-	rt[0]
 		-> ipc :: IPClassifier(src udp port 434,-)[1]
-		-> [1]output
+		-> [1]output;
 
 	rt[1]	-> ipgw :: IPGWOptions($address)
 		-> FixIPSrc($address)
