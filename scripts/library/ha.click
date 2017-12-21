@@ -152,7 +152,8 @@ elementclass Agent {
 
 
 	mipfilter[3]
-		-> Discard
+		-> ForeignAgentReqProcess(AGBASE bind)
+		-> private_arpq;
 
 //infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
 	

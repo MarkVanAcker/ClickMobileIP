@@ -20,8 +20,8 @@ int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) 
 
     AgentBase* templist;
 
-    if (Args(conf, this, errh).read_m("VISITOR",
-    ElementCastArg("VisitorList"),
+    if (Args(conf, this, errh).read_m("AGBASE",
+    ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
     Timer *timer = new Timer(this);
