@@ -26,12 +26,8 @@ int IpDecap::configure(Vector<String> &conf, ErrorHandler *errh) {
 
 
 void IpDecap::push(int, Packet *p) {
-    WritablePacket* q = p->uniqueify();
-    q->pull(sizeof(click_ip));
-    output(1).push(q);
-    return;
 
-    // get the careoff adress of the bindingslist
+    // output 1 is a message for a MN on my network
     click_ip* iph = (click_ip*)p->data();
 	if(iph->ip_p == 4){
         click_ip* iph2 = (click_ip*)(iph+1);
