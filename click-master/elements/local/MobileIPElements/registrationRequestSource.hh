@@ -25,7 +25,7 @@ class RegistrationRequestSource: public Element {
         ~RegistrationRequestSource();
 
         const char *class_name() const { return "RegistrationRequestSource"; }
-        const char *port_count() const { return "0-1/1"; }
+        const char *port_count() const { return "1/1"; }
         const char *processing() const { return PUSH; }
 
         int configure(Vector<String>&, ErrorHandler*);

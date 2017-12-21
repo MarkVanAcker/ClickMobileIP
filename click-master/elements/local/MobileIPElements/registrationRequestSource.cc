@@ -19,7 +19,7 @@ RegistrationRequestSource::~RegistrationRequestSource()
 
 int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *errh) {
     MobileInfoList* tempList;
-    if (Args(conf, this, errh).read("MNLIST",ElementCastArg("MobileInfoList"),tempList).complete() < 0) return -1;
+    if (Args(conf, this, errh).read("MNBASE",ElementCastArg("MobileInfoList"),tempList).complete() < 0) return -1;
 
     _mobileNode = tempList;
 	Timer* timer = new Timer(this);
@@ -149,6 +149,10 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         }
         timer->reschedule_after_msec(1000);
     }else{
+        if(_mobileNode->remainingConnectionTime == 0){
+            timer->reschedule_after_msec(1000);
+            return;
+        }
         _mobileNode->remainingConnectionTime--;
         if(_mobileNode->remainingConnectionTime == 0 && !_mobileNode->home){
             _mobileNode->connected = false;

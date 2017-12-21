@@ -14,9 +14,10 @@ MobileInfoList::MobileInfoList(){}
 MobileInfoList::~MobileInfoList(){}
 
 int MobileInfoList::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_m("PRADDR", home_private_addr).read_m("PADDR",home_public_addr).complete() < 0) return -1;
-		connected = false;
-		curr_coa = home_public_addr;
+    if (Args(conf, this, errh).read_m("MYADDR", myAddress).read_m("PRADDR", home_private_addr).read_m("PADDR",home_public_addr).complete() < 0) return -1;
+		connected = true;
+        remainingConnectionTime = 0;
+        advertisementReady = false;
 		curr_private_addr = home_private_addr;
 		home = true;
         return 0;

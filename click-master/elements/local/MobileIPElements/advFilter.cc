@@ -27,11 +27,14 @@ void AdvFilter::push(int, Packet *p) {
     int packetsize = p->length();
 		if(packetsize == sizeof(click_ip) + sizeof(AdvertisementPacketheader)){
 			    click_ip* iph = (click_ip*)p->data();
-					AdvertisementPacketheader* ah = (AdvertisementPacketheader*) (iph+1);
-					if(ah->typeEx == 16 && ah->type == 9 && ah->code == 0 && iph->ip_p == 1 && iph->ip_dst == IPAddress("255.255.255.255")){
-						output(1).push(p);
-						return;
-					}
+                    if(iph->ip_p == 1 && iph->ip_dst == IPAddress("255.255.255.255")){
+                        AdvertisementPacketheader* ah = (AdvertisementPacketheader*) (iph+1);
+    					if(ah->typeEx == 16 && ah->type == 9 && ah->code == 0 ){
+    						output(1).push(p);
+    						return;
+    					}
+                    }
+
 		}
     output(0).push(p);
 }

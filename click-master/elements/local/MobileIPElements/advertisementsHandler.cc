@@ -18,7 +18,7 @@ AdvertisementsHandler::~AdvertisementsHandler() {}
 int AdvertisementsHandler::configure(Vector<String> &conf,ErrorHandler *errh) {
     MobileInfoList* tempList;
     RegistrationRequestSource* tempSource;
-    if (Args(conf, this, errh).read_m("MNLIST",ElementCastArg("MobileInfoList"),tempList)
+    if (Args(conf, this, errh).read_m("MNBASE",ElementCastArg("MobileInfoList"),tempList)
                               .read_m("SOURCE",ElementCastArg("registrationRequestSource"),tempSource)
                               .complete() < 0) return -1;
 

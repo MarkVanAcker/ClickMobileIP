@@ -17,8 +17,8 @@ AgentSolicitation::~AgentSolicitation(){}
 int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
     MobileInfoList* tempList;
     if (Args(conf, this, errh)
-        .read_m("MNLIST",ElementCastArg("MobileInfoList"),tempList)
-        .read_m("MAX", _maxRetransmissions)
+        .read_m("MNBASE",ElementCastArg("MobileInfoList"),tempList)
+        .read_m("MAXR", _maxRetransmissions)
         .complete() < 0) return -1;
 
     // should send Sollicitations
@@ -69,6 +69,14 @@ Packet* AgentSolicitation::makePacket() {
 
 // make packet and increase seq num
 void AgentSolicitation::run_timer(Timer * timer) {
+    if(_mobileNode->connected && _mobileNode->remainingConnectionTime==0){
+        Packet *p = makePacket();
+        if (p){
+            output(0).push(p);
+            click_chatter("Sollicitation sent");
+        }
+        timer->reschedule_after_msec(1000+((rand()%20)-10));
+    }
     if(!_mobileNode->connected && !_mobileNode->advertisementReady){
         // we could send an adv
         if( transmissions == _maxRetransmissions){
