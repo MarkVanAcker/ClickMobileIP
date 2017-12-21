@@ -17,7 +17,7 @@ IpEncapsulation::~IpEncapsulation()
 int IpEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh) {
     AgentBase* templist;
     if (Args(conf, this, errh).read_mp("IPADDRES", _tunnelAddres).read("BINDING",
-    ElementCastArg("bindingsList"),
+    ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
     _bindingsList = templist;

@@ -13,12 +13,12 @@
 elementclass Agent {
 	$private_address, $public_address, $gateway |
 
-	bind::bindingsList();
+	bind::AgentBase(PUBADDR $public_address,PRIVADDR $private_address);
 
 	// Shared IP input path and routing table
 	ip :: Strip(14)
 		-> CheckIPHeader
-		-> soli :: SolicitationFilter // we moeten nog checken of ze van een publiek of prive netwerk komen (Paint?)
+		-> solipt :: PaintTee(1)
 		-> rt :: StaticIPLookup(
 					$private_address:ip/32 0,
 					$public_address:ip/32 0,
@@ -26,6 +26,11 @@ elementclass Agent {
 					$public_address:ipnet 2,
 					0.0.0.0/0 $gateway 2);
 	
+
+	solipt[1] 		
+		-> soli :: SolicitationFilter
+		-> Discard
+
 	// ARP responses are copied to each ARPQuerier and the host.
 	arpt :: Tee (2);
 	
@@ -137,8 +142,23 @@ elementclass Agent {
 //3. Registration reply van een public netwerk voor jezelf. Deze worden doorverwezen naar de visitor node.
 
 	ipc
+		-> mipfilter :: MobileIPFilter
+		-> Discard
+
+	mipfilter[1]
+		-> Discard //Replies
+
+	mipfilter[2]
+		-> cp :: CheckPaint(1)
+		-> ipc2 :: IPClassifier(src net $private_address:ipnet ,-)
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
+
+	cp[1]
+		->regrep
+
+	ipc2[1]
+		-> Discard
 
 //infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
 	
