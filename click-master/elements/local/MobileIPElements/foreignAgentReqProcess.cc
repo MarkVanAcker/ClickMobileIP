@@ -164,6 +164,7 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
             _visitorList->_registrationReq.erase(it);
         }else{
             if(it->lifetimeReq - it->lifetimeRem == htons(7)){
+                click_chatter("WAIT TOO LONG ON REPLY");
                 int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
                 int headroom = sizeof(click_ether);
                 WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);

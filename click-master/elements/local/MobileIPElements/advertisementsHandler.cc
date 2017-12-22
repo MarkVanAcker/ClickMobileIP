@@ -83,6 +83,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
                         click_chatter("reg source router reset");
                         _source->makePacket(advStruct);
                     }
+                    click_chatter("ADV UPDATE");
                     // update fields recording to the curr adv message,
                     it->lifetime = advh->lifetime;
                     it->reg_lifetime = advh->lifetimeEx;
