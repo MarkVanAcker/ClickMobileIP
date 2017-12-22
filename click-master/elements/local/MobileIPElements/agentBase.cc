@@ -21,7 +21,7 @@ int AgentBase::configure(Vector<String> &conf, ErrorHandler *errh) {
 }
 
 bool AgentBase::inMapHome(IPAddress home){
-    for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); ++it) {
+    for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); it++) {
         if (it->homeAgent == home){
             return true;
         }
@@ -30,7 +30,7 @@ bool AgentBase::inMapHome(IPAddress home){
 }
 
 bool AgentBase::inPendingHome(IPAddress home){
-    for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); ++it) {
+    for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); it++) {
         if (it->homeAgent == home){
             return true;
         }
@@ -39,7 +39,7 @@ bool AgentBase::inPendingHome(IPAddress home){
 }
 
 bool AgentBase::inMapNode(IPAddress node){
-    for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); ++it) {
+    for(Vector<listItem>::iterator it = _visitorMap.begin();it != _visitorMap.end(); it++) {
         if (it->ipSrc == node){
             return true;
         }
@@ -48,7 +48,7 @@ bool AgentBase::inMapNode(IPAddress node){
 }
 
 bool AgentBase::inPendingNode(IPAddress node){
-    for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); ++it) {
+    for(Vector<listItem>::iterator it = _registrationReq.begin();it != _registrationReq.end(); it++) {
         if (it->ipSrc == node){
             return true;
         }
