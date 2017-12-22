@@ -6,6 +6,7 @@
 #include <clicknet/ip.h>
 #include <clicknet/udp.h>
 #include "agentAdvertisements.hh"
+#include <iostream>
 
 CLICK_DECLS
 AgentAdvertiser::AgentAdvertiser():
@@ -39,6 +40,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 Packet* AgentAdvertiser::createPacket() {
     int packetSize =  sizeof(click_ip) + sizeof(AdvertisementPacketheader);
     int headroom = sizeof(click_ether);
+	std::cout << headroom << std::endl;
     WritablePacket* packet = Packet::make(headroom, 0, packetSize, 0);
     if (packet == 0){
         click_chatter("Packet creating failed (agent adveritesement)");
