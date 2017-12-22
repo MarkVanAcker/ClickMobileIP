@@ -46,7 +46,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
     // update list
     if(format->code == 0 || format->code == 1){
         click_chatter("accept from homeAgent at processReply");
-        for(Vector<listItem>::iterator it = visitorList->registrationReq.begin();it != visitorList->registrationReq.end(); ++it) {
+        for(Vector<listItem>::iterator it = visitorList->registrationReq.begin();it != visitorList->registrationReq.end(); it++) {
             // we found a corresponding home agent -> check id's
             if(it->id1 == format->id1 && it->id2 == format->id2){
                 listItem item;

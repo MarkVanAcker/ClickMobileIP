@@ -16,7 +16,7 @@ IpEncapsulation::~IpEncapsulation()
 
 int IpEncapsulation::configure(Vector<String> &conf, ErrorHandler *errh) {
     AgentBase* templist;
-    if (Args(conf, this, errh).read_mp("IPADDRES", tunnelAddres).read("BINDING",
+    if (Args(conf, this, errh).read_m("BINDING",
     ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
@@ -72,11 +72,11 @@ void IpEncapsulation::push(int, Packet *p) {
     Oiph->ip_len = htons(packet->length());
     Oiph->ip_id = htons(1);
     Oiph->ip_ttl = 20; // not too big
-    Oiph->ip_src = tunnelAddres;
+    Oiph->ip_src = bindingsList->public_addr;
     Oiph->ip_dst = careOff; //end of tunnel
     Oiph->ip_sum = click_in_cksum((unsigned char*)Oiph, sizeof(click_ip));
     p->kill(); // free memory
-    packet->set_dst_ip_anno(Oiph->ip_dst);
+    packet->set_dst_ip_anno(Oiph->ip_dst); // important!
 
     output(1).push(packet);
 }
