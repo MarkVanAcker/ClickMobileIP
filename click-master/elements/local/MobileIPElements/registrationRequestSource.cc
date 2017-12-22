@@ -141,6 +141,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
 }
 
 void RegistrationRequestSource::run_timer(Timer *timer){
+    click_chatter("Start timer Source");
     if(timer == (*timers.begin())){
         for(Vector<Request>::iterator it = currentRequests.end()-1; it != currentRequests.begin()-1; it--) {
             it->remainingLifetime = it->remainingLifetime-htons(1);
@@ -148,6 +149,7 @@ void RegistrationRequestSource::run_timer(Timer *timer){
                 currentRequests.erase(it);
             }
         }
+        click_chatter("End timer Source BEGIN");
         timer->reschedule_after_msec(1000);
     }else{
         if(_mobileNode->remainingConnectionTime == 0){
@@ -167,7 +169,7 @@ void RegistrationRequestSource::run_timer(Timer *timer){
                 }
             }
         }
-
+        click_chatter("End timer Source BACK");
         timer->reschedule_after_msec(1000);
     }
 

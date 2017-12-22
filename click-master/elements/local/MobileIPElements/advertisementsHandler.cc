@@ -114,6 +114,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
 
 // decrease lifetimes and act if needed
 void AdvertisementsHandler::run_timer(Timer * timer) {
+    click_chatter("Start timer advH");
     bool wasConnected = _mobileNode->connected;
     bool hostConnectionLost = false;
     for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end();){
@@ -122,8 +123,8 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
             if(wasConnected && it->private_addr == _mobileNode->curr_private_addr){
                 hostConnectionLost = true;
                 _mobileNode->connected = false;
-                _mobileNode->current_advertisements.erase(it);
             }
+            _mobileNode->current_advertisements.erase(it);
         }else{
             it->lifetime = it->lifetime-htons(1);
             it++;
@@ -137,6 +138,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
         _source->makePacket(*_mobileNode->current_advertisements.begin());
     }
 
+    click_chatter("End timer advH");
     timer->reschedule_after_msec(1000);
 }
 
