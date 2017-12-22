@@ -24,6 +24,7 @@ class AgentAdvertiser: public Element {
     private:
         Timer * timer;
 
+        AgentBase* agent;
         bool HA;
         bool FA;
         int lifetimeReg;

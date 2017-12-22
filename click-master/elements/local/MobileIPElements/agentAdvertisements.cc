@@ -16,15 +16,17 @@ sequenceNum(0){
 AgentAdvertiser::~AgentAdvertiser() {}
 
 int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
+    AgentBase* templist;
     if (Args(conf, this, errh).read_m("FA", FA)
         .read_m("HA", HA)
         .read_m("LTREG", lifetimeReg)
         .read_m("LTADV", lifetimeAdv)
         .read_m("INTERVAL", interval)
-        .read_m("ADDAGENT", address)
-        .read_m("COA", addressCO).complete() < 0) return -1;
+        .read_m("BASE",ElementCastArg("AgentBase"),
+        templist).complete() < 0) return -1;
 
 
+    agent = templist;
     sequenceNum = htons(1);
 	timer = new Timer(this);
 	timer->initialize(this);
@@ -50,7 +52,7 @@ Packet* AgentAdvertiser::createPacket() {
     iph->ip_id = htons(sequenceNum);
     iph->ip_ttl = 1; // TTL must be 1 in advertisement
     iph->ip_p = 1; //  IP-protocolnummer 1 voor IPv4 en 58 voor IPv6. (wikipedia)
-    iph->ip_src = address;
+    iph->ip_src = agent->private_addr;
     iph->ip_dst = IPAddress("255.255.255.255");
     iph->ip_sum = click_in_cksum((unsigned char*)packet->data(), packet->length());
 
@@ -60,7 +62,7 @@ Packet* AgentAdvertiser::createPacket() {
     ah->lifetime = htons(lifetimeAdv);
     ah->addressNumbers = 1; // 1 adress
     ah->addrEntrySize = 2; // 2 entries for 1 address
-    ah->address = addressCO; // agent adress
+    ah->address = agent->public_addr; // agent adress
     ah->pref = 0;    // 0
     ah->typeEx = 16; // normal routing
     ah->length = 10; // 6 + 4 bytes
@@ -68,7 +70,7 @@ Packet* AgentAdvertiser::createPacket() {
     ah->lifetimeEx = htons(lifetimeReg);
     // we don not need to use htons() because last bits 0 anyway
     ah->flagsReserved = (FA << 7) + (HA << 5) + (FA << 4) + 0;   // force reg req if FA
-    ah->addressEx = addressCO; // coa
+    ah->addressEx = agent->public_addr; // coa
 
     packet->set_dst_ip_anno(iph->ip_dst);
     ah->checksum = click_in_cksum((unsigned char *) ah, packet->length()-sizeof(click_ip));
