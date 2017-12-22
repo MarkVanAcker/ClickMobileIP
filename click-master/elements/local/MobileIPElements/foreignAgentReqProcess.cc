@@ -27,8 +27,8 @@ int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) 
     Timer *timer = new Timer(this);
     timer->initialize(this);
     timer->schedule_after_msec(1000);
-    _visitorList = templist;
-    _maxLifetime = 1800; // default value
+    visitorList = templist;
+    maxLifetime = 1800; // default value
 	return 0;
 }
 
@@ -42,7 +42,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     // requested lifetime too long
     uint16_t lifetime = format->lifetime;
     uint8_t flags = format->flags;
-    if(ntohs(lifetime) > _maxLifetime) {
+    if(ntohs(lifetime) > maxLifetime) {
         click_chatter("Deny because of lifetime");
         return 69;
     }
@@ -53,7 +53,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
         return 70;
     }
 
-    if(_visitorList->_registrationReq.size() == _visitorList->_maxRequests){
+    if(visitorList->registrationReq.size() == visitorList->maxRequests){
         click_chatter("too much");
         return 66;
     }
@@ -71,8 +71,8 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     item.lifetimeRem = format->lifetime;
 
     // should be true
-    if(_visitorList->_registrationReq.size() < _visitorList->_maxRequests){
-        _visitorList->_registrationReq.push_back(item);
+    if(visitorList->registrationReq.size() < visitorList->maxRequests){
+        visitorList->registrationReq.push_back(item);
     }
 
     return 1;
@@ -96,23 +96,23 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
     unsigned short int code = validatePacket(p);
     click_chatter("after val");
     if(code == 1){
-        int packet_size = sizeof(RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+        int packetSize = sizeof(RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         iph->ip_sum = htons(0);
-        iph->ip_src = _visitorList->_public_addr;
+        iph->ip_src = visitorList->public_addr;
         iph->ip_dst = format->homeAgent;
         iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
         udph->uh_sum = htons(0);
-        udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
-        iph, packet_size - sizeof(click_ip));
+        udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packetSize - sizeof(click_ip)),
+        iph, packetSize - sizeof(click_ip));
 				p->set_dst_ip_anno(format->homeAgent);
         output(1).push(p);
         return;
     }else{
         click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
-        int packet_size = sizeof(struct RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+        int packetSize = sizeof(struct RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
         int headroom = sizeof(click_ether);
-        WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
+        WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
         if(packet == 0) {
             click_chatter("Could not make packet");
             return;
@@ -147,8 +147,8 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
         formatNew->id2 = format->id2;
 
         // Calculate the udp checksum
-        udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
-        iphNew, packet_size - sizeof(click_ip));
+        udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packetSize - sizeof(click_ip)),
+        iphNew, packetSize - sizeof(click_ip));
 
         output(0).push(packet);
     }
@@ -157,17 +157,17 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
 
 void ForeignAgentReqProcess::run_timer(Timer* timer){
     // edit pending registration
-    for(Vector<listItem>::iterator it = _visitorList->_registrationReq.end()-1; it != _visitorList->_registrationReq.begin()-1;it--){
+    for(Vector<listItem>::iterator it = visitorList->registrationReq.end()-1; it != visitorList->registrationReq.begin()-1;it--){
         it->lifetimeRem = it->lifetimeRem-htons(1);
         if(it->lifetimeRem == 0){
             // expired
-            _visitorList->_registrationReq.erase(it);
+            visitorList->registrationReq.erase(it);
         }else{
             if(it->lifetimeReq - it->lifetimeRem == htons(7)){
                 click_chatter("WAIT TOO LONG ON REPLY");
-                int packet_size = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+                int packetSize = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
                 int headroom = sizeof(click_ether);
-                WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
+                WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
                 if(packet == 0) {
                     click_chatter("Could not make packet");
                     return;
@@ -202,16 +202,16 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
                 formatNew->id2 = it->id2;
 
                 // Calculate the udp checksum
-                udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
-                iphNew, packet_size - sizeof(click_ip));
-                _visitorList->_registrationReq.erase(it);
+                udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packetSize - sizeof(click_ip)),
+                iphNew, packetSize - sizeof(click_ip));
+                visitorList->registrationReq.erase(it);
                 output(0).push(packet);
             }
         }
     }
-    for(Vector<listItem>::iterator it = _visitorList->_visitorMap.begin();it != _visitorList->_visitorMap.end();) {
+    for(Vector<listItem>::iterator it = visitorList->visitorMap.begin();it != visitorList->visitorMap.end();) {
         if(it->lifetimeRem == 0){
-            _visitorList->_visitorMap.erase(it);
+            visitorList->visitorMap.erase(it);
         }else{
             it->lifetimeRem = it->lifetimeRem-htons(1);
             it++;

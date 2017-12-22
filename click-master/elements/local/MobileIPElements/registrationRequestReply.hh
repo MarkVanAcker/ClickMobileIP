@@ -25,9 +25,9 @@ class RegistrationRequestReply: public Element {
 
 
 	private:
-		Timer * _timer;
-		IPAddress _homeAgent;
-	    AgentBase* _bindingsList;
+		Timer * timer;
+		IPAddress homeAgent;
+	    AgentBase* bindingsList;
 		unsigned short int validatePacket(Packet *packet);
 
 };

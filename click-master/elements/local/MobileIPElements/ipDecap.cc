@@ -20,7 +20,7 @@ int IpDecap::configure(Vector<String> &conf, ErrorHandler *errh) {
     ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
-    _visitorList = templist;
+    visitorList = templist;
 	return 0;
 }
 
@@ -31,7 +31,7 @@ void IpDecap::push(int, Packet *p) {
     click_ip* iph = (click_ip*)p->data();
 	if(iph->ip_p == 4){
         click_ip* iph2 = (click_ip*)(iph+1);
-        if(_visitorList->inMapNode(iph2->ip_src)){
+        if(visitorList->inMapNode(iph2->ip_src)){
             WritablePacket* q = p->uniqueify();
             q->pull(sizeof(click_ip));
             output(1).push(q);

@@ -18,15 +18,15 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
     MobileInfoList* tempList;
     if (Args(conf, this, errh)
         .read_m("MNBASE",ElementCastArg("MobileInfoList"),tempList)
-        .read_m("MAXR", _maxRetransmissions)
+        .read_m("MAXR", maxRetransmissions)
         .complete() < 0) return -1;
 
     // should send Sollicitations
-    if(_maxRetransmissions < 1){
+    if(maxRetransmissions < 1){
         return -1;
     }
 
-    _mobileNode = tempList;
+    mobileNode = tempList;
     Timer *timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1);
@@ -50,7 +50,7 @@ Packet* AgentSolicitation::makePacket() {
     iph->ip_len = htons(packet->length());
     iph->ip_ttl = 1; // TTL must be 1 in Sollicitation
     iph->ip_p = 1; //  IP-protocolnummer 1 voor IPv4 en 58 voor IPv6 icmp. (wikipedia)
-    iph->ip_src = _mobileNode->myAddress;
+    iph->ip_src = mobileNode->myAddress;
     iph->ip_dst = IPAddress("255.255.255.255");
     iph->ip_sum = click_in_cksum((unsigned char*)packet->data(), packet->length());
 
@@ -68,7 +68,7 @@ Packet* AgentSolicitation::makePacket() {
 
 // make packet and increase seq num
 void AgentSolicitation::run_timer(Timer * timer) {
-    if(_mobileNode->connected && _mobileNode->remainingConnectionTime==0){
+    if(mobileNode->connected && mobileNode->remainingConnectionTime==0){
         Packet *p = makePacket();
         if (p){
             output(0).push(p);
@@ -76,9 +76,9 @@ void AgentSolicitation::run_timer(Timer * timer) {
         }
         timer->reschedule_after_msec(1000+((rand()%20)-10));
     }
-    if(!_mobileNode->connected && !_mobileNode->advertisementReady){
+    if(!mobileNode->connected && !mobileNode->advertisementReady){
         // we could send an adv
-        if( transmissions == _maxRetransmissions){
+        if( transmissions == maxRetransmissions){
             // dont send if we are at max
             timer->schedule_after_msec(1000);
             return;

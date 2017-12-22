@@ -24,7 +24,7 @@ class MobileIPFilter: public Element {
         void push(int, Packet*);
 
 
-				AgentBase * _agentbase;
+				AgentBase * agentbase;
 
 };
 

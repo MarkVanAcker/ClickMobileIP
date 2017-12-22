@@ -25,8 +25,8 @@ class IpEncapsulation: public Element {
         IPAddress getDesitination(IPAddress);
 
     private:
-        IPAddress _tunnelAddres;
-        AgentBase * _bindingsList;
+        IPAddress tunnelAddres;
+        AgentBase * bindingsList;
 
 
 };

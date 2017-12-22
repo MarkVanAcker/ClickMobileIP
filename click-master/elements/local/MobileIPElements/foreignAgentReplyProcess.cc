@@ -24,8 +24,8 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
     ElementCastArg("AgentBase"),
     templist).complete() < 0) return -1;
 
-    _visitorList = templist;
-    _maxLifetime = 1800; // default value
+    visitorList = templist;
+    maxLifetime = 1800; // default value
 	return 0;
 }
 
@@ -46,7 +46,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
     // update list
     if(format->code == 0 || format->code == 1){
         click_chatter("accept from homeAgent at processReply");
-        for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin();it != _visitorList->_registrationReq.end(); ++it) {
+        for(Vector<listItem>::iterator it = visitorList->registrationReq.begin();it != visitorList->registrationReq.end(); ++it) {
             // we found a corresponding home agent -> check id's
             if(it->id1 == format->id1 && it->id2 == format->id2){
                 listItem item;
@@ -59,36 +59,36 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
                 item.id2 = it->id2;
                 item.lifetimeReq = format->lifetime;
                 item.lifetimeRem = format->lifetime; // remaining lifetime
-                _visitorList->_registrationReq.erase(it);
+                visitorList->registrationReq.erase(it);
                 // if there are multiple req sent and multiple replies, update current entry
-                for(Vector<listItem>::iterator it = _visitorList->_visitorMap.begin();it != _visitorList->_visitorMap.end();) {
+                for(Vector<listItem>::iterator it = visitorList->visitorMap.begin();it != visitorList->visitorMap.end();) {
                         if(it->ipSrc == item.ipSrc){
-                            _visitorList->_visitorMap.erase(it);
+                            visitorList->visitorMap.erase(it);
                         }else{
                             it++;
                         }
                 }
-                _visitorList->_visitorMap.push_back(item);
+                visitorList->visitorMap.push_back(item);
                 break;
             }
         }
     }else{
         click_chatter("deny from homeAgent at processReply");
-        for(Vector<listItem>::iterator it = _visitorList->_registrationReq.begin();it != _visitorList->_registrationReq.end(); it++) {
+        for(Vector<listItem>::iterator it = visitorList->registrationReq.begin();it != visitorList->registrationReq.end(); it++) {
             if(it->id1 == format->id1 && it->id2 == format->id2){
-                _visitorList->_registrationReq.erase(it);
+                visitorList->registrationReq.erase(it);
                 break;
             }
         }
     }
-    int packet_size = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+    int packetSize = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
     iph->ip_sum = htons(0);
-    iph->ip_src = _visitorList->_private_addr;
+    iph->ip_src = visitorList->private_addr;
     iph->ip_dst = format->homeAddr;
     iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
     udph->uh_sum = htons(0);
-    udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size - sizeof(click_ip)),
-    iph, packet_size - sizeof(click_ip));
+    udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packetSize - sizeof(click_ip)),
+    iph, packetSize - sizeof(click_ip));
 		q->set_dst_ip_anno(format->homeAddr);
      // respond to node
     output(0).push(q);

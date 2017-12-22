@@ -19,19 +19,19 @@ class AgentAdvertiser: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
         void run_timer(Timer*);
-        Packet* makePacket();
+        Packet* createPacket();
 
     private:
-        Timer * _timer;
+        Timer * timer;
 
-        bool _HA;
-        bool _FA;
-        int _lifetimeReg;
-        int _lifetimeAdv;
-        int _interval;
-        uint16_t _sequenceNum; // max 0xffff
-        IPAddress _address;
-        IPAddress _addressCO;
+        bool HA;
+        bool FA;
+        int lifetimeReg;
+        int lifetimeAdv;
+        int interval;
+        uint16_t sequenceNum; // max 0xffff
+        IPAddress address;
+        IPAddress addressCO;
 
 
 };

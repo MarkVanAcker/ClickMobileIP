@@ -22,8 +22,8 @@ int AdvertisementsHandler::configure(Vector<String> &conf,ErrorHandler *errh) {
                               .read_m("SOURCE",ElementCastArg("RegistrationRequestSource"),tempSource)
                               .complete() < 0) return -1;
 
-    _source = tempSource;
-    _mobileNode = tempList;
+    source = tempSource;
+    mobileNode = tempList;
     Timer *timer = new Timer(this);
     timer->initialize(this);
     timer->schedule_after_msec(1000);
@@ -59,10 +59,10 @@ void AdvertisementsHandler::push(int, Packet *p) {
     if (((flags >> 6) & 1) == 1){
         click_chatter("busy bit set");
         // busy bit set so it has no point in registrating at this agent
-        for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
+        for (Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end(); ++it){
             // remove an entry from this host because we know he is busy
             if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
-                _mobileNode->current_advertisements.erase(it);
+                mobileNode->current_advertisements.erase(it);
                 break;
             }
         }
@@ -70,18 +70,18 @@ void AdvertisementsHandler::push(int, Packet *p) {
     }
     // modify current adv if needed. also extract the seq num
     // check if the adv is from the curr one if connected
-    if(advh->address != _mobileNode->home_private_addr){
+    if(advh->address != mobileNode->home_private_addr){
         bool found = false;
-        for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); ++it){
+        for (Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end(); ++it){
             // if we have an entry in the list. We can update it
             // this happens when we are connected but not necessairly with this agent
             if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
                 found = true;
                 // if the router is reset and i am connected to that one, re reg with new values
-                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && _mobileNode->curr_private_addr == it->private_addr){
-                    if(_mobileNode->curr_private_addr == it->private_addr){
+                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && mobileNode->curr_private_addr == it->private_addr){
+                    if(mobileNode->curr_private_addr == it->private_addr){
                         click_chatter("reg source router reset");
-                        _source->makePacket(advStruct);
+                        source->makePacket(advStruct);
                     }
                     click_chatter("ADV UPDATE");
                     // update fields recording to the curr adv message,
@@ -92,23 +92,23 @@ void AdvertisementsHandler::push(int, Packet *p) {
             }
         }
         if(found == false){
-            _mobileNode->current_advertisements.push_back(advStruct);
+            mobileNode->current_advertisements.push_back(advStruct);
         }
     }
     bool advFromHome = false;
-    if(advh->address == _mobileNode->home_private_addr){
+    if(advh->address == mobileNode->home_private_addr){
         advFromHome = true;
     }
 
-    if(_mobileNode->connected == false && _mobileNode->home && !advFromHome ){
+    if(mobileNode->connected == false && mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
-        _source->makePacket(advStruct);
+        source->makePacket(advStruct);
         return;
     }
     // is there is a change FA to HA
-    else if(_mobileNode->connected == true && !_mobileNode->home && advFromHome){
+    else if(mobileNode->connected == true && !mobileNode->home && advFromHome){
             click_chatter("reg source swtich FA to HA");
-            _source->makePacket(advStruct);
+            source->makePacket(advStruct);
         }
 }
 
@@ -116,27 +116,27 @@ void AdvertisementsHandler::push(int, Packet *p) {
 // decrease lifetimes and act if needed
 void AdvertisementsHandler::run_timer(Timer * timer) {
     click_chatter("Start timer advH");
-    bool wasConnected = _mobileNode->connected;
+    bool wasConnected = mobileNode->connected;
     bool hostConnectionLost = false;
-    for (Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end();){
+    for (Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end();){
         if(it->lifetime == 0){
             // if my host is not active anymore
-            if(wasConnected && it->private_addr == _mobileNode->curr_private_addr){
+            if(wasConnected && it->private_addr == mobileNode->curr_private_addr){
                 hostConnectionLost = true;
-                _mobileNode->connected = false;
+                mobileNode->connected = false;
             }
-            _mobileNode->current_advertisements.erase(it);
+            mobileNode->current_advertisements.erase(it);
         }else{
             it->lifetime = it->lifetime-htons(1);
             it++;
         }
     }
-    if(_mobileNode->current_advertisements.empty()){
-        _mobileNode->advertisementReady = false;
+    if(mobileNode->current_advertisements.empty()){
+        mobileNode->advertisementReady = false;
     }
-    if((!wasConnected || hostConnectionLost) && !_mobileNode->current_advertisements.empty() && !_mobileNode->home){
+    if((!wasConnected || hostConnectionLost) && !mobileNode->current_advertisements.empty() && !mobileNode->home){
         click_chatter("Conection lost remake Request");
-        _source->makePacket(*_mobileNode->current_advertisements.begin());
+        source->makePacket(*mobileNode->current_advertisements.begin());
     }
 
     click_chatter("End timer advH");

@@ -24,7 +24,7 @@ class IpDecap: public Element {
         void push(int, Packet*);
 
     private:
-        AgentBase* _visitorList;
+        AgentBase* visitorList;
 
 };
 

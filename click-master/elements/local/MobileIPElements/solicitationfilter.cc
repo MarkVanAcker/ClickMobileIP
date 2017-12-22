@@ -25,8 +25,8 @@ int SolicitationFilter::configure(Vector<String> &conf, ErrorHandler *errh) {
 
 void SolicitationFilter::push(int, Packet *p) {
 
-    int packetsize = p->length();
-		if(packetsize == sizeof(click_ip) + sizeof(SolicitationPacketheader)){
+    int packetSize = p->length();
+		if(packetSize == sizeof(click_ip) + sizeof(SolicitationPacketheader)){
 			    click_ip* iph = (click_ip*)p->data();
 					SolicitationPacketheader* sh = (SolicitationPacketheader*) (iph+1);
 

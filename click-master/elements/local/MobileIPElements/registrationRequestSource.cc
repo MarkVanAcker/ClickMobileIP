@@ -21,7 +21,7 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
     MobileInfoList* tempList;
     if (Args(conf, this, errh).read("MNBASE",ElementCastArg("MobileInfoList"),tempList).complete() < 0) return -1;
 
-    _mobileNode = tempList;
+    mobileNode = tempList;
 	Timer* timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1000);
@@ -36,9 +36,9 @@ int RegistrationRequestSource::configure(Vector<String> &conf, ErrorHandler *err
 void RegistrationRequestSource::makePacket(Advertisement a){
     click_chatter("source make packet");
     // make the packet
-    int packet_size = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
+    int packetSize = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
     int headroom = sizeof(click_ether);
-    WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
+    WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");
         return;
@@ -57,7 +57,7 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     iph->ip_id = htons(1);
     iph->ip_p = 17;
     iph->ip_ttl = 20;
-    iph->ip_src = _mobileNode->myAddress;
+    iph->ip_src = mobileNode->myAddress;
     iph->ip_dst = a.private_addr;
     iph->ip_sum = click_in_cksum((unsigned char*)iph, sizeof(click_ip));
 
@@ -74,19 +74,19 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     RegistrationRequestPacketheader* format = (RegistrationRequestPacketheader*)(udph+1);
     format->type = 1; //fixed
     format->flags = 0; //all flags 0   ||  4, 8, 16, 32 ?
-    if(a.private_addr == _mobileNode->home_private_addr){
+    if(a.private_addr == mobileNode->home_private_addr){
         click_chatter("source making a DEreg request");
         // update routing table
-        _mobileNode->curr_private_addr = _mobileNode->home_private_addr;
-        _mobileNode->curr_coa = a.COA;
-        _mobileNode->remainingConnectionTime = 0; // should not matter
+        mobileNode->curr_private_addr = mobileNode->home_private_addr;
+        mobileNode->curr_coa = a.COA;
+        mobileNode->remainingConnectionTime = 0; // should not matter
         format->lifetime = 0;
     }else{
         click_chatter("source making a reg request");
         format->lifetime = a.reg_lifetime;
     }
-    format->homeAddr = _mobileNode->myAddress;
-    format->homeAgent = _mobileNode->home_public_addr;
+    format->homeAddr = mobileNode->myAddress;
+    format->homeAgent = mobileNode->home_public_addr;
     format->coAddr = a.COA;
     unsigned int id1  = rand() % (2147483647);
     unsigned int id2  = rand() % (2147483647);
@@ -96,8 +96,8 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     newReq.id2 = id2;
 
 
-    udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packet_size-sizeof(click_ip)),
-    iph, packet_size - sizeof(click_ip));
+    udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packetSize-sizeof(click_ip)),
+    iph, packetSize - sizeof(click_ip));
 
     currentRequests.push_back(newReq);
 
@@ -117,20 +117,20 @@ void RegistrationRequestSource::push(int, Packet *p) {
                 if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
                     // found corresponding request
                     if(format->lifetime == 0){
-                        _mobileNode->home = true;
-                        _mobileNode->remainingConnectionTime = 0; // doenst really matter
-                        _mobileNode->curr_private_addr = it->ipDst;
-                        _mobileNode->curr_coa = it->COA;
+                        mobileNode->home = true;
+                        mobileNode->remainingConnectionTime = 0; // doenst really matter
+                        mobileNode->curr_private_addr = it->ipDst;
+                        mobileNode->curr_coa = it->COA;
                     }else{
-                        _mobileNode->home = false;
-                        _mobileNode->connected = true;
-                        _mobileNode->curr_private_addr = it->ipDst;
-                        _mobileNode->curr_coa = it->COA;
+                        mobileNode->home = false;
+                        mobileNode->connected = true;
+                        mobileNode->curr_private_addr = it->ipDst;
+                        mobileNode->curr_coa = it->COA;
                         uint16_t lifetimeReq = it->requestedLifetime;
                         uint16_t lifetimeResponse = format->lifetime;
                         uint16_t diff = lifetimeReq - lifetimeResponse;
                         uint16_t lifetime = it->remainingLifetime - diff;
-                        _mobileNode->remainingConnectionTime = lifetime;
+                        mobileNode->remainingConnectionTime = lifetime;
                         timers.back()->reschedule_after_msec(1000);
                     }
                 }
@@ -152,18 +152,18 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         click_chatter("End timer Source BEGIN");
         timer->reschedule_after_msec(1000);
     }else{
-        if(_mobileNode->remainingConnectionTime == 0){
+        if(mobileNode->remainingConnectionTime == 0){
             timer->reschedule_after_msec(1000);
             return;
         }
-        _mobileNode->remainingConnectionTime = _mobileNode->remainingConnectionTime-htons(1);
-        if(_mobileNode->remainingConnectionTime == 0 && !_mobileNode->home){
-            _mobileNode->connected = false;
+        mobileNode->remainingConnectionTime = mobileNode->remainingConnectionTime-htons(1);
+        if(mobileNode->remainingConnectionTime == 0 && !mobileNode->home){
+            mobileNode->connected = false;
         }
-        if(_mobileNode->remainingConnectionTime == 2 && _mobileNode->connected && !_mobileNode->home){
+        if(mobileNode->remainingConnectionTime == 2 && mobileNode->connected && !mobileNode->home){
             // we want to re register if the host is still active (find adv)
-            for(Vector<Advertisement>::iterator it = _mobileNode->current_advertisements.begin(); it != _mobileNode->current_advertisements.end(); it++) {
-                if(it->private_addr  == _mobileNode->curr_private_addr && it->COA == _mobileNode->curr_coa){
+            for(Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end(); it++) {
+                if(it->private_addr  == mobileNode->curr_private_addr && it->COA == mobileNode->curr_coa){
                     makePacket(*it);
                     break;
                 }

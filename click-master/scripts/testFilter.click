@@ -11,7 +11,10 @@
 
 	AgentAdvertiser(HA true, FA true, LTREG 10, LTADV 3, INTERVAL 2000, ADDAGENT 20.20.20.20, COA 20.20.20.201)
 	->a::AdvFilter()[1]
-	-> AdvertisementsHandler(MNBASE base, SOURCE regreq);
+	-> EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
+	->ToDump(req.dump)
+	-> Discard;
+	//-> AdvertisementsHandler(MNBASE base, SOURCE regreq);
 
 	regreq[0]
 		->aa::AdvFilter()[0]
@@ -28,7 +31,7 @@
 	->Discard;
 	f[0]
 	->Print("mmh")
-	->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
-	->ToDump(req.dump)
+	//->EtherEncap(0x0800, 42:dd:23:31:ff:e1, 19:a3:ad:cf:ad:cc)
+	//->ToDump(req.dump)
 	->Discard
 

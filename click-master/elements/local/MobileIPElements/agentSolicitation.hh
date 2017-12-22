@@ -23,12 +23,12 @@ class AgentSolicitation: public Element {
         Packet* makePacket();
 
     private:
-        Timer _timer;
+        Timer timer;
 
-        MobileInfoList* _mobileNode;
-        int _interval;
+        MobileInfoList* mobileNode;
+        int interval;
         int transmissions;
-        int _maxRetransmissions;
+        int maxRetransmissions;
 
 };
 

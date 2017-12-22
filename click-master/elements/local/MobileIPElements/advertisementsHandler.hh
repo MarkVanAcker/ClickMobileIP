@@ -27,8 +27,8 @@ class AdvertisementsHandler: public Element {
         void run_timer(Timer*);
 
     private:
-        MobileInfoList* _mobileNode;
-		RegistrationRequestSource* _source;
+        MobileInfoList* mobileNode;
+		RegistrationRequestSource* source;
 
 };
 

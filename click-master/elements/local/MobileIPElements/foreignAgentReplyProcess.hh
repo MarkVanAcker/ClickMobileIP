@@ -21,9 +21,9 @@ class ForeignAgentReplyProcess: public Element {
 
         private:
 
-            IPAddress _foreignAgent;
-            AgentBase* _visitorList;
-            short int _maxLifetime; // ??
+            IPAddress foreignAgent;
+            AgentBase* visitorList;
+            short int maxLifetime; // ??
 
 
 };

@@ -18,12 +18,12 @@ RegistrationRequestReply::~RegistrationRequestReply()
 
 int RegistrationRequestReply::configure(Vector<String> &conf, ErrorHandler *errh) {
     AgentBase* templist;
-    if (Args(conf, this, errh).read_mp("HAGENT", _homeAgent).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
+    if (Args(conf, this, errh).read_mp("HAGENT", homeAgent).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
 
-    _bindingsList = templist;
-	_timer = new Timer(this);
-	_timer->initialize(this);
-	_timer->reschedule_after_msec(1000);
+    bindingsList = templist;
+	timer = new Timer(this);
+	timer->initialize(this);
+	timer->reschedule_after_msec(1000);
 	return 0;
 }
 
@@ -75,9 +75,9 @@ void RegistrationRequestReply::push(int, Packet *p) {
 
 
     // respond to node
-    int packet_size = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
+    int packetSize = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
     int headroom = sizeof(click_ether);
-    WritablePacket *packet = Packet::make(headroom, 0, packet_size, 0);
+    WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");
         return;
@@ -112,8 +112,8 @@ void RegistrationRequestReply::push(int, Packet *p) {
     formatNew->id2 = format->id2;
 
     // Calculate the udp checksum
-    udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packet_size - sizeof(click_ip)),
-    iphNew, packet_size - sizeof(click_ip));
+    udphNew->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udphNew, packetSize - sizeof(click_ip)),
+    iphNew, packetSize - sizeof(click_ip));
 
 
     // if accepted change bindings
@@ -131,14 +131,14 @@ void RegistrationRequestReply::push(int, Packet *p) {
 		    tempentry->id2 = format->id2;
 		    tempentry->mobile_node_homadress = format->homeAddr;
 
-		    _bindingsList->_table.insert(format->homeAddr,tempentry);
-			_bindingsList->_list.push_back(format->homeAddr);
+		    bindingsList->table.insert(format->homeAddr,tempentry);
+			bindingsList->list.push_back(format->homeAddr);
 		}else{
-			if(!_bindingsList->isHome(format->homeAddr)){
-				_bindingsList->_table.erase(format->homeAddr);
-				for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
+			if(!bindingsList->isHome(format->homeAddr)){
+				bindingsList->table.erase(format->homeAddr);
+				for(RegistrationIPList::iterator it = bindingsList->list.begin(); it != bindingsList->list.end();){
 					if((*it) == format->homeAddr){
-						_bindingsList->_list.erase(it);
+						bindingsList->list.erase(it);
 						break;
 					}else{
 						it++;
@@ -163,12 +163,12 @@ void RegistrationRequestReply::push(int, Packet *p) {
 
 void RegistrationRequestReply::run_timer(Timer * timer) {
 
-	for(RegistrationIPList::iterator it = _bindingsList->_list.begin(); it != _bindingsList->_list.end();){
-		RegistrationTable::Pair * pair = _bindingsList->_table.find_pair((*it));
+	for(RegistrationIPList::iterator it = bindingsList->list.begin(); it != bindingsList->list.end();){
+		RegistrationTable::Pair * pair = bindingsList->table.find_pair((*it));
 		pair->value->lifetime = pair->value->lifetime-htons(1);
 		if(pair->value->lifetime == 0){
-			_bindingsList->_table.erase((*it));
-			_bindingsList->_list.erase(it);
+			bindingsList->table.erase((*it));
+			bindingsList->list.erase(it);
 		}else{
 			it++;
 		}

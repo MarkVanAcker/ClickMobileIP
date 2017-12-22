@@ -54,14 +54,14 @@ public:
     bool inPendingNode(IPAddress);
     bool isHome(IPAddress);
 
-    int _maxRequests;
-    IPAddress _public_addr;
-	IPAddress _private_addr;
-    Vector<listItem> _registrationReq;
-    Vector<listItem> _visitorMap;
+    int maxRequests;
+    IPAddress public_addr;
+	IPAddress private_addr;
+    Vector<listItem> registrationReq;
+    Vector<listItem> visitorMap;
 
-    RegistrationTable _table;
-    RegistrationIPList _list;
+    RegistrationTable table;
+    RegistrationIPList list;
 
 };
 

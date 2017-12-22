@@ -26,9 +26,9 @@ class ForeignAgentReqProcess: public Element {
         private:
 
 
-            Timer _timer;
-            AgentBase* _visitorList;
-            short int _maxLifetime; // ??
+            Timer timer;
+            AgentBase* visitorList;
+            short int maxLifetime; // ??
 
             unsigned short int makePacket(Packet *packet);
             unsigned short int validatePacket(Packet *packet);
