@@ -174,14 +174,9 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
-<<<<<<< HEAD
-		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 5, INTERVAL 20000)
-		-> private_arpq;
-=======
-		-> AgentAdvertiser(HA true, FA true, LTREG 60, LTADV 5, INTERVAL 20000,BASE bind)
+		-> AgentAdvertiser(HA true, FA true,LTADV 5, INTERVAL 20000,BASE bind)
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
->>>>>>> f6862a83bd23fca16fa50f71e67227da447f2d89
 
 
 }

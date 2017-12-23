@@ -28,10 +28,10 @@ int IpDecap::configure(Vector<String> &conf, ErrorHandler *errh) {
 void IpDecap::push(int, Packet *p) {
 
     // output 1 is a message for a MN on my network
-    click_ip* iph = (click_ip*)p->data();
+  click_ip* iph = (click_ip*)p->data();
 	if(iph->ip_p == 4){
         click_ip* iph2 = (click_ip*)(iph+1);
-        if(visitorList->inMapNode(iph2->ip_src)){
+        if(visitorList->inMapNode(iph2->ip_dst)){
             WritablePacket* q = p->uniqueify();
             q->pull(sizeof(click_ip));
             output(1).push(q);

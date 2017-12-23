@@ -69,13 +69,14 @@ elementclass Agent {
 
 	// Local delivery
 	rt[0]
+		-> ipdecap :: IpDecap(BASE bind)
 		-> ipc :: IPClassifier(src udp port 434 or dst udp port 434,-)[1]
 		-> [2]output
 	
 	// Forwarding paths per interface
 	rt[1]
 		-> DropBroadcasts
-		-> ipenc :: IpEncapsulation(IPADDRES $public_address, BINDING bind)
+		-> ipenc :: IpEncapsulation(BINDING bind)
 		-> private_paint :: PaintTee(1)
 		-> private_ipgw :: IPGWOptions($private_address)
 		-> FixIPSrc($private_address)
@@ -140,16 +141,13 @@ elementclass Agent {
 
 	ipc
 		-> mipfilter :: MobileIPFilter(AGBASE bind)
-		-> Print("Test5")
 		-> Discard
 
 	mipfilter[1]
-		-> Print("Test4")
 		-> ForeignAgentReplyProcess(AGBASE bind)
 		-> private_arpq;
 
 	mipfilter[2]
-		-> Print("Test2")
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
@@ -178,5 +176,9 @@ elementclass Agent {
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
 
+
+	ipdecap[1]
+		-> CheckIPHeader
+		-> private_arpq;
 
 }
