@@ -75,7 +75,7 @@ elementclass Agent {
 	// Forwarding paths per interface
 	rt[1]
 		-> DropBroadcasts
-		-> ipenc :: IpEncapsulation(IPADDRES $public_address, BINDING bind)
+		-> ipenc :: IpEncapsulation(BINDING bind)
 		-> private_paint :: PaintTee(1)
 		-> private_ipgw :: IPGWOptions($private_address)
 		-> FixIPSrc($private_address)
@@ -140,20 +140,28 @@ elementclass Agent {
 
 	ipc
 		-> mipfilter :: MobileIPFilter(AGBASE bind)
+		-> Print("Test5")
 		-> Discard
 
 	mipfilter[1]
+		-> Print("Test4")
 		-> ForeignAgentReplyProcess(AGBASE bind)
 		-> private_arpq;
 
 	mipfilter[2]
+		-> Print("Test2")
 		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
 
 	mipfilter[3]
-		-> ForeignAgentReqProcess(AGBASE bind)
+		-> farp :: ForeignAgentReqProcess(BASE bind)
 		-> private_arpq;
+
+
+		farp[1]
+			->public_arpq;
+
 
 //infobase moet weet hebben van eigen adres zodat hij kan beslissen waartoe het packet behoort
 	
@@ -166,8 +174,14 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
+<<<<<<< HEAD
 		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 5, INTERVAL 20000)
 		-> private_arpq;
+=======
+		-> AgentAdvertiser(HA true, FA true, LTREG 60, LTADV 5, INTERVAL 20000,BASE bind)
+		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
+		-> output;
+>>>>>>> f6862a83bd23fca16fa50f71e67227da447f2d89
 
 
 }
