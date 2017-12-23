@@ -20,7 +20,6 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
     AgentBase* templist;
     if (Args(conf, this, errh).read_m("FA", FA)
         .read_m("HA", HA)
-        .read_m("LTREG", lifetimeReg)
         .read_m("LTADV", lifetimeAdv)
         .read_m("INTERVAL", interval)
         .read_m("BASE",ElementCastArg("AgentBase"),
@@ -39,12 +38,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 // create adveritesements
 Packet* AgentAdvertiser::createPacket() {
     int packetSize =  sizeof(click_ip) + sizeof(AdvertisementPacketheader);
-<<<<<<< HEAD
     int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
-=======
-    int headroom = sizeof(click_ether);
-	std::cout << headroom << std::endl;
->>>>>>> f6862a83bd23fca16fa50f71e67227da447f2d89
     WritablePacket* packet = Packet::make(headroom, 0, packetSize, 0);
     if (packet == 0){
         click_chatter("Packet creating failed (agent adveritesement)");
@@ -73,7 +67,7 @@ Packet* AgentAdvertiser::createPacket() {
     ah->typeEx = 16; // normal routing
     ah->length = 10; // 6 + 4 bytes
     ah->sequenceNum = sequenceNum; // next seq
-    ah->lifetimeEx = htons(lifetimeReg);
+    ah->lifetimeEx = htons(agent->lifetimeReg);
     // we don not need to use htons() because last bits 0 anyway
     ah->flagsReserved = (FA << 7) + (HA << 5) + (FA << 4) + 0;   // force reg req if FA
     ah->addressEx = agent->public_addr; // coa
