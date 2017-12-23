@@ -13,7 +13,7 @@
 elementclass Agent {
 	$private_address, $public_address, $gateway |
 
-	bind::AgentBase(PUBADDR $public_address,PRIVADDR $private_address);
+	bind::AgentBase(PUBADDR $public_address,PRIVADDR $private_address, LFREG 25);
 
 	// Shared IP input path and routing table
 	ip :: Strip(14)
@@ -174,7 +174,7 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
-		-> AgentAdvertiser(ADDAGENT $private_address , COA $public_address, HA true, FA true, LTREG 60, LTADV 5, INTERVAL 20000)
+		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 5, INTERVAL 20000)
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
 

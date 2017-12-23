@@ -25,7 +25,6 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
     templist).complete() < 0) return -1;
 
     visitorList = templist;
-    maxLifetime = 1800; // default value
 	return 0;
 }
 

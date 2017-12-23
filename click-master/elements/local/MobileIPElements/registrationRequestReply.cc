@@ -76,7 +76,7 @@ void RegistrationRequestReply::push(int, Packet *p) {
 
     // respond to node
     int packetSize = sizeof(struct RegistrationRequestReplyPacketheader) + sizeof(click_ip) + sizeof(click_udp);
-    int headroom = sizeof(click_ether);
+    int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
     WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");

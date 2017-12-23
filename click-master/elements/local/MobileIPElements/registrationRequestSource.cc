@@ -37,7 +37,7 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     click_chatter("source make packet");
     // make the packet
     int packetSize = sizeof(struct RegistrationRequestPacketheader)+ sizeof(click_ip) + sizeof(click_udp);
-    int headroom = sizeof(click_ether);
+    int headroom = sizeof(click_ether) + sizeof(struct EtherCrcHeader);
     WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if(packet == 0) {
         click_chatter("Could not make packet");

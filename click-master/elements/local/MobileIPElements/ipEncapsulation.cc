@@ -48,7 +48,7 @@ void IpEncapsulation::push(int, Packet *p) {
     // space is not the same as packetdata
 
     int packetSize = p->length();
-    int headroom =  sizeof(click_ether) + sizeof(click_ip);
+    int headroom =  sizeof(click_ether) + sizeof(click_ip)+ sizeof(struct EtherCrcHeader);
     WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
     if (packet == 0)
     {

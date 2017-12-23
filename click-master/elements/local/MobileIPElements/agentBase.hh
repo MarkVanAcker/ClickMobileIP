@@ -7,6 +7,7 @@
 #include <click/hashmap.hh>
 #include <click/timer.hh>
 #include <click/etheraddress.hh>
+#include "crcHeader.hh"
 
 CLICK_DECLS
 
@@ -55,6 +56,7 @@ public:
     bool isHome(IPAddress);
 
     int maxRequests;
+    int lifetimeReg;
     IPAddress public_addr;
 	IPAddress private_addr;
     Vector<listItem> registrationReq;

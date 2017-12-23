@@ -38,7 +38,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 // create adveritesements
 Packet* AgentAdvertiser::createPacket() {
     int packetSize =  sizeof(click_ip) + sizeof(AdvertisementPacketheader);
-    int headroom = sizeof(click_ether);
+    int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
     WritablePacket* packet = Packet::make(headroom, 0, packetSize, 0);
     if (packet == 0){
         click_chatter("Packet creating failed (agent adveritesement)");

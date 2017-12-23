@@ -37,7 +37,7 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
 // create adveritesements
 Packet* AgentSolicitation::makePacket() {
     int packetsize = sizeof(click_ip) + sizeof(SolicitationPacketheader);
-    int headroom = sizeof(click_ether);
+    int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
     WritablePacket* packet = Packet::make(headroom, 0, packetsize, 0);
     if (packet == 0){
         click_chatter("Packet creating failed (agent adveritesement)");

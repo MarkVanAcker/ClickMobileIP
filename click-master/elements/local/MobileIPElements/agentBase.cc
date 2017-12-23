@@ -14,7 +14,8 @@ AgentBase::AgentBase(){}
 AgentBase::~AgentBase(){}
 
 int AgentBase::configure(Vector<String> &conf, ErrorHandler *errh) {
-    if (Args(conf, this, errh).read_mp("PUBADDR", public_addr).read_mp("PRIVADDR", private_addr).complete() < 0) return -1;
+    if (Args(conf, this, errh).read_mp("PUBADDR", public_addr).read_mp("PRIVADDR", private_addr)
+        .read_m("LFREG", lifetimeReg).complete() < 0) return -1;
 
     maxRequests = 5;
 	return 0;

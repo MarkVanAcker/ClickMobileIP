@@ -28,7 +28,6 @@ int ForeignAgentReqProcess::configure(Vector<String> &conf, ErrorHandler *errh) 
     timer->initialize(this);
     timer->schedule_after_msec(1000);
     visitorList = templist;
-    maxLifetime = 1800; // default value
 	return 0;
 }
 
@@ -42,7 +41,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     // requested lifetime too long
     uint16_t lifetime = format->lifetime;
     uint8_t flags = format->flags;
-    if(ntohs(lifetime) > maxLifetime) {
+    if(ntohs(lifetime) > visitorList->lifetimeReg) {
         click_chatter("Deny because of lifetime");
         return 69;
     }
@@ -111,7 +110,7 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
         click_chatter("fault in packet recieved (PROCESS REQUEST)");
         // respond to node
         int packetSize = sizeof(struct RegistrationRequestPacketheader) + sizeof(click_ip) + sizeof(click_udp);
-        int headroom = sizeof(click_ether);
+        int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
         WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
         if(packet == 0) {
             click_chatter("Could not make packet");
@@ -166,7 +165,7 @@ void ForeignAgentReqProcess::run_timer(Timer* timer){
             if(it->lifetimeReq - it->lifetimeRem == htons(7)){
                 click_chatter("WAIT TOO LONG ON REPLY");
                 int packetSize = sizeof(struct ForeignAgentReqProcessPacketheader) + sizeof(click_ip) + sizeof(click_udp);
-                int headroom = sizeof(click_ether);
+                int headroom = sizeof(click_ether)+ sizeof(struct EtherCrcHeader);
                 WritablePacket *packet = Packet::make(headroom, 0, packetSize, 0);
                 if(packet == 0) {
                     click_chatter("Could not make packet");

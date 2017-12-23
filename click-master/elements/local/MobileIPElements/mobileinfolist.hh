@@ -4,6 +4,7 @@
 #include <click/element.hh>
 #include <click/timer.hh>
 #include <click/etheraddress.hh>
+#include "crcHeader.hh"
 
 CLICK_DECLS
 
