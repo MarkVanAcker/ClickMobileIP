@@ -100,6 +100,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
         advFromHome = true;
     }
 
+    // change FA to HA
     if(mobileNode->connected == false && mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
         source->makePacket(advStruct);

@@ -68,35 +68,21 @@ Packet* AgentSolicitation::makePacket() {
 
 // make packet and increase seq num
 void AgentSolicitation::run_timer(Timer * timer) {
-    if(mobileNode->connected && mobileNode->remainingConnectionTime==0){
-        Packet *p = makePacket();
-        if (p){
-            output(0).push(p);
-            click_chatter("Sollicitation sent");
-        }
-        timer->reschedule_after_msec(1000+((rand()%20)-10));
-    }
-    if(!mobileNode->connected && !mobileNode->advertisementReady){
-        // we could send an adv
-        if( transmissions == maxRetransmissions){
-            // dont send if we are at max
-            timer->schedule_after_msec(1000);
-            return;
-        }
-        transmissions++;
-        Packet *p = makePacket();
-        if (p){
-            output(0).push(p);
-            click_chatter("Sollicitation sent");
-        }
-        // random term to make sure 2 hosts messages will not interfere
-        timer->reschedule_after_msec(1000+((rand()%20)-10));
-        return;
-    }else{
-        transmissions = 0;
-        timer->reschedule_after_msec(1000+((rand()%20)-10));
+    if( transmissions == maxRetransmissions){
+        // dont send if we are at max
+        maxRetransmissions = 0;
+        timer->schedule_after_msec(3000);
         return;
     }
+    transmissions++;
+    Packet *p = makePacket();
+    if (p){
+        output(0).push(p);
+        click_chatter("Sollicitation sent");
+    }
+    // random term to make sure 2 hosts messages will not interfere
+    timer->reschedule_after_msec(1000+((rand()%20)-10));
+    return;
 }
 
 // no functionality so far

@@ -31,7 +31,7 @@ class RegistrationRequestSource: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
         void run_timer(Timer*);
-        void makePacket(Advertisement a);
+        void makePacket(Advertisement);
 
         Vector<Request> currentRequests;
 

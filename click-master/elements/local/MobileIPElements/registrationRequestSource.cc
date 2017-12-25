@@ -152,7 +152,8 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         click_chatter("End timer Source BEGIN");
         timer->reschedule_after_msec(1000);
     }else{
-        if(mobileNode->remainingConnectionTime == 0){
+        if(mobileNode->remainingConnectionTime == 0 && mobileNode->home){
+            mobileNode->connected = false; // should be already
             timer->reschedule_after_msec(1000);
             return;
         }
