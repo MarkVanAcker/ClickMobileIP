@@ -78,7 +78,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
             if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
                 found = true;
                 // if the router is reset and i am connected to that one, re reg with new values
-                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && mobileNode->curr_private_addr == it->private_addr){
+                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum){
                     if(mobileNode->curr_private_addr == it->private_addr){
                         click_chatter("reg source router reset");
                         source->makePacket(advStruct);
