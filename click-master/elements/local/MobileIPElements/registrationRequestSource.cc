@@ -152,15 +152,12 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         click_chatter("End timer Source BEGIN");
         timer->reschedule_after_msec(1000);
     }else{
-        if(mobileNode->remainingConnectionTime == 0 && mobileNode->home){
+        if(mobileNode->remainingConnectionTime == 0){
             mobileNode->connected = false; // should be already
             timer->reschedule_after_msec(1000);
             return;
         }
         mobileNode->remainingConnectionTime = mobileNode->remainingConnectionTime-htons(1);
-        if(mobileNode->remainingConnectionTime == 0 && !mobileNode->home){
-            mobileNode->connected = false;
-        }
         if(mobileNode->remainingConnectionTime == 2 && mobileNode->connected && !mobileNode->home){
             // we want to re register if the host is still active (find adv)
             for(Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end(); it++) {

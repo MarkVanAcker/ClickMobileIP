@@ -100,6 +100,15 @@ void AdvertisementsHandler::push(int, Packet *p) {
         advFromHome = true;
     }
 
+    // not home and not connected
+    // any FA adv is good
+    // e.g, when router stops working for a long time and comes back online
+    if(!mobileNode->home && !mobileNode->connected){
+        if(!advFromHome){
+            source->makePacket(advStruct);
+        }
+    }
+
     // change Ha to FA
     if(mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
