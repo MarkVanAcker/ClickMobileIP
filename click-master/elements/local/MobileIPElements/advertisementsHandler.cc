@@ -144,7 +144,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
     if(mobileNode->current_advertisements.empty()){
         mobileNode->advertisementReady = false;
     }
-    if(hostConnectionLost && !mobileNode->current_advertisements.empty() && !mobileNode->home){
+    if(hostConnectionLost && !mobileNode->current_advertisements.empty()){
         click_chatter("Conection lost remake Request");
         source->makePacket(*mobileNode->current_advertisements.begin());
     }
