@@ -18,7 +18,7 @@ RegistrationRequestReply::~RegistrationRequestReply()
 
 int RegistrationRequestReply::configure(Vector<String> &conf, ErrorHandler *errh) {
     AgentBase* templist;
-    if (Args(conf, this, errh).read_mp("HAGENT", homeAgent).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
+    if (Args(conf, this, errh).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
 
     bindingsList = templist;
 	timer = new Timer(this);

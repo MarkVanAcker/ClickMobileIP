@@ -56,8 +56,15 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
                 item.homeAgent = it->homeAgent;
                 item.id1 = it->id1;
                 item.id2 = it->id2;
-                item.lifetimeReq = format->lifetime;
-                item.lifetimeRem = format->lifetime; // remaining lifetime
+                if (it->lifetimeReq < format->lifetime){
+                    // must take the MIN of the request and reply
+                    item.lifetimeReq = it->lifetimeReq;
+                    item.lifetimeRem = it->lifetimeReq; // remaining lifetime
+                }else{
+                    // could be equal of less than the request (depends on HA)
+                    item.lifetimeReq = format->lifetime;
+                    item.lifetimeRem = format->lifetime; // remaining lifetime
+                }
                 visitorList->registrationReq.erase(it);
                 // if there are multiple req sent and multiple replies, update current entry
                 for(Vector<listItem>::iterator it = visitorList->visitorMap.begin();it != visitorList->visitorMap.end();) {
@@ -72,6 +79,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
             }
         }
     }else{
+        // no need to take the MIN of both lifetimes (req/reply) because it is denied anyway
         click_chatter("deny from homeAgent at processReply");
         for(Vector<listItem>::iterator it = visitorList->registrationReq.begin();it != visitorList->registrationReq.end(); it++) {
             if(it->id1 == format->id1 && it->id2 == format->id2){
