@@ -47,9 +47,14 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     }
 
     // sent as 0
-    if((flags) & 1 || (flags >> 2) & 1) {
+    if((flags) & 1 || (flags >> 2) & 1){
         click_chatter("sent as zero");
         return 70;
+    }
+
+    if((flags >> 3) & 1 || (flags >> 4) & 1){
+        click_chatter("requested encap not available");
+		return 72;
     }
 
     if(visitorList->registrationReq.size() == visitorList->maxRequests){
