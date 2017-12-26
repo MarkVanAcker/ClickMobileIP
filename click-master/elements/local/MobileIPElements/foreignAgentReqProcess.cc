@@ -144,7 +144,11 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
         ForeignAgentReqProcessPacketheader *formatNew = (ForeignAgentReqProcessPacketheader*)(udphNew+1);
         formatNew->type = 3; // Registration Reply
         formatNew->code = code;
-        formatNew->lifetime = format->lifetime;
+        if(code == 69){
+            formatNew->lifetime = htons(visitorList->lifetimeReg);
+        }else{
+            formatNew->lifetime = format->lifetime;
+        }
         formatNew->homeAddr = format->homeAddr;
         formatNew->homeAgent = format->homeAgent;
         formatNew->id1 = format->id1;
