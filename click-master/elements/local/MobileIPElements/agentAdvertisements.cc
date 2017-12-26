@@ -30,6 +30,11 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
         return -1;
     }
 
+    if(!HA && !FA){
+        click_chatter("Agent must be either (or both) FA or HA");
+        return -1;
+    }
+
 
     agent = templist;
     sequenceNum = htons(1);
