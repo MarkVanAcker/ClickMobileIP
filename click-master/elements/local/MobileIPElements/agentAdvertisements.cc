@@ -37,7 +37,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
 
 
     agent = templist;
-    sequenceNum = htons(1);
+    sequenceNum = htons(0);
 	timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1);
