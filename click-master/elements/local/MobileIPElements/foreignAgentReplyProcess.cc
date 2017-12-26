@@ -96,7 +96,7 @@ void ForeignAgentReplyProcess::push(int, Packet *p) {
     udph->uh_sum = htons(0);
     udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packetSize - sizeof(click_ip)),
     iph, packetSize - sizeof(click_ip));
-		q->set_dst_ip_anno(format->homeAddr);
+	q->set_dst_ip_anno(format->homeAddr);
      // respond to node
     output(0).push(q);
 }

@@ -137,7 +137,7 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
         packet->set_dst_ip_anno(iphNew->ip_dst); //not sure why it is used
 
         click_udp *udphNew = (click_udp*)(iphNew+1);
-        udphNew->uh_sport = udph->uh_dport;
+        udphNew->uh_sport = udph->uh_dport; // should be 434
         udphNew->uh_dport = udph->uh_sport;
         udphNew->uh_ulen = htons(packet->length()-sizeof(click_ip));
 
