@@ -50,8 +50,13 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
         return 128;
     }
 
-
+    // not the same public address
+    // in dereg message only
+    if(format->homeAgent != bindingsList->public_addr){
+        return 136;
+    }
     //accepted but simultanious bindings unsupported
+    // !!!!SHOULD BE 1 BUT DOES NOT WORK IN VM!!!!
     return 0;
 
 }
