@@ -137,7 +137,17 @@ void RegistrationRequestReply::push(int, Packet *p) {
 		    tempentry->mobile_node_homadress = format->homeAddr;
 
 		    bindingsList->table.insert(format->homeAddr,tempentry);
-			bindingsList->list.push_back(format->homeAddr);
+            bool found = false;
+            for(RegistrationIPList::iterator it = bindingsList->list.begin(); it != bindingsList->list.end();it++){
+                if ((*it) == format->homeAddr){
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                // add an IP in de list if it does not exist
+                bindingsList->list.push_back(format->homeAddr);
+            }
 		}else{
 			if(!bindingsList->isHome(format->homeAddr)){
 				bindingsList->table.erase(format->homeAddr);
