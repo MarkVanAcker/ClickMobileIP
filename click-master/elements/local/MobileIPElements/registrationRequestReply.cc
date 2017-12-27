@@ -77,6 +77,17 @@ void RegistrationRequestReply::push(int, Packet *p) {
     // validate packet content, react accordingly
     unsigned short int code = validatePacket(p);
 
+    bool duplicate = false;
+    uint16_t lifetimeDup = 0;
+    // if a binding exists (if node not at home)
+    if(!bindingsList->isHome(format->homeAddr)){
+        RegistrationTable::Pair * pair = bindingsList->table.find_pair(format->homeAddr);
+        if(pair->value->id1 == format->id1 && pair->value->id2 == format->id2 &&
+          pair->value->mobile_node_homadress == format->homeAddr && pair->value->mobile_node_coa == format->coAddr){
+            duplicate = true;
+            lifetimeDup = pair->value->lifetime;
+        }
+    }
 
 
     // respond to node
@@ -110,7 +121,11 @@ void RegistrationRequestReply::push(int, Packet *p) {
     RegistrationRequestReplyPacketheader *formatNew = (RegistrationRequestReplyPacketheader*)(udphNew+1);
     formatNew->type = 3; // Registration Reply
     formatNew->code = code;
-    formatNew->lifetime = format->lifetime;
+    if (duplicate){
+        formatNew->lifetime = lifetimeDup;
+    }else{
+        formatNew->lifetime = format->lifetime;
+    }
     formatNew->homeAddr = format->homeAddr;
     formatNew->homeAgent = format->homeAgent;
     formatNew->id1 = format->id1;
