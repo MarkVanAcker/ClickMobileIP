@@ -47,9 +47,14 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
     }
 
     // sent as 0
-    if((flags) & 1 || (flags >> 2) & 1) {
+    if((flags) & 1 || (flags >> 2) & 1){
         click_chatter("sent as zero");
         return 70;
+    }
+
+    if((flags >> 3) & 1 || (flags >> 4) & 1){
+        click_chatter("requested encap not available");
+		return 72;
     }
 
     if(visitorList->registrationReq.size() == visitorList->maxRequests){
@@ -132,14 +137,18 @@ void ForeignAgentReqProcess::push(int, Packet *pt) {
         packet->set_dst_ip_anno(iphNew->ip_dst); //not sure why it is used
 
         click_udp *udphNew = (click_udp*)(iphNew+1);
-        udphNew->uh_sport = udph->uh_dport;
+        udphNew->uh_sport = udph->uh_dport; // should be 434
         udphNew->uh_dport = udph->uh_sport;
         udphNew->uh_ulen = htons(packet->length()-sizeof(click_ip));
 
         ForeignAgentReqProcessPacketheader *formatNew = (ForeignAgentReqProcessPacketheader*)(udphNew+1);
         formatNew->type = 3; // Registration Reply
         formatNew->code = code;
-        formatNew->lifetime = format->lifetime;
+        if(code == 69){
+            formatNew->lifetime = htons(visitorList->lifetimeReg);
+        }else{
+            formatNew->lifetime = format->lifetime;
+        }
         formatNew->homeAddr = format->homeAddr;
         formatNew->homeAgent = format->homeAgent;
         formatNew->id1 = format->id1;

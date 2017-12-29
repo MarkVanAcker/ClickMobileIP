@@ -78,7 +78,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
             if(it->private_addr == advStruct.private_addr && it->COA == advStruct.COA){
                 found = true;
                 // if the router is reset and i am connected to that one, re reg with new values
-                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum && mobileNode->curr_private_addr == it->private_addr){
+                if(advh->sequenceNum < 256 && advh->sequenceNum <= it->sequenceNum){
                     if(mobileNode->curr_private_addr == it->private_addr){
                         click_chatter("reg source router reset");
                         source->makePacket(advStruct);
@@ -100,13 +100,23 @@ void AdvertisementsHandler::push(int, Packet *p) {
         advFromHome = true;
     }
 
-    if(mobileNode->connected == false && mobileNode->home && !advFromHome ){
+    // not home and not connected
+    // any FA adv is good
+    // e.g, when router stops working for a long time and comes back online
+    if(!mobileNode->home && !mobileNode->connected){
+        if(!advFromHome){
+            source->makePacket(advStruct);
+        }
+    }
+
+    // change Ha to FA
+    if(mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
         source->makePacket(advStruct);
         return;
     }
     // is there is a change FA to HA
-    else if(mobileNode->connected == true && !mobileNode->home && advFromHome){
+    else if(!mobileNode->home && advFromHome){
             click_chatter("reg source swtich FA to HA");
             source->makePacket(advStruct);
         }
@@ -134,7 +144,7 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
     if(mobileNode->current_advertisements.empty()){
         mobileNode->advertisementReady = false;
     }
-    if((!wasConnected || hostConnectionLost) && !mobileNode->current_advertisements.empty() && !mobileNode->home){
+    if(hostConnectionLost && !mobileNode->current_advertisements.empty()){
         click_chatter("Conection lost remake Request");
         source->makePacket(*mobileNode->current_advertisements.begin());
     }

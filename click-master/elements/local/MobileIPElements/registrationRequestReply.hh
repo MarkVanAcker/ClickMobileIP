@@ -26,7 +26,6 @@ class RegistrationRequestReply: public Element {
 
 	private:
 		Timer * timer;
-		IPAddress homeAgent;
 	    AgentBase* bindingsList;
 		unsigned short int validatePacket(Packet *packet);
 

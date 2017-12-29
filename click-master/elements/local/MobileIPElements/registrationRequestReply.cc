@@ -18,7 +18,7 @@ RegistrationRequestReply::~RegistrationRequestReply()
 
 int RegistrationRequestReply::configure(Vector<String> &conf, ErrorHandler *errh) {
     AgentBase* templist;
-    if (Args(conf, this, errh).read_mp("HAGENT", homeAgent).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
+    if (Args(conf, this, errh).read("BINDING", ElementCastArg("AgentBase"), templist).complete() < 0) return -1;
 
     bindingsList = templist;
 	timer = new Timer(this);
@@ -50,8 +50,13 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
         return 128;
     }
 
-
+    // not the same public address
+    // in dereg message only
+    if(format->homeAgent != bindingsList->public_addr){
+        return 136;
+    }
     //accepted but simultanious bindings unsupported
+    // !!!!SHOULD BE 1 BUT DOES NOT WORK IN VM!!!!
     return 0;
 
 }
@@ -72,6 +77,17 @@ void RegistrationRequestReply::push(int, Packet *p) {
     // validate packet content, react accordingly
     unsigned short int code = validatePacket(p);
 
+    bool duplicate = false;
+    uint16_t lifetimeDup = 0;
+    // if a binding exists (if node not at home)
+    if(!bindingsList->isHome(format->homeAddr)){
+        RegistrationTable::Pair * pair = bindingsList->table.find_pair(format->homeAddr);
+        if(pair->value->id1 == format->id1 && pair->value->id2 == format->id2 &&
+          pair->value->mobile_node_homadress == format->homeAddr && pair->value->mobile_node_coa == format->coAddr){
+            duplicate = true;
+            lifetimeDup = pair->value->lifetime;
+        }
+    }
 
 
     // respond to node
@@ -105,7 +121,11 @@ void RegistrationRequestReply::push(int, Packet *p) {
     RegistrationRequestReplyPacketheader *formatNew = (RegistrationRequestReplyPacketheader*)(udphNew+1);
     formatNew->type = 3; // Registration Reply
     formatNew->code = code;
-    formatNew->lifetime = format->lifetime;
+    if (duplicate){
+        formatNew->lifetime = lifetimeDup;
+    }else{
+        formatNew->lifetime = format->lifetime;
+    }
     formatNew->homeAddr = format->homeAddr;
     formatNew->homeAgent = format->homeAgent;
     formatNew->id1 = format->id1;
@@ -132,7 +152,17 @@ void RegistrationRequestReply::push(int, Packet *p) {
 		    tempentry->mobile_node_homadress = format->homeAddr;
 
 		    bindingsList->table.insert(format->homeAddr,tempentry);
-			bindingsList->list.push_back(format->homeAddr);
+            bool found = false;
+            for(RegistrationIPList::iterator it = bindingsList->list.begin(); it != bindingsList->list.end();it++){
+                if ((*it) == format->homeAddr){
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                // add an IP in de list if it does not exist
+                bindingsList->list.push_back(format->homeAddr);
+            }
 		}else{
 			if(!bindingsList->isHome(format->homeAddr)){
 				bindingsList->table.erase(format->homeAddr);

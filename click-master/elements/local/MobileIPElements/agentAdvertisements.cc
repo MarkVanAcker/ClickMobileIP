@@ -25,9 +25,19 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
         .read_m("BASE",ElementCastArg("AgentBase"),
         templist).complete() < 0) return -1;
 
+    if(interval*3 > lifetimeAdv){
+        click_chatter("Interval is greater than 1/3 lifetime of the adv");
+        return -1;
+    }
+
+    if(!HA && !FA){
+        click_chatter("Agent must be either (or both) FA or HA");
+        return -1;
+    }
+
 
     agent = templist;
-    sequenceNum = htons(1);
+    sequenceNum = htons(0);
 	timer = new Timer(this);
 	timer->initialize(this);
 	timer->schedule_after_msec(1);
