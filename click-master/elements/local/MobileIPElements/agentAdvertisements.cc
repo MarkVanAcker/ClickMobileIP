@@ -25,7 +25,7 @@ int AgentAdvertiser::configure(Vector<String> &conf,ErrorHandler *errh) {
         .read_m("BASE",ElementCastArg("AgentBase"),
         templist).complete() < 0) return -1;
 
-    if(interval*3 > lifetimeAdv){
+    if(interval*3 > lifetimeAdv*1000){
         click_chatter("Interval is greater than 1/3 lifetime of the adv");
         return -1;
     }

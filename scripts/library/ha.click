@@ -13,7 +13,7 @@
 elementclass Agent {
 	$private_address, $public_address, $gateway |
 
-	bind::AgentBase(PUBADDR $public_address,PRIVADDR $private_address,LFREG 20);
+	bind::AgentBase(PUBADDR $public_address,PRIVADDR $private_address, LFREG 25);
 
 	// Shared IP input path and routing table
 	ip :: Strip(14)
@@ -69,6 +69,7 @@ elementclass Agent {
 
 	// Local delivery
 	rt[0]
+		-> ipdecap :: IpDecap(BASE bind)
 		-> ipc :: IPClassifier(src udp port 434 or dst udp port 434,-)[1]
 		-> [2]output
 	
@@ -140,17 +141,14 @@ elementclass Agent {
 
 	ipc
 		-> mipfilter :: MobileIPFilter(AGBASE bind)
-		-> Print("Test5")
 		-> Discard
 
 	mipfilter[1]
-		-> Print("Test4")
 		-> ForeignAgentReplyProcess(AGBASE bind)
 		-> private_arpq;
 
 	mipfilter[2]
-		-> Print("Test2")
-		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
+		-> regrep :: RegistrationRequestReply(BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
 
@@ -174,9 +172,13 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
-		-> AgentAdvertiser(HA true, FA true,LTADV 5, INTERVAL 20000,BASE bind)
+		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 60, INTERVAL 15000)
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
 
+
+	ipdecap[1]
+		-> CheckIPHeader
+		-> private_arpq;
 
 }
