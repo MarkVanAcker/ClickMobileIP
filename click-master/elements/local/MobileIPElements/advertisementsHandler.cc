@@ -112,20 +112,25 @@ void AdvertisementsHandler::push(int, Packet *p) {
     // change Ha to FA
     if(mobileNode->home && !advFromHome ){
         click_chatter("reg source swtich HA to FA");
+        changedAgent() // type
         source->makePacket(advStruct);
         return;
     }
     // is there is a change FA to HA
     else if(!mobileNode->home && advFromHome){
             click_chatter("reg source swtich FA to HA");
+            changedAgent() // type
             source->makePacket(advStruct);
         }
+}
+
+void AdvertisementsHandler::changedAgent(){
+    // type
 }
 
 
 // decrease lifetimes and act if needed
 void AdvertisementsHandler::run_timer(Timer * timer) {
-    click_chatter("Start timer advH");
     bool wasConnected = mobileNode->connected;
     bool hostConnectionLost = false;
     for (Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end();){
@@ -149,7 +154,6 @@ void AdvertisementsHandler::run_timer(Timer * timer) {
         source->makePacket(*mobileNode->current_advertisements.begin());
     }
 
-    click_chatter("End timer advH");
     timer->reschedule_after_msec(1000);
 }
 

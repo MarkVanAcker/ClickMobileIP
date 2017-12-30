@@ -25,6 +25,7 @@ class AdvertisementsHandler: public Element {
         int configure(Vector<String>&, ErrorHandler*);
         void push(int, Packet*);
         void run_timer(Timer*);
+        void changedAgent();
 
     private:
         MobileInfoList* mobileNode;
