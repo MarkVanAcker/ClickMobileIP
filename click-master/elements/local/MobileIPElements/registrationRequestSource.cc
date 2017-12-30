@@ -92,8 +92,8 @@ void RegistrationRequestSource::makePacket(Advertisement a){
     unsigned int id2  = rand() % (2147483647);
     format->id1 = htonl(id1); // max 32 bit number (unsigned) if we want to secure the messages
     format->id2 = htonl(id2);
-    newReq.id1 = id1;
-    newReq.id2 = id2;
+    newReq.id1 = htonl(id1);
+    newReq.id2 = htonl(id2);
 
 
     udph->uh_sum = click_in_cksum_pseudohdr(click_in_cksum((unsigned char*)udph, packetSize-sizeof(click_ip)),
@@ -111,17 +111,22 @@ void RegistrationRequestSource::push(int, Packet *p) {
     //
     // check pendings and accept occerdingly
     //
+    click_chatter("source recieved a reply (MN)");
     if(format->type == 3){
         if(format->code == 0 || format->code == 1){ // code 1 should not be used
+            click_chatter("source recieved a reply with T=3 and CODE=0");
             for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); it++){
                 if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port){
+                    click_chatter("source recieved a reply amd matched with request");
                     // found corresponding request
                     if(format->lifetime == 0){
+                        click_chatter("Source ik ben home adv reply");
                         mobileNode->home = true;
                         mobileNode->remainingConnectionTime = 0; // doenst really matter
                         mobileNode->curr_private_addr = it->ipDst;
                         mobileNode->curr_coa = it->COA;
                     }else{
+                        click_chatter("source ik ben For adv reply");
                         mobileNode->home = false;
                         mobileNode->connected = true;
                         mobileNode->curr_private_addr = it->ipDst;
