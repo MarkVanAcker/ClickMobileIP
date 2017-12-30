@@ -26,6 +26,7 @@ int AgentSolicitation::configure(Vector<String> &conf,ErrorHandler *errh) {
         return -1;
     }
 
+    transmissions = 0;
     mobileNode = tempList;
     Timer *timer = new Timer(this);
 	timer->initialize(this);
@@ -71,7 +72,7 @@ void AgentSolicitation::run_timer(Timer * timer) {
     if( transmissions == maxRetransmissions){
         // dont send if we are at max
         transmissions = 0;
-        timer->schedule_after_msec(3000);
+        timer->schedule_after_msec(5000);
         return;
     }
     transmissions++;
@@ -81,7 +82,7 @@ void AgentSolicitation::run_timer(Timer * timer) {
         click_chatter("Sollicitation sent");
     }
     // random term to make sure 2 hosts messages will not interfere
-    timer->reschedule_after_msec(1000+((rand()%20)-10));
+    timer->reschedule_after_msec(5000);
     return;
 }
 
