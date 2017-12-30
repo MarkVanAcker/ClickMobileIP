@@ -148,7 +148,7 @@ elementclass Agent {
 		-> private_arpq;
 
 	mipfilter[2]
-		-> regrep :: RegistrationRequestReply(HAGENT $public_address, BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
+		-> regrep :: RegistrationRequestReply(BINDING bind) //moet via RT terugsturen in plaats van op te splitsen in 2 outputs, moet ook berichten kunnen doorsturen als HAaddr != $public ADDR
 		-> public_arpq;
 
 
@@ -172,7 +172,7 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
-		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 5, INTERVAL 20000)
+		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 60, INTERVAL 15000)
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
 
