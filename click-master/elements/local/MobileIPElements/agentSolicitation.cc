@@ -70,7 +70,7 @@ Packet* AgentSolicitation::makePacket() {
 void AgentSolicitation::run_timer(Timer * timer) {
     if( transmissions == maxRetransmissions){
         // dont send if we are at max
-        maxRetransmissions = 0;
+        transmissions = 0;
         timer->schedule_after_msec(3000);
         return;
     }
