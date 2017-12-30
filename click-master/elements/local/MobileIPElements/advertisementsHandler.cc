@@ -96,7 +96,7 @@ void AdvertisementsHandler::push(int, Packet *p) {
         }
     }
     bool advFromHome = false;
-    if(advh->address == mobileNode->home_private_addr){
+    if(advh->address == mobileNode->home_public_addr){
         advFromHome = true;
     }
 
