@@ -34,6 +34,7 @@ void AdvFilter::push(int, Packet *p) {
     						return;
     					}else{
                             click_chatter("Advertisement -> code or type (or both) not as expected");
+                            p->kill();
                             return;
                         }
                     }
