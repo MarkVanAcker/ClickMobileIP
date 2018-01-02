@@ -121,7 +121,7 @@ void RegistrationRequestSource::push(int, Packet *p) {
         if(format->code == 0 || format->code == 1){ // code 1 should not be used
             click_chatter("source recieved a reply with T=3 and CODE=0");
             for (Vector<Request>::iterator it = currentRequests.begin(); it != currentRequests.end(); it++){
-                if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port && format->homeAgent == mobileNode->public_addr){
+                if(format->id1 == it->id1 && format->id2 == it->id2 && udph->uh_dport == it->port && format->homeAgent == mobileNode->home_public_addr){
                     click_chatter("source recieved a reply amd matched with request");
                     // found corresponding request
                     if(format->lifetime == 0){
