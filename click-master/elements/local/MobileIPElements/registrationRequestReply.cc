@@ -64,7 +64,7 @@ void RegistrationRequestReply::push(int, Packet *p) {
     // it is assumed that all incoming packets are registration requests
     // get relevant headers
     int packetsize = p->length();
-	if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestPacketheader))){
+	if(packetsize < (sizeof(click_ip) + sizeof(click_udp) + sizeof(RegistrationRequestPacketheader))){
         p->kill();
         return;
     }
@@ -114,7 +114,7 @@ void RegistrationRequestReply::push(int, Packet *p) {
     iphNew->ip_dst = iph->ip_src;
     iphNew->ip_sum = click_in_cksum((unsigned char *)iphNew, sizeof(click_ip));
 
-    packet->set_dst_ip_anno(iphNew->ip_dst); 
+    packet->set_dst_ip_anno(iphNew->ip_dst);
 
     click_udp *udphNew = (click_udp*)(iphNew+1);
     udphNew->uh_sport = udph->uh_dport;

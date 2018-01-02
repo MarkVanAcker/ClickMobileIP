@@ -105,8 +105,8 @@ void RegistrationRequestSource::makePacket(Advertisement a){
 }
 
 void RegistrationRequestSource::push(int, Packet *p) {
-    int packetzise = p->length()
-    if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestReplyPacketheader))){
+    int packetsize = p->length();
+    if(packetsize < (sizeof(click_ip) + sizeof(click_udp) + sizeof(RegistrationRequestReplyPacketheader))){
         p->kill();
         return;
     }
