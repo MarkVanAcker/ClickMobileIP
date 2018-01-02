@@ -172,8 +172,8 @@ elementclass Agent {
 
 	soli[1]
 		-> CheckPaint(1)
-		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 60, INTERVAL 15000)
 		-> CheckICMPHeader
+		-> AgentAdvertiser(BASE bind, HA true, FA true, LTADV 60, INTERVAL 15000)
 		->EtherEncap(0x0800, $private_address:eth, FF:FF:FF:FF:FF:FF)
 		-> output;
 
