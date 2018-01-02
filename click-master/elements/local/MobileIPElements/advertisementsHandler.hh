@@ -29,7 +29,8 @@ class AdvertisementsHandler: public Element {
 
     private:
         MobileInfoList* mobileNode;
-		RegistrationRequestSource* source;
+				RegistrationRequestSource* source;
+
 
 };
 

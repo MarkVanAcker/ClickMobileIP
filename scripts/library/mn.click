@@ -27,16 +27,21 @@ elementclass MobileNode {
 		-> rt :: LinearIPLookup( 
 			$address:ip/32 0,
 			$address:ipnet 1,
-			0.0.0.0/0 $gateway 1)
+			0.0.0.0/0 2)
 		-> ipc :: IPClassifier(src udp port 434,-)[1]
 		-> [1]output;
 
-	rt[1]	-> ipgw :: IPGWOptions($address)
+	rt[1]	
+		-> ipgw :: IPGWOptions($address)
 		-> FixIPSrc($address)
 		-> ttl :: DecIPTTL
 		-> frag :: IPFragmenter(1500)
 		-> arpq :: ARPQuerier($address)
 		-> output;
+	
+	rt[2]
+		-> SetGateway(MNBASE base)
+		-> ipgw;
 
 	ipgw[1]	-> ICMPError($address, parameterproblem)
 		-> output;
@@ -48,7 +53,7 @@ elementclass MobileNode {
 		-> output;
 
 	// incoming packets
-	input	-> ToDump(dump.req)
+	input
 		-> HostEtherFilter($address)
 		-> in_cl :: Classifier(12/0806 20/0001, 12/0806 20/0002, 12/0800)
 		-> arp_res :: ARPResponder($address)
