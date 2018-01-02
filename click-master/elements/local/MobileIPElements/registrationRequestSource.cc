@@ -166,7 +166,8 @@ void RegistrationRequestSource::run_timer(Timer *timer){
             return;
         }
         mobileNode->remainingConnectionTime = mobileNode->remainingConnectionTime-htons(1);
-        if(mobileNode->remainingConnectionTime == 2 && mobileNode->connected && !mobileNode->home){
+        if(mobileNode->remainingConnectionTime == htons(2) && mobileNode->connected && !mobileNode->home){
+            click_chatter("Refresh -> reregistration with HA");
             // we want to re register if the host is still active (find adv)
             for(Vector<Advertisement>::iterator it = mobileNode->current_advertisements.begin(); it != mobileNode->current_advertisements.end(); it++) {
                 if(it->private_addr  == mobileNode->curr_private_addr && it->COA == mobileNode->curr_coa){
@@ -175,7 +176,6 @@ void RegistrationRequestSource::run_timer(Timer *timer){
                 }
             }
         }
-        click_chatter("End timer Source BACK");
         timer->reschedule_after_msec(1000);
     }
 
