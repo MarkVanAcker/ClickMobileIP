@@ -70,6 +70,7 @@ elementclass MobileNode {
 		-> arpq;
 
 	adv[1]
+		-> CheckICMPHeader
 		-> AdvertisementsHandler(MNBASE base, SOURCE regreq);
 
 	ipc
