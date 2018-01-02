@@ -33,7 +33,11 @@ void SolicitationFilter::push(int, Packet *p) {
 					if(sh->type == 10 && sh->code == 0 && iph->ip_dst == IPAddress("255.255.255.255")){
 						output(1).push(p);
 						return;
-					}
+					}else{
+                        click_chatter("Sollicitation type/code or destination is not as expected");
+                        p->kill();
+                        return;
+                    }
 		}
     output(0).push(p);
 }
