@@ -84,7 +84,7 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
 
 
 void ForeignAgentReqProcess::push(int, Packet *pt) {
-    int packetsize = pt->length();
+    unsigned int packetsize = pt->length();
     if(packetsize < (sizeof(click_ip) + sizeof(click_udp) + sizeof(RegistrationRequestPacketheader))){
         pt->kill();
         return;

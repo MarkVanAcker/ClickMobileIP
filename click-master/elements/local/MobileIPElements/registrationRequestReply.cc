@@ -63,7 +63,7 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
 void RegistrationRequestReply::push(int, Packet *p) {
     // it is assumed that all incoming packets are registration requests
     // get relevant headers
-    int packetsize = p->length();
+    unsigned int packetsize = p->length();
 	if(packetsize < (sizeof(click_ip) + sizeof(click_udp) + sizeof(RegistrationRequestPacketheader))){
         p->kill();
         return;

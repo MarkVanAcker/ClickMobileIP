@@ -32,7 +32,7 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
 void ForeignAgentReplyProcess::push(int, Packet *p) {
     //  assume that all incoming packets are registration requests
     // get access packet
-    int packetsize = p->length();
+    unsigned int packetsize = p->length();
     if(packetsize < (sizeof(click_ip) + sizeof(click_udp) + sizeof(RegistrationRequestReplyPacketheader))){
         p->kill();
         return;
