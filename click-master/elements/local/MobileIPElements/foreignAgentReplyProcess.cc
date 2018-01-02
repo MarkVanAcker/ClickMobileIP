@@ -32,6 +32,11 @@ int ForeignAgentReplyProcess::configure(Vector<String> &conf, ErrorHandler *errh
 void ForeignAgentReplyProcess::push(int, Packet *p) {
     //  assume that all incoming packets are registration requests
     // get access packet
+    int packetzise = p->length()
+    if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestReplyPacketheader))){
+        p->kill();
+        return;
+    }
     WritablePacket* q = p->uniqueify();
     click_ip *iph = (click_ip*)q->data();
     click_udp *udph = (click_udp*)(iph+1);

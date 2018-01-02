@@ -37,8 +37,6 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
     click_udp *udph = (click_udp*)(iph+1);
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
 
-    // 136 ???
-
     // sent as zero, ignore
     uint8_t flags = format->flags;
     if((flags & 1) || (flags >> 2) & 1) { // logical AND with a shift right logical
@@ -65,6 +63,11 @@ unsigned short int RegistrationRequestReply::validatePacket(Packet *p){
 void RegistrationRequestReply::push(int, Packet *p) {
     // it is assumed that all incoming packets are registration requests
     // get relevant headers
+    int packetsize = p->length();
+	if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestPacketheader))){
+        p->kill();
+        return;
+    }
     click_ip *iph = (click_ip*)p->data();
     click_udp *udph = (click_udp*)(iph+1);
     RegistrationRequestPacketheader *format = (RegistrationRequestPacketheader*)(udph+1);
@@ -192,7 +195,6 @@ void RegistrationRequestReply::push(int, Packet *p) {
 }
 
 void RegistrationRequestReply::run_timer(Timer * timer) {
-
 	for(RegistrationIPList::iterator it = bindingsList->list.begin(); it != bindingsList->list.end();){
 		RegistrationTable::Pair * pair = bindingsList->table.find_pair((*it));
 		pair->value->lifetime = pair->value->lifetime-htons(1);

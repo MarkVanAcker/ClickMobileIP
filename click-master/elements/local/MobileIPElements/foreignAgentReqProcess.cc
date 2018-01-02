@@ -84,6 +84,11 @@ unsigned short int ForeignAgentReqProcess::validatePacket(Packet *p){
 
 
 void ForeignAgentReqProcess::push(int, Packet *pt) {
+    int packetsize = p->length();
+    if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestPacketheader))){
+        p->kill();
+        return;
+    }
     // it is assumed that all incoming packets are registration requests
     // get relevant headers
     WritablePacket* p = pt->uniqueify();

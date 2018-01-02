@@ -105,6 +105,11 @@ void RegistrationRequestSource::makePacket(Advertisement a){
 }
 
 void RegistrationRequestSource::push(int, Packet *p) {
+    int packetzise = p->length()
+    if(packetsize < (sizeof(click_ip) + sizeof(click_udp) sizeof(RegistrationRequestReplyPacketheader))){
+        p->kill();
+        return;
+    }
     click_ip *iph = (click_ip *)p->data();
     click_udp *udph= (click_udp*)(iph+1);
     RegistrationRequestReplyPacketheader *format = (RegistrationRequestReplyPacketheader*)(udph+1);
@@ -156,7 +161,7 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         timer->reschedule_after_msec(1000);
     }else{
         if(mobileNode->remainingConnectionTime == 0){
-            mobileNode->connected = false; // should be already
+            mobileNode->connected = false;
             timer->reschedule_after_msec(1000);
             return;
         }
