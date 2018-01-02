@@ -32,7 +32,10 @@ void AdvFilter::push(int, Packet *p) {
                             click_chatter("is mobile ip adv");
     						output(1).push(p);
     						return;
-    					}
+    					}else{
+                            click_chatter("Advertisement -> code or type (or both) not as expected");
+                            return;
+                        }
                     }
 
 		}
