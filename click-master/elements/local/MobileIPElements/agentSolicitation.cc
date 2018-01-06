@@ -69,10 +69,11 @@ Packet* AgentSolicitation::makePacket() {
 
 // make packet and increase seq num
 void AgentSolicitation::run_timer(Timer * timer) {
+    // could be used to send in bursts
     if( transmissions == maxRetransmissions){
         // dont send if we are at max
         transmissions = 0;
-        timer->schedule_after_msec(5000);
+        timer->schedule_after_msec(1);
         return;
     }
     transmissions++;
