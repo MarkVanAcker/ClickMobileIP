@@ -179,7 +179,6 @@ void RegistrationRequestSource::run_timer(Timer *timer){
         }
         timer->reschedule_after_msec(1000);
     }
-
 }
 
 CLICK_ENDDECLS

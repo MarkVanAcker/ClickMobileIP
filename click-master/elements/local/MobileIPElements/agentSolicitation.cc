@@ -82,7 +82,7 @@ void AgentSolicitation::run_timer(Timer * timer) {
         click_chatter("Sollicitation sent");
     }
     // random term to make sure 2 hosts messages will not interfere
-    timer->reschedule_after_msec(5000);
+    timer->reschedule_after_msec(5000); // could be lower to send in bursts
     return;
 }
 

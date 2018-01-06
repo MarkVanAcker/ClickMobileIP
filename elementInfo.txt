@@ -1,0 +1,197 @@
+########################################
+#     Uitleg Elementen Mobile IP       #
+########################################
+
+
+1. AdvertisementsHandler
+
+	input: Advertisement berichten van de agents.
+
+	output: /
+
+	process: De paketten worden gecontroleerd door te kijken naar de flags.
+		 Voor elk paket wordt er een struct aangemaakt met nuttige informatie.
+		 Als er een verandering van Agent vastgesteld wordt dan zal de RegistrationRequestSource opgeroepen worden met deze struct.
+		 De timer in dit element behandeld de aangemaakt structs.
+
+
+2. AdvFilter
+
+	input: IP paketten.
+
+	output: 0 -> geen advertisement.
+		1 -> geldige advertisement.
+
+	process: /
+
+
+3. AgentAdvertiser
+
+	input: Solicitations.
+
+	output: Agent advertisements.
+
+	process: Maakt advertisements met de gekozen waarden in de configuratie.
+
+
+4. AgentBase
+
+	input: /
+
+	output: /
+
+	Process: Infobase element van een agent op een netwerk.
+
+
+5. AgentSolicitation
+
+	input: /
+
+	output: Mobile node solicitations.
+
+	porcess: maakt en stuurt om de 5 seconden een solicitation.
+
+
+6. ForeignAgentReplyProcess
+
+	input: Registration reply message.
+
+	output: Registration reply message.
+
+	process: Aan de hand van het paket past de Foreign agent zijn visitor list aan met de gekregen lifetime.
+		 Stuurt het paket door na de src en dst aan te passen in de IP header.
+
+
+7. ForeignAgentReqProcess
+
+	input: Registration request message.
+
+	ouput: 0 -> registration reply message (deny).
+	       1 -> registration reqeust message.
+
+	process: Ontvangt een registration request. Deze Controleert de lifetime, de flags, ... .
+		 Als deze request niet geaccepteerd wordt dan zal er een deny gestuurd worden met de gepaste code.
+		 Als deze request voldoet aan de eisen dan wordt deze doorgestuurd naar de home agent nadat de IP header src en dst aangepast zijn.
+
+
+8. ipDecap
+
+	input: IP paketten
+	
+	output: 0 -> geen paket voor iemand op mijn netwerk.
+		1 -> packet voor iemand op mijn netwerk (in de visitorlist).
+
+	process: /
+
+
+9. IpEncapsulation
+
+	input: messages voor nodes op het netwerk
+
+	output: 0 -> Mobile node op het eigen netwerk
+		1 -> Encap het bericht naar het COA van dat IP adress in de Bindingslist.
+
+	process: /
+
+
+10. MobilerInfoList
+
+	input: /
+	
+	output: /
+
+	process: infobase element van de Mobile Node.
+
+
+11. MobileIPfilter
+
+	input: IP paketten.
+
+	output: 0 -> geen registration paketten (req of reply).
+		1 -> registration reply messages.
+		2 -> registration request messages als HA.
+		3 -> registration request messages als FA.
+
+	process: /
+
+
+12. RegistrationRequestReply
+
+	input: registration request messages.
+
+	output: registration reply.
+
+	process: valideert het paket en stuurt ofwel een accepted of denied code terug naar de node.
+		 Maakt een nieuwe binding aan voor die node of doet een update. Reageert gepast op gedupliceerde paketten.
+
+
+13. RegistrationRequestSource
+
+	input: registration reply messages.
+	
+	output: registration request messages.
+
+	process: Wordt opgeroepen door de Advertisementshandler met een struct (info van een adv message) waarnaar er een registration request gestuurd moet worden.
+		 Maakt een struct aan met de nuttige informatie van de nieuwe request.
+		 Update het infoelement als er een geaccepteerde reply ontvangen wordt.
+
+
+14. SetGateway
+
+	input: IP paketten
+
+	output: zet juiste destination anno bij het packet
+
+	process: /
+
+
+15. SolicitationFilter
+
+	input: IP paketten.
+
+	output: 0 -> geen solicitations.
+		1 -> solications messages.
+
+	process: /
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
