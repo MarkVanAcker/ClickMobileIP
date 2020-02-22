@@ -1,2 +1,2 @@
 # ClickMobileIP
-An implementation of Mobile IP with Click Modular router
+An implementation of the Mobile IP protocol with Click Modular router
